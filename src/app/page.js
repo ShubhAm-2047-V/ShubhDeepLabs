@@ -259,7 +259,7 @@ export default function Home() {
               </Link>
               
               <a
-                href="https://wa.me/919028833275?text=Hello%2C%20I%20want%20to%20discuss%20my%20academic%20project."
+                href="https://wa.me/919028833275?text=Hello%2C%20ShubDeep%20I%20want%20to%20discuss%20my%20academic%20project."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto text-base font-marker bg-white text-[#2C2C2C] border-3 border-[#2C2C2C] rounded-xl px-8 py-4 flex items-center justify-center shadow-[4px_5px_0px_#2C2C2C] hover:bg-[#FAF6EE] hover:translate-y-0.5 hover:shadow-[3px_3px_0px_#2C2C2C] transition-all cursor-pointer"
