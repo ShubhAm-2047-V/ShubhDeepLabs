@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Patrick+Hand&family=Architects+Daughter&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #FAF6EE;
+  --color-pencil: #2C2C2C;
+  --color-pencil-light: #5A5A5A;
+  
+  --color-marker-yellow: #FFF176;
+  --color-marker-green: #A5D6A7;
+  --color-marker-blue: #90CAF9;
+  --color-marker-red: #EF9A9A;
+  --color-marker-purple: #E1BEE7;
+  --color-marker-orange: #FFE082;
+  
+  --color-cardboard: #EADEC9;
+  --color-chalkboard: #1E2E2A;
+  
+  --font-sans: 'Outfit', sans-serif;
+  --font-hand: 'Caveat', cursive;
+  --font-marker: 'Patrick Hand', sans-serif;
+  --font-sketch: 'Architects Daughter', sans-serif;
+
+  --animate-pencil-wiggle: wiggle 0.5s ease-in-out infinite alternate;
+  --animate-sketch-float: sketch-float 5s ease-in-out infinite;
+  --animate-marker-draw: marker-draw 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+@keyframes wiggle {
+  0% { transform: rotate(-0.8deg); }
+  100% { transform: rotate(0.8deg); }
+}
+
+@keyframes sketch-float {
+  0%, 100% { transform: translateY(0px) rotate(-1deg); }
+  50% { transform: translateY(-10px) rotate(1.5deg); }
+}
+
+@keyframes marker-draw {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+/* Base Root Styles */
+:root {
+  --background: #FAF6EE;
+  --foreground: #2C2C2C;
+  background-color: #FAF6EE;
+  color: #2C2C2C;
+}
+
+body {
+  background-color: #FAF6EE !important;
+  color: #2C2C2C !important;
+  overflow-x: hidden;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  line-height: 1.65;
+  background-image: 
+    radial-gradient(rgba(44, 44, 44, 0.04) 1px, transparent 0),
+    radial-gradient(rgba(44, 44, 44, 0.02) 2px, transparent 0);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+}
+
+/* Notebook Ruled Layout with binder spirals */
+.ruled-paper {
+  background-color: #FCF9F2;
+  background-image: 
+    linear-gradient(rgba(33, 150, 243, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(44, 44, 44, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.notebook-ruled {
+  background-color: #FCF9F2;
+  background-image: linear-gradient(rgba(33, 150, 243, 0.12) 1px, transparent 1px);
+  background-size: 100% 28px;
+  position: relative;
+  border-left: 3px solid rgba(244, 67, 54, 0.15);
+}
+
+/* Spiral Ring Binder Sidebar */
+.spiral-binder {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  bottom: 0;
+  width: 25px;
+  background-image: radial-gradient(circle, #2C2C2C 4px, transparent 5px);
+  background-size: 25px 35px;
+  background-position: center;
+  opacity: 0.15;
+}
+
+/* Highly Attractive Hand-Drawn Sketch Borders */
+.sketch-border {
+  border: 3px solid #2C2C2C !important;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px !important;
+}
+
+.sketch-card {
+  background: #FFFFFF;
+  border: 3.5px solid #2C2C2C;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  box-shadow: 6px 8px 0px #2C2C2C;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.sketch-card:hover {
+  transform: translate(-3px, -4px) scale(1.01);
+  box-shadow: 10px 12px 0px #2C2C2C;
+}
+
+/* Premium Highlight Marker Styling */
+.marker-yellow {
+  background: linear-gradient(100deg, rgba(255, 235, 59, 0.35) 0%, rgba(255, 235, 59, 0.95) 45%, rgba(255, 235, 59, 0.55) 100%);
+  padding: 0.1em 0.35em;
+  border-radius: 5px 15px 6px 12px/8px 6px 10px 4px;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.marker-green {
+  background: linear-gradient(102deg, rgba(129, 199, 132, 0.35) 0%, rgba(129, 199, 132, 0.95) 50%, rgba(129, 199, 132, 0.45) 100%);
+  padding: 0.1em 0.35em;
+  border-radius: 6px 12px 4px 14px/6px 8px 4px 10px;
+}
+
+.marker-blue {
+  background: linear-gradient(98deg, rgba(100, 181, 246, 0.35) 0%, rgba(100, 181, 246, 0.95) 40%, rgba(100, 181, 246, 0.45) 100%);
+  padding: 0.1em 0.35em;
+  border-radius: 8px 10px 6px 12px/4px 10px 8px 6px;
+}
+
+.marker-red {
+  background: linear-gradient(101deg, rgba(255, 138, 128, 0.35) 0%, rgba(255, 138, 128, 0.95) 55%, rgba(255, 138, 128, 0.45) 100%);
+  padding: 0.1em 0.35em;
+  border-radius: 10px 8px 12px 6px/10px 4px 6px 8px;
+}
+
+.marker-purple {
+  background: linear-gradient(103deg, rgba(186, 104, 200, 0.35) 0%, rgba(186, 104, 200, 0.95) 50%, rgba(186, 104, 200, 0.45) 100%);
+  padding: 0.1em 0.35em;
+  border-radius: 6px 12px 8px 10px/8px 6px 10px 4px;
+}
+
+.marker-orange {
+  background: linear-gradient(104deg, rgba(255, 183, 77, 0.35) 0%, rgba(255, 183, 77, 0.95) 50%, rgba(255, 183, 77, 0.45) 100%);
+  padding: 0.1em 0.35em;
+  border-radius: 8px 6px 12px 10px/4px 10px 6px 8px;
+}
+
+/* Whimsical Wood-Framed Classroom Chalkboard */
+.chalkboard-panel {
+  background-color: #1E2E2A !important;
+  border: 10px solid #5D4037 !important;
+  border-radius: 14px !important;
+  box-shadow: 
+    inset 0 0 25px rgba(0, 0, 0, 0.75),
+    6px 8px 0px #2C2C2C !important;
+  position: relative;
+  z-index: 10;
+}
+
+.chalkboard-panel ::placeholder {
+  color: rgba(235, 229, 217, 0.45) !important;
+}
+
+/* Polaroid Photo Styling */
+.polaroid-card {
+  background: #FFF;
+  border: 3px solid #2C2C2C;
+  border-radius: 2px;
+  padding: 12px 12px 24px 12px;
+  box-shadow: 4px 6px 0px rgba(44, 44, 44, 0.15);
+  transition: all 0.2s ease;
+}
+
+.polaroid-card:hover {
+  transform: scale(1.02) rotate(-1deg);
+  box-shadow: 6px 10px 0px rgba(44, 44, 44, 0.25);
+}
+
+/* Beautiful custom typewriter grid for ledger */
+.ledger-sheet {
+  background-color: #FFFBF5;
+  border-top: 4px dashed #2C2C2C;
+  border-bottom: 4px dashed #2C2C2C;
+}
+
+/* Hand-Drawn buttons styling (Attractive & Dynamic) */
+.btn-sketch {
+  background: #FFF;
+  color: #2C2C2C;
+  border: 3.5px solid #2C2C2C;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  box-shadow: 4px 5px 0px #2C2C2C;
+  font-family: 'Patrick Hand', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+}
+
+.btn-sketch:hover {
+  transform: translate(-2px, -3px);
+  box-shadow: 7px 8px 0px #2C2C2C;
+  background: #FFF9C4; /* Warm yellow on hover */
+}
+
+.btn-sketch:active {
+  transform: translate(3px, 4px);
+  box-shadow: 0px 1px 0px #2C2C2C;
+}
+
+/* Custom Highlight cursor spotlight */
+.cursor-glow-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.cursor-glow-element {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background-color: rgba(255, 241, 118, 0.45);
+  border: 2px solid #2C2C2C;
+  border-radius: 50% 60% 55% 50% / 50% 55% 60% 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  box-shadow: 2px 3px 0px #2C2C2C;
+  transition: transform 0.05s ease-out;
+}
+
+/* Custom fonts definitions */
+.font-sans {
+  font-family: 'Outfit', sans-serif !important;
+}
+
+.font-hand {
+  font-family: 'Caveat', cursive !important;
+}
+
+.font-marker {
+  font-family: 'Patrick Hand', sans-serif !important;
+}
+
+.font-sketch {
+  font-family: 'Architects Daughter', sans-serif !important;
+}
+
+/* Notebook torn edge banner */
+.ripped-edge-banner {
+  background-color: #FAF6EE;
+  position: relative;
+}
+
+.ripped-edge-banner::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none'%3E%3Cpath d='M0,10 L5,2 L10,8 L15,1 L20,9 L25,3 L30,8 L35,2 L40,9 L45,4 L50,8 L55,1 L60,9 L65,3 L70,8 L75,2 L80,9 L85,3 L90,8 L95,1 L100,10 Z' fill='%232C2C2C'/%3E%3C/svg%3E");
+  background-size: 20px 10px;
+  background-repeat: repeat-x;
+}
