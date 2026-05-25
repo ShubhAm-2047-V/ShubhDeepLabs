@@ -144,7 +144,7 @@ export default function Footer() {
               <li className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-[#2C2C2C] shrink-0 mt-0.5" />
                 <span className="text-sm text-[#2C2C2C]">
-                  Dharwad & Bengaluru, Karnataka, India
+                  Solapur, Maharashtra
                 </span>
               </li>
             </ul>
