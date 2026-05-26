@@ -494,7 +494,7 @@ export default function ChatbotWorkspace() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF6EE] text-[#2C2C2C] p-4 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#FAF6EE] text-[#2C2C2C] p-4 pt-20 md:pt-24 flex flex-col font-sans">
       
       {/* 1. ROW HEADER */}
       <header className="sketch-card bg-white p-4 flex flex-col md:flex-row md:items-center justify-between shadow-[4px_5px_0_#2C2C2C] border-3 border-[#2C2C2C] mb-5 gap-4">
@@ -536,11 +536,11 @@ export default function ChatbotWorkspace() {
         </div>
       </header>
 
-      {/* 2. SPLIT LAYOUT */}
-      <main className="grid grid-cols-1 lg:grid-cols-2 gap-5 flex-1 h-[calc(100vh-100px)] min-h-0">
+      {/* 2. CENTERED CHAT CANVAS */}
+      <main className="flex justify-center flex-grow min-h-0 mb-6 h-[calc(100vh-180px)] md:h-[calc(100vh-220px)]">
         
-        {/* LEFT COLUMN: CHAT CANVAS */}
-        <section className="sketch-card bg-white flex flex-col overflow-hidden h-full shadow-[5px_6px_0_#2C2C2C] border-3 border-[#2C2C2C]">
+        {/* CHAT CANVAS */}
+        <section className="sketch-card bg-white flex flex-col overflow-hidden h-full w-full max-w-4xl shadow-[5px_6px_0_#2C2C2C] border-3 border-[#2C2C2C]">
           <div className="px-5 py-4 border-b-3 border-[#2C2C2C] flex justify-between items-center bg-[#FAF6EE]">
             <h2 className="text-[#2C2C2C] text-sm md:text-base font-marker font-bold flex items-center gap-2">
               <MessageSquare size={16} className="text-[#2C2C2C]" />
@@ -633,158 +633,6 @@ export default function ChatbotWorkspace() {
               </button>
             </div>
           </div>
-        </section>
-
-        {/* RIGHT COLUMN: RAG DETAILS & CHALKBOARD TERMINAL */}
-        <section className="flex flex-col gap-5 h-full min-h-0">
-          
-          {/* RAG Knowledge Indexer */}
-          <div className="sketch-card bg-white flex flex-col overflow-hidden flex-[1.1] min-h-0 border-3 border-[#2C2C2C] shadow-[5px_6px_0_#2C2C2C]">
-            <div className="px-5 py-3 border-b-3 border-[#2C2C2C] bg-[#FAF6EE] flex justify-between items-center">
-              <h2 className="text-[#2C2C2C] text-sm md:text-base font-marker font-bold flex items-center gap-2">
-                <Database size={16} className="text-[#2C2C2C]" />
-                <span>Customizable RAG Document Indexer</span>
-              </h2>
-              <button 
-                onClick={() => setShowAddDoc(!showAddDoc)}
-                className="btn-sketch py-1 px-2.5 text-xs flex items-center gap-1"
-              >
-                <Plus size={12} />
-                <span>{showAddDoc ? "Close" : "Index Document"}</span>
-              </button>
-            </div>
-
-            <div className="p-4 flex flex-col gap-4 overflow-y-auto flex-1">
-              
-              {/* Analytics metrics */}
-              <div className="grid grid-cols-4 gap-2.5 text-center">
-                <div className="border-2 border-[#2C2C2C] bg-[#FAF6EE] rounded-xl p-2.5 shadow-[2px_2.5px_0_#2C2C2C]">
-                  <div className="text-lg font-marker font-extrabold text-[#2C2C2C]">{analytics.documentsCount}</div>
-                  <div className="text-[9px] text-[#5A5A5A] uppercase font-bold tracking-wider">Documents</div>
-                </div>
-                <div className="border-2 border-[#2C2C2C] bg-[#FAF6EE] rounded-xl p-2.5 shadow-[2px_2.5px_0_#2C2C2C]">
-                  <div className="text-lg font-marker font-extrabold text-[#2C2C2C]">{analytics.chunksCount}</div>
-                  <div className="text-[9px] text-[#5A5A5A] uppercase font-bold tracking-wider">Total Chunks</div>
-                </div>
-                <div className="border-2 border-[#2C2C2C] bg-[#FAF6EE] rounded-xl p-2.5 shadow-[2px_2.5px_0_#2C2C2C]">
-                  <div className="text-lg font-marker font-extrabold text-[#2C2C2C]">{analytics.queryCount}</div>
-                  <div className="text-[9px] text-[#5A5A5A] uppercase font-bold tracking-wider">Queries</div>
-                </div>
-                <div className="border-2 border-[#2C2C2C] bg-[#FAF6EE] rounded-xl p-2.5 shadow-[2px_2.5px_0_#2C2C2C]">
-                  <div className="text-lg font-marker font-extrabold text-[#2C2C2C]">{analytics.averageResponseTime}ms</div>
-                  <div className="text-[9px] text-[#5A5A5A] uppercase font-bold tracking-wider">Latency</div>
-                </div>
-              </div>
-
-              {/* Add document form */}
-              {showAddDoc && (
-                <form onSubmit={handleIndexDocument} className="bg-[#FAF6EE] border-2 border-dashed border-[#2C2C2C] p-4 rounded-xl flex flex-col gap-3">
-                  <h3 className="text-[#2C2C2C] text-sm font-marker font-extrabold">Create New Context File</h3>
-                  <div>
-                    <label className="block text-[9px] font-marker font-bold text-[#5A5A5A] uppercase mb-1">Filename (e.g. revisions.txt)</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="revisions.txt"
-                      className="w-full bg-white border-2 border-[#2C2C2C] rounded-lg px-2.5 py-1.5 text-xs text-[#2C2C2C] placeholder-slate-400 focus:outline-none focus:bg-[#FFF9C4]/10 font-sans font-semibold"
-                      value={newDocName}
-                      onChange={(e) => setNewDocName(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[9px] font-marker font-bold text-[#5A5A5A] uppercase mb-1">Knowledge Content (unstructured text)</label>
-                    <textarea
-                      required
-                      rows={3}
-                      placeholder="Paste factual statements, guidelines, or Q&As. The local vector scanner computes term frequencies for matching..."
-                      className="w-full bg-white border-2 border-[#2C2C2C] rounded-lg px-2.5 py-1.5 text-xs text-[#2C2C2C] placeholder-slate-400 focus:outline-none focus:bg-[#FFF9C4]/10 resize-none font-sans font-semibold"
-                      value={newDocContent}
-                      onChange={(e) => setNewDocContent(e.target.value)}
-                    />
-                  </div>
-                  <button type="submit" disabled={isIndexing} className="self-end btn-sketch py-1.5 px-4 text-xs disabled:opacity-50">
-                    {isIndexing ? "Indexing..." : "Index Content"}
-                  </button>
-                </form>
-              )}
-
-              {/* Document rows */}
-              <div className="flex-1 overflow-y-auto min-h-0">
-                <h3 className="text-[#2C2C2C] text-sm font-marker font-extrabold mb-2.5 flex items-center gap-1.5">
-                  <FileText size={14} />
-                  <span>Factual Guidelines Database</span>
-                </h3>
-                
-                {documents.length === 0 ? (
-                  <div className="border-2 border-dashed border-[#2C2C2C]/30 p-5 rounded-xl text-center text-[#5A5A5A]">
-                    <AlertCircle size={22} className="mx-auto mb-1.5 opacity-60" />
-                    <p className="text-xs font-marker font-bold">No documents indexed. Using generic defaults.</p>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {documents.map((doc) => (
-                      <div key={doc.id} className="flex justify-between items-center p-3 bg-white border-2 border-[#2C2C2C] rounded-xl shadow-[2px_2.5px_0_#2C2C2C]">
-                        <div>
-                          <div className="text-xs font-sans font-extrabold text-[#2C2C2C]">📄 {doc.filename}</div>
-                          <div className="text-[9px] font-marker font-bold text-[#6A6A6A] mt-0.5">
-                            Added: {new Date(doc.addedAt).toLocaleDateString()}
-                          </div>
-                        </div>
-                        <button 
-                          onClick={() => handleDeleteDocument(doc.id)}
-                          className="text-red-500 hover:text-red-700 transition-colors p-1"
-                          title="De-index"
-                        >
-                          <Trash2 size={13} />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Retro wood-framed classroom chalkboard logs */}
-          <div className="chalkboard-panel flex flex-col overflow-hidden flex-[0.9] min-h-0">
-            <div className="px-5 py-2.5 border-b border-white/10 flex justify-between items-center bg-black/25">
-              <h2 className="text-[#FAF6EE] text-xs font-marker font-bold flex items-center gap-2">
-                <Terminal size={14} className="text-[#A5D6A7]" />
-                <span>RAG Vector Search & Pipeline Monitor</span>
-              </h2>
-              <button 
-                onClick={() => setLogs([])}
-                className="text-[#FAF6EE]/50 hover:text-[#FAF6EE] text-[10px] font-marker border border-white/20 rounded px-2 py-0.5 transition-colors"
-              >
-                CLEAR
-              </button>
-            </div>
-
-            <div className="flex-1 p-4 bg-[#1E2E2A] font-marker text-[13px] text-[#FCF9F2]/90 overflow-y-auto leading-relaxed" ref={terminalBottomRef}>
-              {logs.length === 0 ? (
-                <div className="text-[#FCF9F2]/40 italic text-center mt-4">
-                  Waiting for chat query or document indexation event logs...
-                </div>
-              ) : (
-                <div className="space-y-1.5">
-                  {logs.map((log, i) => (
-                    <div key={i} className="flex gap-2 items-start">
-                      <span className="text-[#FCF9F2]/50 flex-shrink-0 font-mono">[{log.timestamp.split('T')[1].substring(0, 8)}]</span>
-                      <span className={`font-extrabold uppercase flex-shrink-0 ${
-                        log.level === "error" 
-                          ? "text-red-400" 
-                          : log.level === "warn" 
-                            ? "text-amber-300" 
-                            : "text-emerald-300"
-                      }`}>{log.level}</span>
-                      <span className="whitespace-pre-wrap">{log.message}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
         </section>
 
       </main>
