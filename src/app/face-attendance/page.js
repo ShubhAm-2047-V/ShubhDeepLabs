@@ -109,7 +109,7 @@ export default function FaceAttendanceWorkspace() {
   // Load clmtrackr.js and face model from local public directory on mount
   useEffect(() => {
     // If already loaded in window, don't append again
-    if (window.clm && window.clm.tracker && window.pmodel) {
+    if (window.clm && window.clm.tracker && (window.pModel || window.pmodel)) {
       addSystemLog("Client-side clmtrackr face tracking module active (cached).", "info");
       return;
     }
@@ -123,6 +123,9 @@ export default function FaceAttendanceWorkspace() {
       script2.src = "/js/model_pca_20_svm.js";
       script2.async = true;
       script2.onload = () => {
+        // Bridge global pModel and pmodel references
+        window.pmodel = window.pModel || window.pmodel;
+        window.pModel = window.pModel || window.pmodel;
         addSystemLog("Client-side clmtrackr face tracking module loaded.", "info");
       };
       document.body.appendChild(script2);
@@ -264,10 +267,11 @@ export default function FaceAttendanceWorkspace() {
       addSystemLog("Webcam connection established. Frame stream active.", "info");
       
       // Initialize clmtrackr face tracker on the video stream
-      if (window.clm && window.clm.tracker && window.pmodel) {
+      if (window.clm && window.clm.tracker && (window.pModel || window.pmodel)) {
         try {
+          const modelObj = window.pModel || window.pmodel;
           const tracker = new window.clm.tracker();
-          tracker.init(window.pmodel);
+          tracker.init(modelObj);
           tracker.start(videoRef.current);
           trackerRef.current = tracker;
           addSystemLog("Face tracker registered on video stream.", "info");
@@ -352,10 +356,11 @@ export default function FaceAttendanceWorkspace() {
 
       // Delayed tracker initialization if webcam is active but tracker is null
       if (streamRef.current && !trackerRef.current) {
-        if (window.clm && window.clm.tracker && window.pmodel) {
+        if (window.clm && window.clm.tracker && (window.pModel || window.pmodel)) {
           try {
+            const modelObj = window.pModel || window.pmodel;
             const tracker = new window.clm.tracker();
-            tracker.init(window.pmodel);
+            tracker.init(modelObj);
             tracker.start(videoRef.current);
             trackerRef.current = tracker;
             addSystemLog("Face tracker initialized on active video stream.", "info");
