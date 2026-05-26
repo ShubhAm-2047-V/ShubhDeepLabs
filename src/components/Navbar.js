@@ -24,7 +24,6 @@ export default function Navbar() {
     { name: "Project Topics", href: "/#categories", icon: Layers },
     { name: "Daily Offer", href: "/offers", icon: Gift },
     { name: "Success Stories", href: "/#portfolio", icon: Award },
-    { name: "AI Chatbot", href: "/chatbot", icon: MessageSquare },
     { name: "Common Doubts", href: "/#faq", icon: FileText },
   ];
  

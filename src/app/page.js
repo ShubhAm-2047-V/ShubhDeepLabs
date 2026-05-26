@@ -529,15 +529,25 @@ export default function Home() {
                 </div>
 
                 <div className="mt-6 pt-4 border-t border-[#2C2C2C]/10">
-                  <a
-                    href={`https://wa.me/919028833275?text=Hello%2C%20I%20want%20to%20see%20a%20demo%20for%20${encodeURIComponent(proj.title)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full inline-flex items-center justify-center px-4 py-2.5 border-2 border-[#2C2C2C] text-sm font-marker font-bold text-[#2C2C2C] hover:bg-[#FAF6EE] rounded-xl transition-all shadow-[2.5px_3px_0_#2C2C2C] hover:translate-y-0.5 cursor-pointer"
-                  >
-                    Request Demo Output
-                    <ArrowRight className="w-4 h-4 ml-1.5" />
-                  </a>
+                  {proj.title === "Advanced AI Customer Care Chatbot" ? (
+                    <Link
+                      href="/chatbot"
+                      className="w-full inline-flex items-center justify-center px-4 py-2.5 border-2 border-[#2C2C2C] text-sm font-marker font-bold text-[#2C2C2C] hover:bg-[#FAF6EE] rounded-xl transition-all shadow-[2.5px_3px_0_#2C2C2C] hover:translate-y-0.5 cursor-pointer"
+                    >
+                      Request Demo Output
+                      <ArrowRight className="w-4 h-4 ml-1.5" />
+                    </Link>
+                  ) : (
+                    <a
+                      href={`https://wa.me/919028833275?text=Hello%2C%20I%20want%20to%20see%20a%20demo%20for%20${encodeURIComponent(proj.title)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-flex items-center justify-center px-4 py-2.5 border-2 border-[#2C2C2C] text-sm font-marker font-bold text-[#2C2C2C] hover:bg-[#FAF6EE] rounded-xl transition-all shadow-[2.5px_3px_0_#2C2C2C] hover:translate-y-0.5 cursor-pointer"
+                    >
+                      Request Demo Output
+                      <ArrowRight className="w-4 h-4 ml-1.5" />
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
