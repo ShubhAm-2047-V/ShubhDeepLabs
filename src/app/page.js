@@ -23,14 +23,22 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   // Request Demo Handler
-  const handleRequestDemo = () => {
+  const handleRequestDemo = (title) => {
     const expiry = Date.now() + 5 * 60 * 1000;
     localStorage.setItem("shubdeep_demo_expiry", expiry.toString());
-    toast.success("Demo access granted! Opening Chatbot...", {
+    
+    let targetRoute = "/chatbot";
+    let targetName = "Chatbot";
+    if (title === "Face Recognition Attendance system") {
+      targetRoute = "/face-attendance";
+      targetName = "Face Attendance Portal";
+    }
+
+    toast.success(`Demo access granted! Opening ${targetName}...`, {
       className: "sketch-card text-[#2C2C2C] border-2 border-[#2C2C2C] bg-[#FAF6EE] rounded-xl font-marker text-sm"
     });
     setTimeout(() => {
-      window.location.href = "/chatbot";
+      window.location.href = targetRoute;
     }, 800);
   };
 
@@ -541,7 +549,7 @@ export default function Home() {
                 </div>
 
                 <div className="mt-6 pt-4 border-t border-[#2C2C2C]/10">
-                  {proj.title === "Advanced AI Customer Care Chatbot" ? (
+                  {proj.title === "Advanced AI Customer Care Chatbot" || proj.title === "Face Recognition Attendance system" ? (
                     <button
                       onClick={() => handleRequestDemo(proj.title)}
                       className="w-full inline-flex items-center justify-center px-4 py-2.5 border-2 border-[#2C2C2C] text-sm font-marker font-bold text-[#2C2C2C] hover:bg-[#FAF6EE] rounded-xl transition-all shadow-[2.5px_3px_0_#2C2C2C] hover:translate-y-0.5 cursor-pointer text-left"
