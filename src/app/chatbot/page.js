@@ -61,6 +61,11 @@ export default function ChatbotWorkspace() {
   const [documents, setDocuments] = useState([]);
   const [logs, setLogs] = useState([]);
   
+  // Demo Token & Timer States
+  const [token, setToken] = useState(null);
+  const [tokenStatus, setTokenStatus] = useState("loading"); // loading, approved, expired, invalid
+  const [timeLeft, setTimeLeft] = useState(600); // 10 minutes (600s)
+
   // Chat States
   const [messages, setMessages] = useState([
     { id: "msg-1", sender: "bot", text: "Hello! Welcome to Shubdeep Labs Customer Care Workspace. I can answer questions about our pricing tiers, office schedule, refund policy, and revision limits. Try asking a question or upload custom documents on the right to index them into my active RAG context!", timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
@@ -86,9 +91,47 @@ export default function ChatbotWorkspace() {
   const chatBottomRef = useRef(null);
   const terminalBottomRef = useRef(null);
 
-  // Initial load
+  // Verify token on mount
   useEffect(() => {
     setMounted(true);
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlToken = urlParams.get("token");
+    setToken(urlToken);
+
+    if (!urlToken) {
+      setTokenStatus("invalid");
+      return;
+    }
+
+    const verifyToken = async () => {
+      try {
+        const res = await fetch(`/api/demo?action=status&id=${urlToken}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.status === "approved" && data.approvedAt) {
+            const elapsed = Date.now() - data.approvedAt;
+            const remaining = 10 * 60 * 1000 - elapsed;
+            
+            if (remaining > 0) {
+              setTokenStatus("approved");
+              setTimeLeft(Math.floor(remaining / 1000));
+            } else {
+              setTokenStatus("expired");
+            }
+          } else {
+            setTokenStatus(data.status || "invalid");
+          }
+        } else {
+          setTokenStatus("invalid");
+        }
+      } catch (err) {
+        setTokenStatus("invalid");
+      }
+    };
+
+    verifyToken();
+
     // Load documents from LocalStorage or seed defaults
     const local = localStorage.getItem("shubdeep_chatbot_docs");
     if (local) {
@@ -103,6 +146,30 @@ export default function ChatbotWorkspace() {
     addLog("  Client-Side RAG Vector Indexer online (Zero-Database).", "info");
     addLog("=======================================================", "info");
   }, []);
+
+  // Timer interval countdown
+  useEffect(() => {
+    if (tokenStatus !== "approved" || timeLeft <= 0) {
+      if (timeLeft <= 0 && tokenStatus === "approved") {
+        setTokenStatus("expired");
+        addLog("[System] Demo Session Expired. Session locked.", "warn");
+      }
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          setTokenStatus("expired");
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [tokenStatus, timeLeft]);
 
   // Sync scrollbars
   useEffect(() => {
@@ -387,7 +454,55 @@ export default function ChatbotWorkspace() {
     addLog("[RAG Indexer] Document removed from active directory.", "info");
   };
 
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
   if (!mounted) return null;
+
+  // Render Loading State
+  if (tokenStatus === "loading") {
+    return (
+      <div className="min-h-screen bg-[#070A13] text-[#94A3B8] flex items-center justify-center font-sans p-4">
+        <div className="text-center">
+          <div className="w-10 h-10 border-2.5 border-[#8B5CF6] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-sm font-semibold">Verifying Secure Access Token...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Render Expired/Invalid Block State
+  if (tokenStatus !== "approved") {
+    return (
+      <div className="min-h-screen bg-[#070A13] text-[#94A3B8] flex items-center justify-center font-sans p-4">
+        <div className="bg-[#111726]/80 border border-white/5 p-8 max-w-md w-full text-center rounded-2xl shadow-xl">
+          <div className="w-12 h-12 bg-rose-500/10 border border-rose-500/30 text-rose-500 flex items-center justify-center rounded-xl mx-auto mb-5 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+            <AlertCircle size={24} />
+          </div>
+          
+          <h2 className="text-white text-xl font-bold mb-3">
+            {tokenStatus === "expired" ? "Demo Session Expired" : "Access Key Restricted"}
+          </h2>
+          
+          <p className="text-xs text-slate-400 leading-relaxed mb-6">
+            {tokenStatus === "expired" 
+              ? "Your 10-minute chatbot preview session has elapsed. To request new access, click the 'Request Demo Output' button on our home page."
+              : "Direct access to this workspace is restricted. You must generate an approval request on the homepage and submit it on WhatsApp."}
+          </p>
+
+          <Link
+            href="/"
+            className="w-full inline-flex items-center justify-center px-4 py-2.5 bg-gradient-to-br from-[#8B5CF6] to-[#7C3AED] hover:from-[#9061F9] hover:to-[#6C2BD9] text-white text-sm font-semibold rounded-lg shadow-md transition-all cursor-pointer"
+          >
+            Return to Homepage
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#070A13] text-[#94A3B8] p-4 flex flex-col font-sans">
@@ -410,6 +525,9 @@ export default function ChatbotWorkspace() {
         </div>
 
         <div className="flex items-center gap-4 text-xs">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-950/20 border border-rose-500/30 rounded-lg text-rose-400 font-mono font-semibold animate-pulse">
+            <span>⏱️ EXPIRES IN: {formatTime(timeLeft)}</span>
+          </div>
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_6px_#10b981]"></span>
             <span className="text-slate-400">ENGINE: ACTIVE</span>

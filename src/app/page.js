@@ -22,6 +22,64 @@ export default function Home() {
   });
   const [loading, setLoading] = useState(false);
 
+  // Demo Approval Gateway States
+  const [demoRequest, setDemoRequest] = useState(null);
+  const [pollingActive, setPollingActive] = useState(false);
+  const [showDemoModal, setShowDemoModal] = useState(false);
+
+  // Request Demo Handler
+  const handleRequestDemo = async (title) => {
+    try {
+      const res = await fetch("/api/demo", { method: "POST" });
+      if (!res.ok) throw new Error("Failed to init demo");
+      const data = await res.json();
+      
+      setDemoRequest({ id: data.requestId, status: "pending" });
+      setShowDemoModal(true);
+      setPollingActive(true);
+
+      const domain = window.location.origin;
+      const approvalUrl = `${domain}/api/demo?action=approve&id=${data.requestId}`;
+      const waText = `Hello admin, please approve my demo access request for Shubdeep Labs Chatbot!\n\nApproval Link: ${approvalUrl}`;
+      const waUrl = `https://wa.me/919028833275?text=${encodeURIComponent(waText)}`;
+      
+      window.open(waUrl, "_blank");
+      toast.success("Approval request generated! Send it on WhatsApp.", {
+        className: "sketch-card text-[#2C2C2C] border-2 border-[#2C2C2C] bg-[#FAF6EE] rounded-xl font-marker text-sm"
+      });
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to generate approval request.");
+    }
+  };
+
+  // Poll for Approval status
+  useEffect(() => {
+    if (!pollingActive || !demoRequest?.id) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/demo?action=status&id=${demoRequest.id}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.status === "approved") {
+            clearInterval(interval);
+            setPollingActive(false);
+            setShowDemoModal(false);
+            toast.success("Access Approved! Opening Chatbot Workspace...", {
+              className: "sketch-card text-[#2C2C2C] border-2 border-[#2C2C2C] bg-[#FAF6EE] rounded-xl font-marker text-sm"
+            });
+            window.location.href = `/chatbot?token=${demoRequest.id}`;
+          }
+        }
+      } catch (e) {
+        console.error("Polling error:", e);
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [pollingActive, demoRequest]);
+
   // FAQ Accordion State
   const [openFaq, setOpenFaq] = useState(null);
 
@@ -530,13 +588,13 @@ export default function Home() {
 
                 <div className="mt-6 pt-4 border-t border-[#2C2C2C]/10">
                   {proj.title === "Advanced AI Customer Care Chatbot" ? (
-                    <Link
-                      href="/chatbot"
-                      className="w-full inline-flex items-center justify-center px-4 py-2.5 border-2 border-[#2C2C2C] text-sm font-marker font-bold text-[#2C2C2C] hover:bg-[#FAF6EE] rounded-xl transition-all shadow-[2.5px_3px_0_#2C2C2C] hover:translate-y-0.5 cursor-pointer"
+                    <button
+                      onClick={() => handleRequestDemo(proj.title)}
+                      className="w-full inline-flex items-center justify-center px-4 py-2.5 border-2 border-[#2C2C2C] text-sm font-marker font-bold text-[#2C2C2C] hover:bg-[#FAF6EE] rounded-xl transition-all shadow-[2.5px_3px_0_#2C2C2C] hover:translate-y-0.5 cursor-pointer text-left"
                     >
                       Request Demo Output
                       <ArrowRight className="w-4 h-4 ml-1.5" />
-                    </Link>
+                    </button>
                   ) : (
                     <a
                       href={`https://wa.me/919028833275?text=Hello%2C%20I%20want%20to%20see%20a%20demo%20for%20${encodeURIComponent(proj.title)}`}
@@ -771,6 +829,65 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Demo Approval Gateway Modal */}
+      <AnimatePresence>
+        {showDemoModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="sketch-card bg-[#FAF6EE] border-3 border-[#2C2C2C] p-8 max-w-md w-full text-center relative shadow-[6px_8px_0px_#2C2C2C]">
+              {/* Binder hole */}
+              <div className="absolute top-3 left-3 w-4 h-4 bg-white border-2 border-[#2C2C2C] rounded-full" />
+              <div className="absolute top-3 right-3 w-4 h-4 bg-white border-2 border-[#2C2C2C] rounded-full" />
+              
+              <h3 className="text-2xl font-hand font-extrabold text-[#2C2C2C] mb-4">
+                <span className="marker-yellow px-2">Access Request Pending</span>
+              </h3>
+              
+              <p className="text-sm font-sans font-semibold text-[#5A5A5A] leading-relaxed mb-6">
+                To access the AI Chatbot demo, you must send the approval request to our coordinator on WhatsApp. Once approved, this screen will automatically redirect.
+              </p>
+
+              {/* Status pulse */}
+              <div className="flex flex-col items-center justify-center gap-4 mb-6">
+                <div className="relative w-12 h-12 flex items-center justify-center">
+                  <span className="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-[#FFCA28] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-4 w-4 bg-[#FFCA28] border-2 border-[#2C2C2C]"></span>
+                </div>
+                <span className="text-xs font-mono text-[#6A6A6A] animate-pulse leading-normal">
+                  Request ID: {demoRequest?.id} <br />
+                  Waiting for Coordinator Approval...
+                </span>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={() => {
+                    const domain = window.location.origin;
+                    const approvalUrl = `${domain}/api/demo?action=approve&id=${demoRequest?.id}`;
+                    const waText = `Hello admin, please approve my demo access request for Shubdeep Labs Chatbot!\n\nApproval Link: ${approvalUrl}`;
+                    const waUrl = `https://wa.me/919028833275?text=${encodeURIComponent(waText)}`;
+                    window.open(waUrl, "_blank");
+                  }}
+                  className="btn-sketch py-3 px-6 text-sm flex items-center justify-center w-full cursor-pointer"
+                >
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Send WhatsApp Request
+                </button>
+                
+                <button
+                  onClick={() => {
+                    setPollingActive(false);
+                    setShowDemoModal(false);
+                  }}
+                  className="text-xs text-[#6A6A6A] font-marker font-bold hover:underline cursor-pointer"
+                >
+                  Cancel Request
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </AnimatePresence>
 
     </div>
   );
