@@ -61,10 +61,9 @@ export default function ChatbotWorkspace() {
   const [documents, setDocuments] = useState([]);
   const [logs, setLogs] = useState([]);
   
-  // Demo Token & Timer States
-  const [token, setToken] = useState(null);
+  // Demo Expiry & Timer States
   const [tokenStatus, setTokenStatus] = useState("loading"); // loading, approved, expired, invalid
-  const [timeLeft, setTimeLeft] = useState(600); // 10 minutes (600s)
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes (300s)
 
   // Chat States
   const [messages, setMessages] = useState([
@@ -95,42 +94,21 @@ export default function ChatbotWorkspace() {
   useEffect(() => {
     setMounted(true);
     
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlToken = urlParams.get("token");
-    setToken(urlToken);
-
-    if (!urlToken) {
+    const localExpiry = localStorage.getItem("shubdeep_demo_expiry");
+    if (!localExpiry) {
       setTokenStatus("invalid");
       return;
     }
 
-    const verifyToken = async () => {
-      try {
-        const res = await fetch(`/api/demo?action=status&id=${urlToken}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.status === "approved" && data.approvedAt) {
-            const elapsed = Date.now() - data.approvedAt;
-            const remaining = 10 * 60 * 1000 - elapsed;
-            
-            if (remaining > 0) {
-              setTokenStatus("approved");
-              setTimeLeft(Math.floor(remaining / 1000));
-            } else {
-              setTokenStatus("expired");
-            }
-          } else {
-            setTokenStatus(data.status || "invalid");
-          }
-        } else {
-          setTokenStatus("invalid");
-        }
-      } catch (err) {
-        setTokenStatus("invalid");
-      }
-    };
-
-    verifyToken();
+    const expiryTime = parseInt(localExpiry, 10);
+    const remaining = expiryTime - Date.now();
+    
+    if (remaining > 0) {
+      setTokenStatus("approved");
+      setTimeLeft(Math.floor(remaining / 1000));
+    } else {
+      setTokenStatus("expired");
+    }
 
     // Load documents from LocalStorage or seed defaults
     const local = localStorage.getItem("shubdeep_chatbot_docs");
@@ -149,27 +127,30 @@ export default function ChatbotWorkspace() {
 
   // Timer interval countdown
   useEffect(() => {
-    if (tokenStatus !== "approved" || timeLeft <= 0) {
-      if (timeLeft <= 0 && tokenStatus === "approved") {
-        setTokenStatus("expired");
-        addLog("[System] Demo Session Expired. Session locked.", "warn");
-      }
-      return;
-    }
+    if (tokenStatus !== "approved") return;
 
     const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          setTokenStatus("expired");
-          return 0;
-        }
-        return prev - 1;
-      });
+      const localExpiry = localStorage.getItem("shubdeep_demo_expiry");
+      if (!localExpiry) {
+        setTokenStatus("invalid");
+        clearInterval(timer);
+        return;
+      }
+      const expiryTime = parseInt(localExpiry, 10);
+      const remaining = expiryTime - Date.now();
+
+      if (remaining <= 0) {
+        clearInterval(timer);
+        setTokenStatus("expired");
+        setTimeLeft(0);
+        addLog("[System] Demo Session Expired. Session locked.", "warn");
+      } else {
+        setTimeLeft(Math.floor(remaining / 1000));
+      }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [tokenStatus, timeLeft]);
+  }, [tokenStatus]);
 
   // Sync scrollbars
   useEffect(() => {
@@ -332,6 +313,10 @@ export default function ChatbotWorkspace() {
 
   // --- ACTIONS ---
 
+  const handleQuickReply = (text) => {
+    handleSendMessage(text);
+  };
+
   const handleSendMessage = async (textToSend) => {
     const queryText = textToSend || inputValue;
     if (!queryText.trim()) return;
@@ -489,8 +474,8 @@ export default function ChatbotWorkspace() {
           
           <p className="text-xs text-slate-400 leading-relaxed mb-6">
             {tokenStatus === "expired" 
-              ? "Your 10-minute chatbot preview session has elapsed. To request new access, click the 'Request Demo Output' button on our home page."
-              : "Direct access to this workspace is restricted. You must generate an approval request on the homepage and submit it on WhatsApp."}
+              ? "Your 5-minute chatbot preview session has elapsed. To request new access, click the 'Request Demo Output' button on our home page."
+              : "Direct access to this workspace is restricted. Please go to the homepage and click 'Request Demo Output' to start a session."}
           </p>
 
           <Link
