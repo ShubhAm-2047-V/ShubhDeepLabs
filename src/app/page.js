@@ -35,6 +35,9 @@ export default function Home() {
     } else if (title === "Hospital Management Core Desk") {
       targetRoute = "/hospital-desk";
       targetName = "Hospital Core Desk";
+    } else if (title === "Expense Tracker with AI Insights") {
+      targetRoute = "/expense-tracker";
+      targetName = "Expense Tracker Dashboard";
     }
 
     toast.success(`Demo access granted! Opening ${targetName}...`, {
@@ -552,7 +555,7 @@ export default function Home() {
                 </div>
 
                 <div className="mt-6 pt-4 border-t border-[#2C2C2C]/10">
-                  {proj.title === "Advanced AI Customer Care Chatbot" || proj.title === "Face Recognition Attendance system" || proj.title === "Hospital Management Core Desk" ? (
+                  {proj.title === "Advanced AI Customer Care Chatbot" || proj.title === "Face Recognition Attendance system" || proj.title === "Hospital Management Core Desk" || proj.title === "Expense Tracker with AI Insights" ? (
                     <button
                       onClick={() => handleRequestDemo(proj.title)}
                       className="w-full inline-flex items-center justify-center px-4 py-2.5 border-2 border-[#2C2C2C] text-sm font-marker font-bold text-[#2C2C2C] hover:bg-[#FAF6EE] rounded-xl transition-all shadow-[2.5px_3px_0_#2C2C2C] hover:translate-y-0.5 cursor-pointer text-left"

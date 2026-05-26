@@ -1,0 +1,16 @@
+{
+  "name": "hospital-management-core-desk",
+  "version": "1.0.0",
+  "description": "Unified EHR Intake, Scheduling & Billing Administration Desk",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "bun install && cd backend && bun install && cd ../frontend && bun install",
+    "start": "concurrently \"bun run start:backend\" \"bun run start:frontend\"",
+    "start:backend": "cd backend && bun run start",
+    "start:frontend": "cd frontend && bun run dev",
+    "build": "cd frontend && bun run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

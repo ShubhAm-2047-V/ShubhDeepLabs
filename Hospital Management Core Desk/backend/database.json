@@ -1,0 +1,63 @@
+{
+  "appointments": [
+    {
+      "id": "apt-1",
+      "patientName": "Aman Verma",
+      "doctorName": "Dr. Mehta (Cardio)",
+      "date": "5/26/2026",
+      "slot": "10:30 AM",
+      "status": "Scheduled",
+      "reason": "General heart checkup"
+    },
+    {
+      "id": "apt-2",
+      "patientName": "Pooja Patel",
+      "doctorName": "Dr. Sharma (Ortho)",
+      "date": "5/26/2026",
+      "slot": "11:45 AM",
+      "status": "Completed",
+      "reason": "Post-fracture consultation"
+    },
+    {
+      "id": "apt-3",
+      "patientName": "Rahul Sen",
+      "doctorName": "Dr. Joshi (Pedia)",
+      "date": "5/26/2026",
+      "slot": "02:15 PM",
+      "status": "Scheduled",
+      "reason": "Seasonal flu review"
+    }
+  ],
+  "invoices": [
+    {
+      "id": "inv-1",
+      "patientName": "Aman Verma",
+      "treatmentFee": 1200,
+      "consultFee": 500,
+      "medFee": 350,
+      "total": 2050,
+      "status": "Paid",
+      "date": "5/26/2026"
+    },
+    {
+      "id": "inv-2",
+      "patientName": "Pooja Patel",
+      "treatmentFee": 800,
+      "consultFee": 500,
+      "medFee": 200,
+      "total": 1500,
+      "status": "Unpaid",
+      "date": "5/26/2026"
+    }
+  ],
+  "prescriptions": [
+    {
+      "id": "rx-1",
+      "patientName": "Pooja Patel",
+      "diagnosis": "Ankle Sprain Recovery",
+      "medicines": "Tab Combiflam 1-0-1, Crepe Bandage",
+      "notes": "Apply ice packs 3 times daily. Keep foot elevated.",
+      "date": "5/26/2026"
+    }
+  ]
+}

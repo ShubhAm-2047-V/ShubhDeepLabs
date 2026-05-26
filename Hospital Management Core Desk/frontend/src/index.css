@@ -1,0 +1,203 @@
+/* Base design system for hand-sketch notebook dashboard */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-paper: #FAF6EE;
+  --color-pencil: #2C2C2C;
+  --color-pencil-light: #5A5A5A;
+}
+
+body {
+  background-color: #FAF6EE;
+  color: #2C2C2C;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  line-height: 1.65;
+  background-image: 
+    radial-gradient(rgba(44, 44, 44, 0.04) 1px, transparent 0),
+    radial-gradient(rgba(44, 44, 44, 0.02) 2px, transparent 0);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
+/* Notebook grids */
+.ruled-paper {
+  background-color: #FCF9F2;
+  background-image: 
+    linear-gradient(rgba(33, 150, 243, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(44, 44, 44, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.notebook-ruled {
+  background-color: #FCF9F2;
+  background-image: linear-gradient(rgba(33, 150, 243, 0.12) 1px, transparent 1px);
+  background-size: 100% 28px;
+  position: relative;
+  border-left: 3px solid rgba(244, 67, 54, 0.15);
+}
+
+/* Spirals ring binder */
+.spiral-binder {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  bottom: 0;
+  width: 25px;
+  background-image: radial-gradient(circle, #2C2C2C 4px, transparent 5px);
+  background-size: 25px 35px;
+  background-position: center;
+  opacity: 0.15;
+}
+
+/* Sketch Borders */
+.sketch-border {
+  border: 3px solid #2C2C2C !important;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px !important;
+}
+
+.sketch-card {
+  background: #FFFFFF;
+  border: 3.5px solid #2C2C2C;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  box-shadow: 6px 8px 0px #2C2C2C;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.sketch-card:hover {
+  transform: translate(-3px, -4px) scale(1.01);
+  box-shadow: 10px 12px 0px #2C2C2C;
+}
+
+/* Highlight Marker Colors */
+.marker-yellow {
+  background: linear-gradient(100deg, rgba(255, 235, 59, 0.35) 0%, rgba(255, 235, 59, 0.95) 45%, rgba(255, 235, 59, 0.55) 100%);
+  padding: 0.1em 0.35em;
+  border-radius: 5px 15px 6px 12px/8px 6px 10px 4px;
+}
+
+.marker-green {
+  background: linear-gradient(102deg, rgba(129, 199, 132, 0.35) 0%, rgba(129, 199, 132, 0.95) 50%, rgba(129, 199, 132, 0.45) 100%);
+  padding: 0.1em 0.35em;
+  border-radius: 6px 12px 4px 14px/6px 8px 4px 10px;
+}
+
+.marker-blue {
+  background: linear-gradient(98deg, rgba(100, 181, 246, 0.35) 0%, rgba(100, 181, 246, 0.95) 40%, rgba(100, 181, 246, 0.45) 100%);
+  padding: 0.1em 0.35em;
+  border-radius: 8px 10px 6px 12px/4px 10px 8px 6px;
+}
+
+.marker-red {
+  background: linear-gradient(101deg, rgba(255, 138, 128, 0.35) 0%, rgba(255, 138, 128, 0.95) 55%, rgba(255, 138, 128, 0.45) 100%);
+  padding: 0.1em 0.35em;
+  border-radius: 10px 8px 12px 6px/10px 4px 6px 8px;
+}
+
+.marker-purple {
+  background: linear-gradient(103deg, rgba(186, 104, 200, 0.35) 0%, rgba(186, 104, 200, 0.95) 50%, rgba(186, 104, 200, 0.45) 100%);
+  padding: 0.1em 0.35em;
+  border-radius: 6px 12px 8px 10px/8px 6px 10px 4px;
+}
+
+.marker-orange {
+  background: linear-gradient(104deg, rgba(255, 183, 77, 0.35) 0%, rgba(255, 183, 77, 0.95) 50%, rgba(255, 183, 77, 0.45) 100%);
+  padding: 0.1em 0.35em;
+  border-radius: 8px 6px 12px 10px/4px 10px 6px 8px;
+}
+
+/* Hand-Drawn Sketch Buttons */
+.btn-sketch {
+  background: #FFF;
+  color: #2C2C2C;
+  border: 3.5px solid #2C2C2C;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  box-shadow: 4px 5px 0px #2C2C2C;
+  font-family: 'Patrick Hand', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-sketch:hover {
+  transform: translate(-2px, -3px);
+  box-shadow: 7px 8px 0px #2C2C2C;
+  background: #FFF9C4;
+}
+
+.btn-sketch:active {
+  transform: translate(3px, 4px);
+  box-shadow: 0px 1px 0px #2C2C2C;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03);
+}
+::-webkit-scrollbar-thumb {
+  background: #2C2C2C;
+  border-radius: 10px;
+}
+
+/* Font helpers */
+.font-sans {
+  font-family: 'Outfit', sans-serif !important;
+}
+
+.font-hand {
+  font-family: 'Caveat', cursive !important;
+}
+
+.font-marker {
+  font-family: 'Patrick Hand', sans-serif !important;
+}
+
+.font-sketch {
+  font-family: 'Architects Daughter', sans-serif !important;
+}
+
+/* Simple helper layouts */
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.flex { display: flex; }
+.grid { display: grid; }
+.relative { position: relative; }
+.overflow-hidden { overflow: hidden; }
+
+@keyframes wiggle {
+  0% { transform: rotate(-0.8deg); }
+  100% { transform: rotate(0.8deg); }
+}
+
+@keyframes sketch-float {
+  0%, 100% { transform: translateY(0px) rotate(-1deg); }
+  50% { transform: translateY(-10px) rotate(1.5deg); }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}
