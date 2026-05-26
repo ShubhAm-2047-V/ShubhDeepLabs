@@ -163,8 +163,8 @@ export default function Home() {
     { title: "Advanced AI Customer Care Chatbot", tech: "React, Node.js, Express, OpenAI API", desc: "Intelligent messaging center with customizable document indexing (RAG) and interactive dashboard console log views.", markerColor: "marker-purple" },
     { title: "Face Recognition Attendance system", tech: "Python, OpenCV, Tkinter, SQLite", desc: "Real-time face detection tracker featuring automated CSV sheets generation and attendance log exports.", markerColor: "marker-blue" },
     { title: "Hospital Management Core Desk", tech: "Next.js, MongoDB, Tailwind, Node.js", desc: "Full clinic portal with scheduling grids, active invoice trackers, and secure digital prescription vaults.", markerColor: "marker-orange" },
-    { title: "Smart IoT RFID Attendance portal", tech: "React, Firebase, C++, ESP32 Controller", desc: "Hardware-connected online school registry recording live scans from card readers to web dashboard panels.", markerColor: "marker-yellow" },
-    { title: "E-Voting Blockchain Ledger", tech: "React, Solidity, Web3.js, MetaMask", desc: "Encrypted vote logger utilizing decentralized smart contracts to prevent vote tampering during college elections.", markerColor: "marker-red" }
+    { title: "Expense Tracker with AI Insights", tech: "React, Node.js, MongoDB, Gemini API", desc: "Personal finance portal offering automated category tagging, monthly budget forecasting, and AI-driven spending recommendations.", markerColor: "marker-yellow" },
+    { title: "Smart Notes Summarizer", tech: "React, FastAPI, Python, Hugging Face", desc: "Collaborative document pad that auto-generates structured summaries, highlights action items, and generates flashcards using NLP.", markerColor: "marker-red" }
   ];
 
   const testimonials = [
