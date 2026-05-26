@@ -106,15 +106,21 @@ export default function FaceAttendanceWorkspace() {
   const tempFeaturesRef = useRef([]);
   const isDemoSimulationRef = useRef(false);
 
-  // Load clmtrackr.js and face model from CDN on mount
+  // Load clmtrackr.js and face model from local public directory on mount
   useEffect(() => {
+    // If already loaded in window, don't append again
+    if (window.clm && window.clm.tracker && window.pmodel) {
+      addSystemLog("Client-side clmtrackr face tracking module active (cached).", "info");
+      return;
+    }
+
     const script1 = document.createElement("script");
-    script1.src = "https://cdn.jsdelivr.net/npm/clmtrackr@1.3.1/clmtrackr.min.js";
+    script1.src = "/js/clmtrackr.min.js";
     script1.async = true;
     
     script1.onload = () => {
       const script2 = document.createElement("script");
-      script2.src = "https://cdn.jsdelivr.net/npm/clmtrackr@1.3.1/models/model_pca-20-svm.js";
+      script2.src = "/js/model_pca_20_svm.js";
       script2.async = true;
       script2.onload = () => {
         addSystemLog("Client-side clmtrackr face tracking module loaded.", "info");
