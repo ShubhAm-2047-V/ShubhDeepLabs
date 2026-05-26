@@ -1,0 +1,16 @@
+{
+  "name": "expense-tracker-ai",
+  "version": "1.0.0",
+  "description": "Personal finance portal offering automated category tagging, monthly budget forecasting, and AI-driven spending recommendations.",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "bun install && cd backend && bun install && cd ../frontend && bun install",
+    "start": "concurrently \"bun run start:backend\" \"bun run start:frontend\"",
+    "start:backend": "cd backend && bun run start",
+    "start:frontend": "cd frontend && bun run dev",
+    "build": "cd frontend && bun run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

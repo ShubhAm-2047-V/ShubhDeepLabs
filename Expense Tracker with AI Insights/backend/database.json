@@ -1,0 +1,37 @@
+{
+  "transactions": [
+    {
+      "id": "exp-1",
+      "description": "Monthly Apartment Rent",
+      "amount": 8000,
+      "category": "Rent",
+      "type": "Expense",
+      "date": "5/26/2026"
+    },
+    {
+      "id": "exp-2",
+      "description": "Software Developer Salary",
+      "amount": 25000,
+      "category": "Salary",
+      "type": "Income",
+      "date": "5/26/2026"
+    },
+    {
+      "id": "exp-3",
+      "description": "Starbucks Coffee & Snacks",
+      "amount": 450,
+      "category": "Food",
+      "type": "Expense",
+      "date": "5/26/2026"
+    },
+    {
+      "id": "exp-4",
+      "description": "Uber office commute",
+      "amount": 350,
+      "category": "Travel",
+      "type": "Expense",
+      "date": "5/26/2026"
+    }
+  ],
+  "budget": 15000
+}
