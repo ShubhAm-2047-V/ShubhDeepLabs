@@ -462,17 +462,21 @@ export default function ChatbotWorkspace() {
   // Render Expired/Invalid Block State
   if (tokenStatus !== "approved") {
     return (
-      <div className="min-h-screen bg-[#070A13] text-[#94A3B8] flex items-center justify-center font-sans p-4">
-        <div className="bg-[#111726]/80 border border-white/5 p-8 max-w-md w-full text-center rounded-2xl shadow-xl">
-          <div className="w-12 h-12 bg-rose-500/10 border border-rose-500/30 text-rose-500 flex items-center justify-center rounded-xl mx-auto mb-5 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+      <div className="min-h-screen bg-[#FAF6EE] text-[#2C2C2C] flex items-center justify-center font-sans p-4">
+        <div className="sketch-card bg-white p-8 max-w-md w-full text-center relative shadow-[6px_8px_0px_#2C2C2C]">
+          {/* Binder hole */}
+          <div className="absolute top-3 left-3 w-4 h-4 bg-[#FAF6EE] border-2 border-[#2C2C2C] rounded-full" />
+          <div className="absolute top-3 right-3 w-4 h-4 bg-[#FAF6EE] border-2 border-[#2C2C2C] rounded-full" />
+          
+          <div className="w-12 h-12 bg-red-100 border-2 border-[#2C2C2C] text-red-500 flex items-center justify-center rounded-xl mx-auto mb-5 shadow-[2px_2.5px_0_#2C2C2C]">
             <AlertCircle size={24} />
           </div>
           
-          <h2 className="text-white text-xl font-bold mb-3">
+          <h2 className="text-[#2C2C2C] text-2xl font-hand font-extrabold mb-3">
             {tokenStatus === "expired" ? "Demo Session Expired" : "Access Key Restricted"}
           </h2>
           
-          <p className="text-xs text-slate-400 leading-relaxed mb-6">
+          <p className="text-xs font-marker text-[#5A5A5A] leading-relaxed mb-6">
             {tokenStatus === "expired" 
               ? "Your 5-minute chatbot preview session has elapsed. To request new access, click the 'Request Demo Output' button on our home page."
               : "Direct access to this workspace is restricted. Please go to the homepage and click 'Request Demo Output' to start a session."}
@@ -480,7 +484,7 @@ export default function ChatbotWorkspace() {
 
           <Link
             href="/"
-            className="w-full inline-flex items-center justify-center px-4 py-2.5 bg-gradient-to-br from-[#8B5CF6] to-[#7C3AED] hover:from-[#9061F9] hover:to-[#6C2BD9] text-white text-sm font-semibold rounded-lg shadow-md transition-all cursor-pointer"
+            className="btn-sketch w-full py-3 px-6 text-sm flex items-center justify-center"
           >
             Return to Homepage
           </Link>
@@ -490,32 +494,32 @@ export default function ChatbotWorkspace() {
   }
 
   return (
-    <div className="min-h-screen bg-[#070A13] text-[#94A3B8] p-4 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#FAF6EE] text-[#2C2C2C] p-4 flex flex-col font-sans">
       
       {/* 1. ROW HEADER */}
-      <header className="flex flex-col md:flex-row md:items-center justify-between p-4 bg-[#111726]/80 backdrop-blur-md border border-white/5 rounded-xl shadow-lg mb-4 gap-4">
+      <header className="sketch-card bg-white p-4 flex flex-col md:flex-row md:items-center justify-between shadow-[4px_5px_0_#2C2C2C] border-3 border-[#2C2C2C] mb-5 gap-4">
         <div className="flex items-center gap-3">
-          <Link href="/" className="p-2 border border-white/10 rounded-lg bg-white/5 hover:bg-white/10 transition-colors text-white">
+          <Link href="/" className="p-2 border-2 border-[#2C2C2C] rounded-xl bg-white hover:bg-[#FFF9C4] transition-all text-[#2C2C2C] shadow-[1.5px_2px_0_#2C2C2C] flex items-center justify-center">
             <ArrowLeft size={16} />
           </Link>
           <div className="flex items-center gap-2.5">
-            <div className="bg-gradient-to-br from-[#8B5CF6] to-[#06B6D4] p-2 rounded-lg shadow-[0_0_10px_rgba(139,92,246,0.3)]">
-              <Brain size={18} color="#FFF" />
+            <div className="bg-[#FFF176] border-2 border-[#2C2C2C] p-2 rounded-xl shadow-[2px_2.5px_0_#2C2C2C]">
+              <Brain size={18} className="text-[#2C2C2C]" />
             </div>
             <div>
-              <h1 className="text-white text-base md:text-lg font-bold leading-none">Advanced AI Customer Care Chatbot</h1>
-              <p className="text-[10px] md:text-xs text-slate-500 mt-1">Unified Next.js RAG Portal & Real-time Console Monitor</p>
+              <h1 className="text-[#2C2C2C] text-lg md:text-xl font-hand font-extrabold leading-none">Advanced AI Customer Care Chatbot</h1>
+              <p className="text-[10px] md:text-xs font-marker text-[#5A5A5A] mt-1">Unified Next.js RAG Portal & Real-time Console Monitor</p>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-4 text-xs">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-950/20 border border-rose-500/30 rounded-lg text-rose-400 font-mono font-semibold animate-pulse">
+        <div className="flex flex-wrap items-center gap-3.5 text-xs">
+          <div className="flex items-center gap-2 px-3 py-1.5 marker-red border-2 border-[#2C2C2C] rounded-xl text-[#2C2C2C] font-marker font-bold shadow-[2px_2.5px_0_#2C2C2C] animate-pulse">
             <span>⏱️ EXPIRES IN: {formatTime(timeLeft)}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_6px_#10b981]"></span>
-            <span className="text-slate-400">ENGINE: ACTIVE</span>
+          <div className="flex items-center gap-2 font-marker font-bold border-2 border-[#2C2C2C] bg-white rounded-xl px-2.5 py-1.5 shadow-[2px_2px_0_#2C2C2C]">
+            <span className="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse border border-[#2C2C2C] shadow-[0_0_4px_#10b981]"></span>
+            <span className="text-[#2C2C2C] tracking-wide">ENGINE: ACTIVE</span>
           </div>
           <button 
             onClick={() => {
@@ -523,7 +527,7 @@ export default function ChatbotWorkspace() {
               localStorage.setItem("shubdeep_chatbot_docs", JSON.stringify(DEFAULT_DOCS));
               addLog("[System] Knowledge base reset to default faq guidelines.", "info");
             }}
-            className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg text-slate-300 hover:bg-white/10 transition-all flex items-center gap-1.5"
+            className="btn-sketch py-1.5 px-3 text-xs flex items-center gap-1.5"
             title="Reset DB"
           >
             <RefreshCw size={12} />
@@ -533,37 +537,37 @@ export default function ChatbotWorkspace() {
       </header>
 
       {/* 2. SPLIT LAYOUT */}
-      <main className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1 h-[calc(100vh-100px)] min-h-0">
+      <main className="grid grid-cols-1 lg:grid-cols-2 gap-5 flex-1 h-[calc(100vh-100px)] min-h-0">
         
         {/* LEFT COLUMN: CHAT CANVAS */}
-        <section className="bg-[#111726]/60 backdrop-blur-md border border-white/5 rounded-xl shadow-xl flex flex-col overflow-hidden h-full">
-          <div className="px-5 py-4 border-b border-white/5 flex justify-between items-center bg-slate-900/30">
-            <h2 className="text-white text-sm font-semibold flex items-center gap-2">
-              <MessageSquare size={16} className="text-[#8B5CF6]" />
+        <section className="sketch-card bg-white flex flex-col overflow-hidden h-full shadow-[5px_6px_0_#2C2C2C] border-3 border-[#2C2C2C]">
+          <div className="px-5 py-4 border-b-3 border-[#2C2C2C] flex justify-between items-center bg-[#FAF6EE]">
+            <h2 className="text-[#2C2C2C] text-sm md:text-base font-marker font-bold flex items-center gap-2">
+              <MessageSquare size={16} className="text-[#2C2C2C]" />
               <span>Customer Care Dialogue Workspace</span>
             </h2>
-            <span className="text-[10px] text-slate-500 font-mono">NEXTJS ROUTE: /chatbot</span>
+            <span className="text-[10px] text-[#5A5A5A] font-mono">NEXTJS ROUTE: /chatbot</span>
           </div>
 
-          {/* Chat scroll box */}
-          <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-slate-950/20">
+          {/* Chat scroll box - ruled paper */}
+          <div className="flex-1 overflow-y-auto p-5 space-y-4 notebook-ruled">
             {messages.map((msg) => (
               <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[80%] rounded-xl p-3.5 text-sm shadow-md ${
+                <div className={`max-w-[80%] rounded-xl p-3.5 text-sm shadow-[2px_3px_0_#2C2C2C] border-2 border-[#2C2C2C] ${
                   msg.sender === "user"
-                    ? "bg-gradient-to-br from-[#8B5CF6] to-[#6D28D9] text-white rounded-tr-none"
+                    ? "bg-[#FFF9C4] text-[#2C2C2C] rounded-tr-none"
                     : msg.isError 
-                      ? "bg-rose-950/20 border border-rose-800/40 text-rose-300 rounded-tl-none"
-                      : "bg-white/5 border border-white/5 text-slate-200 rounded-tl-none"
+                      ? "bg-red-50 text-red-700 rounded-tl-none border-red-400"
+                      : "bg-white text-[#2C2C2C] rounded-tl-none"
                 }`}>
-                  <p className="leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                  <p className="leading-relaxed whitespace-pre-wrap font-sans font-semibold">{msg.text}</p>
                   
                   {msg.sources && msg.sources.length > 0 && (
-                    <div className="mt-3 pt-2.5 border-t border-white/5">
-                      <span className="block text-[9px] text-slate-500 uppercase tracking-wider mb-1.5">RETRIEVED CONTEXT REFERENCE:</span>
+                    <div className="mt-3 pt-2.5 border-t border-[#2C2C2C]/10">
+                      <span className="block text-[9px] font-marker font-bold text-[#5A5A5A] uppercase tracking-wider mb-1.5">RETRIEVED CONTEXT REFERENCE:</span>
                       <div className="flex flex-wrap gap-1.5">
                         {msg.sources.map((src, i) => (
-                          <span key={i} className="text-[9px] font-mono px-2 py-0.5 bg-cyan-950/30 border border-cyan-800/40 text-cyan-400 rounded">
+                          <span key={i} className="text-[10px] font-marker font-bold px-2 py-0.5 marker-blue border border-[#2C2C2C] text-[#2C2C2C] rounded shadow-[1px_1px_0_#2C2C2C]">
                             📄 {src}
                           </span>
                         ))}
@@ -571,18 +575,18 @@ export default function ChatbotWorkspace() {
                     </div>
                   )}
 
-                  <span className="block text-[9px] text-slate-500 mt-2 text-right">{msg.timestamp}</span>
+                  <span className="block text-[9px] text-[#6A6A6A] font-mono mt-2 text-right">{msg.timestamp}</span>
                 </div>
               </div>
             ))}
 
             {isTyping && (
               <div className="flex justify-start">
-                <div className="bg-white/5 border border-white/5 rounded-xl rounded-tl-none p-3.5">
-                  <div className="flex gap-1">
-                    <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></span>
-                    <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                    <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                <div className="bg-white border-2 border-[#2C2C2C] rounded-xl rounded-tl-none p-3.5 shadow-[2px_3px_0_#2C2C2C]">
+                  <div className="flex gap-1.5 items-center">
+                    <span className="w-1.5 h-1.5 bg-[#2C2C2C] rounded-full animate-bounce"></span>
+                    <span className="w-1.5 h-1.5 bg-[#2C2C2C] rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                    <span className="w-1.5 h-1.5 bg-[#2C2C2C] rounded-full animate-bounce [animation-delay:0.4s]"></span>
                   </div>
                 </div>
               </div>
@@ -591,20 +595,20 @@ export default function ChatbotWorkspace() {
           </div>
 
           {/* Form Actions */}
-          <div className="p-4 border-t border-white/5 bg-slate-950/40 flex flex-col gap-3">
+          <div className="p-4 border-t-3 border-[#2C2C2C] bg-[#FAF6EE] flex flex-col gap-3">
             
             {/* Quick Pills */}
             <div className="flex flex-wrap gap-1.5">
-              <button onClick={() => handleQuickReply("What are the pricing plans?")} className="text-[10px] md:text-xs px-3 py-1 bg-white/5 border border-white/5 hover:border-[#8B5CF6]/50 hover:bg-[#8B5CF6]/10 text-slate-300 rounded-full transition-all">
+              <button onClick={() => handleQuickReply("What are the pricing plans?")} className="text-[10px] md:text-xs px-3 py-1 bg-white border-2 border-[#2C2C2C] hover:bg-[#FFF9C4] text-[#2C2C2C] font-marker font-bold rounded-full transition-all shadow-[1px_2.5px_0_#2C2C2C] active:translate-y-0.5 active:shadow-[0px_0px_0_#2C2C2C]">
                 💰 Pricing Tiers
               </button>
-              <button onClick={() => handleQuickReply("How can I contact Shubdeep Labs?")} className="text-[10px] md:text-xs px-3 py-1 bg-white/5 border border-white/5 hover:border-[#8B5CF6]/50 hover:bg-[#8B5CF6]/10 text-slate-300 rounded-full transition-all">
+              <button onClick={() => handleQuickReply("How can I contact Shubdeep Labs?")} className="text-[10px] md:text-xs px-3 py-1 bg-white border-2 border-[#2C2C2C] hover:bg-[#FFF9C4] text-[#2C2C2C] font-marker font-bold rounded-full transition-all shadow-[1px_2.5px_0_#2C2C2C] active:translate-y-0.5 active:shadow-[0px_0px_0_#2C2C2C]">
                 📞 Call Coordinator
               </button>
-              <button onClick={() => handleQuickReply("What is the revision policy?")} className="text-[10px] md:text-xs px-3 py-1 bg-white/5 border border-white/5 hover:border-[#8B5CF6]/50 hover:bg-[#8B5CF6]/10 text-slate-300 rounded-full transition-all">
+              <button onClick={() => handleQuickReply("What is the revision policy?")} className="text-[10px] md:text-xs px-3 py-1 bg-white border-2 border-[#2C2C2C] hover:bg-[#FFF9C4] text-[#2C2C2C] font-marker font-bold rounded-full transition-all shadow-[1px_2.5px_0_#2C2C2C] active:translate-y-0.5 active:shadow-[0px_0px_0_#2C2C2C]">
                 🔄 Revisions policy
               </button>
-              <button onClick={() => handleQuickReply("Do you guarantee refunds?")} className="text-[10px] md:text-xs px-3 py-1 bg-white/5 border border-white/5 hover:border-[#8B5CF6]/50 hover:bg-[#8B5CF6]/10 text-slate-300 rounded-full transition-all">
+              <button onClick={() => handleQuickReply("Do you guarantee refunds?")} className="text-[10px] md:text-xs px-3 py-1 bg-white border-2 border-[#2C2C2C] hover:bg-[#FFF9C4] text-[#2C2C2C] font-marker font-bold rounded-full transition-all shadow-[1px_2.5px_0_#2C2C2C] active:translate-y-0.5 active:shadow-[0px_0px_0_#2C2C2C]">
                 🛡️ Refund info
               </button>
             </div>
@@ -613,7 +617,7 @@ export default function ChatbotWorkspace() {
               <input
                 type="text"
                 placeholder="Submit query to RAG agent (e.g. 'What is the price of the hard project?')..."
-                className="flex-1 bg-slate-900 border border-white/10 rounded-lg px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#8B5CF6] transition-colors"
+                className="flex-1 bg-white border-2 border-[#2C2C2C] rounded-xl px-3.5 py-2 text-sm text-[#2C2C2C] placeholder-slate-400 focus:outline-none focus:bg-[#FFF9C4]/10 transition-colors font-sans font-semibold"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
@@ -622,7 +626,7 @@ export default function ChatbotWorkspace() {
               <button 
                 onClick={() => handleSendMessage()}
                 disabled={isTyping || !inputValue.trim()}
-                className="px-4 py-2 bg-gradient-to-br from-[#8B5CF6] to-[#7C3AED] hover:from-[#9061F9] hover:to-[#6C2BD9] text-white text-sm font-semibold rounded-lg shadow-md transition-all flex items-center gap-2 disabled:opacity-50"
+                className="btn-sketch py-2 px-5 text-sm flex items-center gap-1.5 disabled:opacity-50"
               >
                 <Send size={14} />
                 <span>Send</span>
@@ -631,19 +635,19 @@ export default function ChatbotWorkspace() {
           </div>
         </section>
 
-        {/* RIGHT COLUMN: RAG DETAILS & TERMINAL */}
-        <section className="flex flex-col gap-4 h-full min-h-0">
+        {/* RIGHT COLUMN: RAG DETAILS & CHALKBOARD TERMINAL */}
+        <section className="flex flex-col gap-5 h-full min-h-0">
           
           {/* RAG Knowledge Indexer */}
-          <div className="bg-[#111726]/60 backdrop-blur-md border border-white/5 rounded-xl shadow-xl flex flex-col overflow-hidden flex-[1.1] min-h-0">
-            <div className="px-5 py-3 border-b border-white/5 flex justify-between items-center bg-slate-900/30">
-              <h2 className="text-white text-sm font-semibold flex items-center gap-2">
-                <Database size={16} className="text-[#06B6D4]" />
+          <div className="sketch-card bg-white flex flex-col overflow-hidden flex-[1.1] min-h-0 border-3 border-[#2C2C2C] shadow-[5px_6px_0_#2C2C2C]">
+            <div className="px-5 py-3 border-b-3 border-[#2C2C2C] bg-[#FAF6EE] flex justify-between items-center">
+              <h2 className="text-[#2C2C2C] text-sm md:text-base font-marker font-bold flex items-center gap-2">
+                <Database size={16} className="text-[#2C2C2C]" />
                 <span>Customizable RAG Document Indexer</span>
               </h2>
               <button 
                 onClick={() => setShowAddDoc(!showAddDoc)}
-                className="px-2 py-1 bg-white/5 border border-white/10 rounded text-slate-200 text-[11px] hover:bg-white/10 transition-all flex items-center gap-1"
+                className="btn-sketch py-1 px-2.5 text-xs flex items-center gap-1"
               >
                 <Plus size={12} />
                 <span>{showAddDoc ? "Close" : "Index Document"}</span>
@@ -653,52 +657,52 @@ export default function ChatbotWorkspace() {
             <div className="p-4 flex flex-col gap-4 overflow-y-auto flex-1">
               
               {/* Analytics metrics */}
-              <div className="grid grid-cols-4 gap-2 text-center">
-                <div className="bg-white/2 border border-white/5 rounded-lg p-2">
-                  <div className="text-base font-bold text-[#06B6D4]">{analytics.documentsCount}</div>
-                  <div className="text-[9px] text-slate-500 uppercase font-semibold">Documents</div>
+              <div className="grid grid-cols-4 gap-2.5 text-center">
+                <div className="border-2 border-[#2C2C2C] bg-[#FAF6EE] rounded-xl p-2.5 shadow-[2px_2.5px_0_#2C2C2C]">
+                  <div className="text-lg font-marker font-extrabold text-[#2C2C2C]">{analytics.documentsCount}</div>
+                  <div className="text-[9px] text-[#5A5A5A] uppercase font-bold tracking-wider">Documents</div>
                 </div>
-                <div className="bg-white/2 border border-white/5 rounded-lg p-2">
-                  <div className="text-base font-bold text-[#06B6D4]">{analytics.chunksCount}</div>
-                  <div className="text-[9px] text-slate-500 uppercase font-semibold">Total Chunks</div>
+                <div className="border-2 border-[#2C2C2C] bg-[#FAF6EE] rounded-xl p-2.5 shadow-[2px_2.5px_0_#2C2C2C]">
+                  <div className="text-lg font-marker font-extrabold text-[#2C2C2C]">{analytics.chunksCount}</div>
+                  <div className="text-[9px] text-[#5A5A5A] uppercase font-bold tracking-wider">Total Chunks</div>
                 </div>
-                <div className="bg-white/2 border border-white/5 rounded-lg p-2">
-                  <div className="text-base font-bold text-[#06B6D4]">{analytics.queryCount}</div>
-                  <div className="text-[9px] text-slate-500 uppercase font-semibold">Queries</div>
+                <div className="border-2 border-[#2C2C2C] bg-[#FAF6EE] rounded-xl p-2.5 shadow-[2px_2.5px_0_#2C2C2C]">
+                  <div className="text-lg font-marker font-extrabold text-[#2C2C2C]">{analytics.queryCount}</div>
+                  <div className="text-[9px] text-[#5A5A5A] uppercase font-bold tracking-wider">Queries</div>
                 </div>
-                <div className="bg-white/2 border border-white/5 rounded-lg p-2">
-                  <div className="text-base font-bold text-[#06B6D4]">{analytics.averageResponseTime}ms</div>
-                  <div className="text-[9px] text-slate-500 uppercase font-semibold">Latency</div>
+                <div className="border-2 border-[#2C2C2C] bg-[#FAF6EE] rounded-xl p-2.5 shadow-[2px_2.5px_0_#2C2C2C]">
+                  <div className="text-lg font-marker font-extrabold text-[#2C2C2C]">{analytics.averageResponseTime}ms</div>
+                  <div className="text-[9px] text-[#5A5A5A] uppercase font-bold tracking-wider">Latency</div>
                 </div>
               </div>
 
               {/* Add document form */}
               {showAddDoc && (
-                <form onSubmit={handleIndexDocument} className="bg-slate-900/50 border border-white/5 p-3 rounded-lg flex flex-col gap-3">
-                  <h3 className="text-white text-xs font-semibold">Create New Context File</h3>
+                <form onSubmit={handleIndexDocument} className="bg-[#FAF6EE] border-2 border-dashed border-[#2C2C2C] p-4 rounded-xl flex flex-col gap-3">
+                  <h3 className="text-[#2C2C2C] text-sm font-marker font-extrabold">Create New Context File</h3>
                   <div>
-                    <label className="block text-[9px] text-slate-500 uppercase mb-1">Filename (e.g. revisions.txt)</label>
+                    <label className="block text-[9px] font-marker font-bold text-[#5A5A5A] uppercase mb-1">Filename (e.g. revisions.txt)</label>
                     <input
                       type="text"
                       required
                       placeholder="revisions.txt"
-                      className="w-full bg-slate-950 border border-white/10 rounded px-2.5 py-1.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-[#06B6D4]"
+                      className="w-full bg-white border-2 border-[#2C2C2C] rounded-lg px-2.5 py-1.5 text-xs text-[#2C2C2C] placeholder-slate-400 focus:outline-none focus:bg-[#FFF9C4]/10 font-sans font-semibold"
                       value={newDocName}
                       onChange={(e) => setNewDocName(e.target.value)}
                     />
                   </div>
                   <div>
-                    <label className="block text-[9px] text-slate-500 uppercase mb-1">Knowledge Content (unstructured text)</label>
+                    <label className="block text-[9px] font-marker font-bold text-[#5A5A5A] uppercase mb-1">Knowledge Content (unstructured text)</label>
                     <textarea
                       required
                       rows={3}
                       placeholder="Paste factual statements, guidelines, or Q&As. The local vector scanner computes term frequencies for matching..."
-                      className="w-full bg-slate-950 border border-white/10 rounded px-2.5 py-1.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-[#06B6D4] resize-none"
+                      className="w-full bg-white border-2 border-[#2C2C2C] rounded-lg px-2.5 py-1.5 text-xs text-[#2C2C2C] placeholder-slate-400 focus:outline-none focus:bg-[#FFF9C4]/10 resize-none font-sans font-semibold"
                       value={newDocContent}
                       onChange={(e) => setNewDocContent(e.target.value)}
                     />
                   </div>
-                  <button type="submit" disabled={isIndexing} className="self-end px-3 py-1.5 bg-[#06B6D4] hover:bg-[#0891B2] text-slate-900 text-xs font-semibold rounded transition-colors disabled:opacity-50">
+                  <button type="submit" disabled={isIndexing} className="self-end btn-sketch py-1.5 px-4 text-xs disabled:opacity-50">
                     {isIndexing ? "Indexing..." : "Index Content"}
                   </button>
                 </form>
@@ -706,29 +710,29 @@ export default function ChatbotWorkspace() {
 
               {/* Document rows */}
               <div className="flex-1 overflow-y-auto min-h-0">
-                <h3 className="text-white text-xs font-semibold mb-2 flex items-center gap-1.5">
-                  <FileText size={12} />
+                <h3 className="text-[#2C2C2C] text-sm font-marker font-extrabold mb-2.5 flex items-center gap-1.5">
+                  <FileText size={14} />
                   <span>Factual Guidelines Database</span>
                 </h3>
                 
                 {documents.length === 0 ? (
-                  <div className="border border-dashed border-white/5 p-4 rounded-lg text-center text-slate-500">
-                    <AlertCircle size={20} className="mx-auto mb-1.5 opacity-50" />
-                    <p className="text-xs">No documents indexed. Using generic defaults.</p>
+                  <div className="border-2 border-dashed border-[#2C2C2C]/30 p-5 rounded-xl text-center text-[#5A5A5A]">
+                    <AlertCircle size={22} className="mx-auto mb-1.5 opacity-60" />
+                    <p className="text-xs font-marker font-bold">No documents indexed. Using generic defaults.</p>
                   </div>
                 ) : (
-                  <div className="space-y-1.5">
+                  <div className="space-y-2">
                     {documents.map((doc) => (
-                      <div key={doc.id} className="flex justify-between items-center p-2.5 bg-white/2 border border-white/5 rounded-lg">
+                      <div key={doc.id} className="flex justify-between items-center p-3 bg-white border-2 border-[#2C2C2C] rounded-xl shadow-[2px_2.5px_0_#2C2C2C]">
                         <div>
-                          <div className="text-xs font-semibold text-slate-200">📄 {doc.filename}</div>
-                          <div className="text-[10px] text-slate-500 mt-0.5">
+                          <div className="text-xs font-sans font-extrabold text-[#2C2C2C]">📄 {doc.filename}</div>
+                          <div className="text-[9px] font-marker font-bold text-[#6A6A6A] mt-0.5">
                             Added: {new Date(doc.addedAt).toLocaleDateString()}
                           </div>
                         </div>
                         <button 
                           onClick={() => handleDeleteDocument(doc.id)}
-                          className="text-rose-500 hover:text-rose-400 transition-colors p-1"
+                          className="text-red-500 hover:text-red-700 transition-colors p-1"
                           title="De-index"
                         >
                           <Trash2 size={13} />
@@ -741,39 +745,39 @@ export default function ChatbotWorkspace() {
             </div>
           </div>
 
-          {/* Retro terminal console logs */}
-          <div className="bg-black border border-white/5 rounded-xl shadow-xl flex flex-col overflow-hidden flex-[0.9] min-h-0">
-            <div className="px-5 py-2 border-b border-white/5 flex justify-between items-center bg-[#070A13]">
-              <h2 className="text-white text-xs font-semibold flex items-center gap-2 font-mono">
-                <Terminal size={14} className="text-[#10b981]" />
+          {/* Retro wood-framed classroom chalkboard logs */}
+          <div className="chalkboard-panel flex flex-col overflow-hidden flex-[0.9] min-h-0">
+            <div className="px-5 py-2.5 border-b border-white/10 flex justify-between items-center bg-black/25">
+              <h2 className="text-[#FAF6EE] text-xs font-marker font-bold flex items-center gap-2">
+                <Terminal size={14} className="text-[#A5D6A7]" />
                 <span>RAG Vector Search & Pipeline Monitor</span>
               </h2>
               <button 
                 onClick={() => setLogs([])}
-                className="text-slate-500 hover:text-slate-300 text-[10px] font-mono border border-white/10 rounded px-1.5 py-0.5"
+                className="text-[#FAF6EE]/50 hover:text-[#FAF6EE] text-[10px] font-marker border border-white/20 rounded px-2 py-0.5 transition-colors"
               >
                 CLEAR
               </button>
             </div>
 
-            <div className="flex-1 p-3 bg-black font-mono text-[11px] overflow-y-auto leading-relaxed" ref={terminalBottomRef}>
+            <div className="flex-1 p-4 bg-[#1E2E2A] font-marker text-[13px] text-[#FCF9F2]/90 overflow-y-auto leading-relaxed" ref={terminalBottomRef}>
               {logs.length === 0 ? (
-                <div className="text-slate-600 italic text-center mt-4">
+                <div className="text-[#FCF9F2]/40 italic text-center mt-4">
                   Waiting for chat query or document indexation event logs...
                 </div>
               ) : (
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   {logs.map((log, i) => (
                     <div key={i} className="flex gap-2 items-start">
-                      <span className="text-slate-500 flex-shrink-0">[{log.timestamp.split('T')[1].substring(0, 8)}]</span>
-                      <span className={`font-semibold flex-shrink-0 uppercase ${
+                      <span className="text-[#FCF9F2]/50 flex-shrink-0 font-mono">[{log.timestamp.split('T')[1].substring(0, 8)}]</span>
+                      <span className={`font-extrabold uppercase flex-shrink-0 ${
                         log.level === "error" 
-                          ? "text-rose-500" 
+                          ? "text-red-400" 
                           : log.level === "warn" 
-                            ? "text-amber-500" 
-                            : "text-cyan-400"
+                            ? "text-amber-300" 
+                            : "text-emerald-300"
                       }`}>{log.level}</span>
-                      <span className="text-slate-300 whitespace-pre-wrap">{log.message}</span>
+                      <span className="whitespace-pre-wrap">{log.message}</span>
                     </div>
                   ))}
                 </div>
