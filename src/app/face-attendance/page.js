@@ -41,6 +41,9 @@ const getFaceFeatureVector = (positions) => {
   // 44: left mouth corner
   // 50: right mouth corner
   // 35, 39: nose width points
+  // 16, 20: eyebrow center points
+  // 23, 25, 28, 30: eye edges
+  // 47, 53: mouth heights
   
   const faceHeight = getDistance(positions[33], positions[7]);
   if (faceHeight === 0) return null;
@@ -51,13 +54,27 @@ const getFaceFeatureVector = (positions) => {
   const mouthWidth = getDistance(positions[44], positions[50]);
   const noseToChin = getDistance(positions[37], positions[7]);
   
-  // Normalized ratios (invariant to camera scale/distance)
+  // Additional landmarks for higher dimensional (12-D) accuracy
+  const noseBridgeHeight = getDistance(positions[33], positions[37]);
+  const mouthHeight = getDistance(positions[47], positions[53]);
+  const mouthToChin = getDistance(positions[53], positions[7]);
+  const eyebrowToEyeLeft = getDistance(positions[16], positions[27]);
+  const eyebrowToEyeRight = getDistance(positions[20], positions[32]);
+  
+  // Normalized ratios (invariant to camera scale/distance and minor head rotation)
   return [
     jawWidth / faceHeight,
     eyeToEye / faceHeight,
     noseWidth / faceHeight,
     mouthWidth / faceHeight,
-    noseToChin / faceHeight
+    noseToChin / faceHeight,
+    eyeToEye / (jawWidth || 1),
+    noseWidth / (eyeToEye || 1),
+    mouthWidth / (jawWidth || 1),
+    mouthHeight / (mouthWidth || 1),
+    noseBridgeHeight / faceHeight,
+    mouthToChin / faceHeight,
+    (eyebrowToEyeLeft + eyebrowToEyeRight) / (2 * faceHeight)
   ];
 };
 
@@ -185,7 +202,15 @@ export default function FaceAttendanceWorkspace() {
     // Load students database
     const localStudents = localStorage.getItem("shubdeep_attendance_students");
     if (localStudents) {
-      setStudents(JSON.parse(localStudents));
+      const parsed = JSON.parse(localStudents);
+      // Migration check: Reset cached students if they do not match the new 12D feature format
+      const needsMigration = parsed.some(s => s.features && s.features.length !== 12);
+      if (needsMigration) {
+        setStudents(DEFAULT_STUDENTS);
+        localStorage.setItem("shubdeep_attendance_students", JSON.stringify(DEFAULT_STUDENTS));
+      } else {
+        setStudents(parsed);
+      }
     } else {
       setStudents(DEFAULT_STUDENTS);
       localStorage.setItem("shubdeep_attendance_students", JSON.stringify(DEFAULT_STUDENTS));
@@ -478,7 +503,7 @@ export default function FaceAttendanceWorkspace() {
           }
         }
 
-        const currentFeatures = isSimulated ? [0.8, 0.25, 0.18, 0.3, 0.4] : getFaceFeatureVector(positions);
+        const currentFeatures = isSimulated ? [0.8, 0.25, 0.18, 0.3, 0.4, 0.6, 0.72, 0.45, 0.12, 0.35, 0.3, 0.1] : getFaceFeatureVector(positions);
 
         // 3. Handle Sampling Mode
         if (currentModeRef.current === "Sampling" && samplingStudentRef.current) {
@@ -557,11 +582,12 @@ export default function FaceAttendanceWorkspace() {
             studentsRef.current.forEach(student => {
               if (student.features) {
                 let sumSq = 0;
-                for (let i = 0; i < 5; i++) {
+                const dims = Math.min(currentFeatures.length, student.features.length);
+                for (let i = 0; i < dims; i++) {
                   const diff = currentFeatures[i] - student.features[i];
                   sumSq += diff * diff;
                 }
-                const dist = Math.sqrt(sumSq);
+                const dist = Math.sqrt(sumSq / (dims || 1));
                 if (dist < minDistance) {
                   minDistance = dist;
                   matchedStudent = student;
@@ -569,7 +595,7 @@ export default function FaceAttendanceWorkspace() {
               }
             });
 
-            // Threshold of 0.07 is ideal for normalized ratio matching
+            // Threshold of 0.07 is ideal for normalized ratio matching (RMSE based)
             if (matchedStudent && minDistance < 0.07) {
               labelColor = "#10B981"; // Green match
               labelText = `${matchedStudent.name} (${matchedStudent.studentId}) [Dist: ${minDistance.toFixed(3)}]`;
