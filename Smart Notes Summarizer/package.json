@@ -1,0 +1,18 @@
+{
+  "name": "smart-notes-summarizer",
+  "version": "1.0.0",
+  "description": "Smart Notes Summarizer with AI-powered study assistant — FastAPI + React",
+  "scripts": {
+    "install:backend": "cd backend && pip install -r requirements.txt",
+    "install:frontend": "cd frontend && bun install",
+    "install:all": "bun run install:frontend",
+    "dev:backend": "cd backend && python -m uvicorn main:app --reload --port 8000",
+    "dev:frontend": "cd frontend && bun run dev",
+    "dev": "concurrently --names \"BACKEND,FRONTEND\" --prefix-colors \"cyan,yellow\" \"bun run dev:backend\" \"bun run dev:frontend\"",
+    "build": "cd frontend && bun run build",
+    "start": "bun run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
