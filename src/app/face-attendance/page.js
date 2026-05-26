@@ -20,6 +20,47 @@ const DEFAULT_LOGS = [
   { id: "log-seed-2", studentId: "DIP-202", name: "Amit Sharma", department: "Diploma Mechanical", date: new Date().toLocaleDateString(), time: "09:42:10" }
 ];
 
+// Helper to calculate scale-invariant facial geometry feature vector from clmtrackr positions
+const getFaceFeatureVector = (positions) => {
+  if (!positions || positions.length < 71) return null;
+  
+  const getDistance = (p1, p2) => {
+    const dx = p1[0] - p2[0];
+    const dy = p1[1] - p2[1];
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+  
+  // Landmark points:
+  // 33: top of nose bridge
+  // 7: chin tip
+  // 0: left jaw edge
+  // 14: right jaw edge
+  // 27: left eye center
+  // 32: right eye center
+  // 37: nose tip
+  // 44: left mouth corner
+  // 50: right mouth corner
+  // 35, 39: nose width points
+  
+  const faceHeight = getDistance(positions[33], positions[7]);
+  if (faceHeight === 0) return null;
+  
+  const jawWidth = getDistance(positions[0], positions[14]);
+  const eyeToEye = getDistance(positions[27], positions[32]);
+  const noseWidth = getDistance(positions[35], positions[39]);
+  const mouthWidth = getDistance(positions[44], positions[50]);
+  const noseToChin = getDistance(positions[37], positions[7]);
+  
+  // Normalized ratios (invariant to camera scale/distance)
+  return [
+    jawWidth / faceHeight,
+    eyeToEye / faceHeight,
+    noseWidth / faceHeight,
+    mouthWidth / faceHeight,
+    noseToChin / faceHeight
+  ];
+};
+
 export default function FaceAttendanceWorkspace() {
   const [mounted, setMounted] = useState(false);
   const [students, setStudents] = useState([]);
@@ -34,6 +75,7 @@ export default function FaceAttendanceWorkspace() {
   const [cameraActive, setCameraActive] = useState(false);
   const [currentMode, setCurrentMode] = useState("Idle"); // Idle, Sampling, Tracking
   const [trackingActive, setTrackingActive] = useState(false);
+  const [isDemoSimulation, setIsDemoSimulation] = useState(false);
   
   // Form fields
   const [newId, setNewId] = useState("");
@@ -60,28 +102,28 @@ export default function FaceAttendanceWorkspace() {
   const samplingStudentRef = useRef(null);
   const samplingCountRef = useRef(0);
   const studentsRef = useRef([]);
-  const detectedFacesRef = useRef([]);
-  const trackerTaskRef = useRef(null);
+  const trackerRef = useRef(null);
+  const tempFeaturesRef = useRef([]);
+  const isDemoSimulationRef = useRef(false);
 
-  // Load tracking.js and face classifier from CDN on mount
+  // Load clmtrackr.js and face model from CDN on mount
   useEffect(() => {
     const script1 = document.createElement("script");
-    script1.src = "https://cdnjs.cloudflare.com/ajax/libs/tracking.js/1.1.3/tracking-min.js";
+    script1.src = "https://cdn.jsdelivr.net/npm/clmtrackr@1.3.1/clmtrackr.min.js";
     script1.async = true;
     
     script1.onload = () => {
       const script2 = document.createElement("script");
-      script2.src = "https://cdnjs.cloudflare.com/ajax/libs/tracking.js/1.1.3/data/face-min.js";
+      script2.src = "https://cdn.jsdelivr.net/npm/clmtrackr@1.3.1/models/model_pca-20-svm.js";
       script2.async = true;
       script2.onload = () => {
-        addSystemLog("Client-side face detection module loaded successfully.", "info");
+        addSystemLog("Client-side clmtrackr face tracking module loaded.", "info");
       };
       document.body.appendChild(script2);
     };
     document.body.appendChild(script1);
     
     return () => {
-      // Clean up script tags if component unmounts
       if (document.body.contains(script1)) document.body.removeChild(script1);
     };
   }, []);
@@ -106,6 +148,10 @@ export default function FaceAttendanceWorkspace() {
   useEffect(() => {
     studentsRef.current = students;
   }, [students]);
+
+  useEffect(() => {
+    isDemoSimulationRef.current = isDemoSimulation;
+  }, [isDemoSimulation]);
 
   // Verify token and seed databases on mount
   useEffect(() => {
@@ -208,28 +254,23 @@ export default function FaceAttendanceWorkspace() {
       }
       
       setCameraActive(true);
+      setIsDemoSimulation(false); // Real webcam successfully connected!
       addSystemLog("Webcam connection established. Frame stream active.", "info");
       
-      // Initialize tracking.js tracker on the video stream
-      if (window.tracking && window.tracking.ObjectTracker) {
+      // Initialize clmtrackr face tracker on the video stream
+      if (window.clm && window.clm.tracker && window.pmodel) {
         try {
-          const tracker = new window.tracking.ObjectTracker('face');
-          tracker.setInitialScale(4);
-          tracker.setStepSize(2);
-          tracker.setEdgesDensity(0.1);
-          
-          tracker.on('track', (event) => {
-            detectedFacesRef.current = event.data || [];
-          });
-          
-          trackerTaskRef.current = window.tracking.track(videoRef.current, tracker);
-          addSystemLog("Face detector registered on video stream.", "info");
+          const tracker = new window.clm.tracker();
+          tracker.init(window.pmodel);
+          tracker.start(videoRef.current);
+          trackerRef.current = tracker;
+          addSystemLog("Face tracker registered on video stream.", "info");
         } catch (trackerErr) {
           console.error("Tracker initialization failed:", trackerErr);
           addSystemLog("Tracker startup warning. Running in fallback mode.", "warn");
         }
       } else {
-        addSystemLog("Tracking library not loaded yet. Running in standby mock.", "warn");
+        addSystemLog("Tracking library loading. Standing by.", "warn");
       }
 
       // Start canvas drawing loops
@@ -242,6 +283,7 @@ export default function FaceAttendanceWorkspace() {
       addSystemLog("Failed to connect webcam. Falling back to video placeholder.", "error");
       // Fallback: active state but no real webcam (draws a simulated face frame)
       setCameraActive(true);
+      setIsDemoSimulation(true); // Enable demo simulation overlay
       setTimeout(() => {
         startCanvasLoop();
       }, 500);
@@ -255,11 +297,10 @@ export default function FaceAttendanceWorkspace() {
       frameIdRef.current = null;
     }
     
-    if (trackerTaskRef.current) {
-      trackerTaskRef.current.stop();
-      trackerTaskRef.current = null;
+    if (trackerRef.current) {
+      trackerRef.current.stop();
+      trackerRef.current = null;
     }
-    detectedFacesRef.current = [];
 
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
@@ -272,6 +313,7 @@ export default function FaceAttendanceWorkspace() {
     
     setCameraActive(false);
     setTrackingActive(false);
+    setIsDemoSimulation(false);
     setCurrentMode("Idle");
     addSystemLog("Webcam stream released. Standby mode active.", "info");
   };
@@ -302,6 +344,21 @@ export default function FaceAttendanceWorkspace() {
       ctx.clearRect(0, 0, width, height);
       frameCount++;
 
+      // Delayed tracker initialization if webcam is active but tracker is null
+      if (streamRef.current && !trackerRef.current) {
+        if (window.clm && window.clm.tracker && window.pmodel) {
+          try {
+            const tracker = new window.clm.tracker();
+            tracker.init(window.pmodel);
+            tracker.start(videoRef.current);
+            trackerRef.current = tracker;
+            addSystemLog("Face tracker initialized on active video stream.", "info");
+          } catch (trackerErr) {
+            console.error("Delayed tracker initialization failed:", trackerErr);
+          }
+        }
+      }
+
       // 1. Draw webcam feed if actual webcam is active
       if (videoRef.current && videoRef.current.readyState === videoRef.current.HAVE_ENOUGH_DATA) {
         // Draw video mirrored horizontally
@@ -330,28 +387,108 @@ export default function FaceAttendanceWorkspace() {
       }
 
       // 2. Fetch Face coordinates
-      let faces = [];
-      if (streamRef.current) {
-        faces = detectedFacesRef.current || [];
-      } else if (cameraActive) {
+      let positions = null;
+      let boundingBox = null;
+      let isSimulated = false;
+
+      if (streamRef.current && trackerRef.current) {
+        positions = trackerRef.current.getCurrentPosition();
+        if (positions && positions.length > 0) {
+          // Calculate bounding box from min/max positions
+          let minX = width;
+          let maxX = 0;
+          let minY = height;
+          let maxY = 0;
+          for (let i = 0; i < positions.length; i++) {
+            const px = positions[i][0];
+            const py = positions[i][1];
+            if (px < minX) minX = px;
+            if (px > maxX) maxX = px;
+            if (py < minY) minY = py;
+            if (py > maxY) maxY = py;
+          }
+          const padX = (maxX - minX) * 0.1;
+          const padY = (maxY - minY) * 0.15;
+          boundingBox = {
+            x: Math.max(0, minX - padX),
+            y: Math.max(0, minY - padY),
+            width: Math.min(width, (maxX - minX) + padX * 2),
+            height: Math.min(height, (maxY - minY) + padY * 2)
+          };
+        }
+      } else if (cameraActive && isDemoSimulationRef.current) {
         // Fallback simulation when camera is in simulated placeholder mode
         const simX = 240 + Math.sin(frameCount * 0.02) * 15;
         const simY = 170 + Math.cos(frameCount * 0.035) * 8;
-        faces = [{ x: simX - 65, y: simY - 65, width: 130, height: 130, isSimulated: true }];
+        boundingBox = { x: simX - 65, y: simY - 65, width: 130, height: 130 };
+        isSimulated = true;
+      }
+
+      // Visual feedback status overlay for Real Webcam Mode
+      if (streamRef.current) {
+        ctx.fillStyle = "rgba(15, 23, 42, 0.75)";
+        ctx.fillRect(10, 10, 175, 28);
+        ctx.strokeStyle = "#2C2C2C";
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(10, 10, 175, 28);
+
+        if (!trackerRef.current) {
+          ctx.fillStyle = "#F59E0B"; // Yellow
+          ctx.font = "bold 9px sans-serif";
+          ctx.fillText("⏳ INITIALIZING FACE TRACKER...", 20, 27);
+        } else if (!positions || positions.length === 0) {
+          ctx.fillStyle = "#EF4444"; // Red
+          ctx.font = "bold 9px sans-serif";
+          ctx.fillText("❌ NO FACE DETECTED IN FRAME", 20, 27);
+        } else {
+          ctx.fillStyle = "#10B981"; // Green
+          ctx.font = "bold 9px sans-serif";
+          ctx.fillText("✅ FACE DETECTED & ACTIVE", 20, 27);
+        }
       }
 
       // If faces are detected in the feed
-      if (faces.length > 0) {
-        const rect = faces[0];
-        
+      if (boundingBox) {
         // Horizontal mirroring correction
-        const x = rect.isSimulated ? rect.x : (width - rect.x - rect.width);
-        const y = rect.y;
-        const w = rect.width;
-        const h = rect.height;
+        const x = isSimulated ? boundingBox.x : (width - boundingBox.x - boundingBox.width);
+        const y = boundingBox.y;
+        const w = boundingBox.width;
+        const h = boundingBox.height;
+
+        // Draw face tracking dots (for real webcam feed)
+        if (!isSimulated && positions) {
+          ctx.fillStyle = "rgba(16, 185, 129, 0.4)";
+          for (let i = 0; i < positions.length; i++) {
+            const px = width - positions[i][0];
+            const py = positions[i][1];
+            ctx.beginPath();
+            ctx.arc(px, py, 1.8, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        const currentFeatures = isSimulated ? [0.8, 0.25, 0.18, 0.3, 0.4] : getFaceFeatureVector(positions);
 
         // 3. Handle Sampling Mode
         if (currentModeRef.current === "Sampling" && samplingStudentRef.current) {
+          if (currentFeatures) {
+            tempFeaturesRef.current.push(currentFeatures);
+            const count = tempFeaturesRef.current.length;
+            
+            if (count !== samplingCountRef.current) {
+              setSamplingCount(count);
+              addSystemLog(`Face snapshot #${count} analyzed.`, "info");
+            }
+            
+            if (count >= samplingLimit) {
+              const collected = [...tempFeaturesRef.current];
+              tempFeaturesRef.current = [];
+              setTimeout(() => {
+                finishSampling(collected);
+              }, 10);
+            }
+          }
+
           // Draw blue capture crosshair
           ctx.strokeStyle = "#0EA5E9";
           ctx.lineWidth = 3;
@@ -386,24 +523,51 @@ export default function FaceAttendanceWorkspace() {
 
         // 4. Handle Tracking / Recognition Mode
         else if (currentModeRef.current === "Tracking" && trackingActiveRef.current) {
-          // Perform mock periodic face identification (every 50 frames ~ 1.5s)
-          const scanPeriod = 50;
-          const scanIndex = frameCount % scanPeriod;
-          
           let labelColor = "#EAB308"; // Scanning yellow
           let labelText = "IDENTIFYING FACE...";
-          
-          if (scanIndex > 35) {
-            // Identify! Match against students
-            labelColor = "#10B981"; // Green match
+
+          if (isSimulated) {
+            // For simulated feed, just show a demo match of the last student
+            const matchPeriod = 50;
+            const matchIndex = frameCount % matchPeriod;
+            if (matchIndex > 35) {
+              labelColor = "#10B981";
+              const matchTarget = studentsRef.current[studentsRef.current.length - 1] || DEFAULT_STUDENTS[0];
+              labelText = `${matchTarget.name} (${matchTarget.studentId}) [SIM]`;
+              if (matchIndex === 36) {
+                triggerMarkAttendance(matchTarget);
+              }
+            }
+          } else if (currentFeatures) {
+            // Real geometric classification
+            let minDistance = 999;
+            let matchedStudent = null;
             
-            // Pick the last enrolled student (user registered) or default seed
-            const matchTarget = studentsRef.current[studentsRef.current.length - 1] || DEFAULT_STUDENTS[0];
-            labelText = `${matchTarget.name} (${matchTarget.studentId})`;
-            
-            // Mark attendance in database
-            if (scanIndex === 36) {
-              triggerMarkAttendance(matchTarget);
+            studentsRef.current.forEach(student => {
+              if (student.features) {
+                let sumSq = 0;
+                for (let i = 0; i < 5; i++) {
+                  const diff = currentFeatures[i] - student.features[i];
+                  sumSq += diff * diff;
+                }
+                const dist = Math.sqrt(sumSq);
+                if (dist < minDistance) {
+                  minDistance = dist;
+                  matchedStudent = student;
+                }
+              }
+            });
+
+            // Threshold of 0.07 is ideal for normalized ratio matching
+            if (matchedStudent && minDistance < 0.07) {
+              labelColor = "#10B981"; // Green match
+              labelText = `${matchedStudent.name} (${matchedStudent.studentId}) [Dist: ${minDistance.toFixed(3)}]`;
+              triggerMarkAttendance(matchedStudent);
+            } else {
+              labelColor = "#EF4444"; // Red mismatch
+              labelText = minDistance < 999 
+                ? `UNKNOWN FACE [Dist: ${minDistance.toFixed(3)}]` 
+                : "UNKNOWN FACE [NO TEMPLATE]";
             }
           }
 
@@ -459,37 +623,32 @@ export default function FaceAttendanceWorkspace() {
     draw();
   };
 
-  // --- SIMULATED SAMPLING TRIGGER ---
-  useEffect(() => {
-    if (currentMode !== "Sampling" || !samplingStudent) return;
-
-    const interval = setInterval(() => {
-      setSamplingCount(prev => {
-        if (prev + 1 >= samplingLimit) {
-          clearInterval(interval);
-          finishSampling();
-          return samplingLimit;
-        }
-        addSystemLog(`Face snapshot #${prev + 2} exported to local dataset index.`, "info");
-        return prev + 1;
-      });
-    }, 85); // Capture every 85ms
-
-    return () => clearInterval(interval);
-  }, [currentMode, samplingStudent]);
-
-  const finishSampling = () => {
+  // --- SAMPLING PROCESS ---
+  const finishSampling = (collectedFeatures) => {
     addSystemLog(`Successfully logged 30 samples to directory.`, "info");
     
+    // Calculate average feature vector
+    const numSamples = collectedFeatures.length;
+    const avgFeatures = [0, 0, 0, 0, 0];
+    for (let i = 0; i < numSamples; i++) {
+      for (let j = 0; j < 5; j++) {
+        avgFeatures[j] += collectedFeatures[i][j];
+      }
+    }
+    for (let j = 0; j < 5; j++) {
+      avgFeatures[j] = avgFeatures[j] / numSamples;
+    }
+
     // Add student to the database
     const newStudentObj = {
-      studentId: samplingStudent.id,
-      name: samplingStudent.name,
-      department: samplingStudent.dept,
+      studentId: samplingStudentRef.current.id,
+      name: samplingStudentRef.current.name,
+      department: samplingStudentRef.current.dept,
+      features: avgFeatures,
       addedAt: new Date().toISOString()
     };
 
-    const updatedStudents = [...students, newStudentObj];
+    const updatedStudents = [...studentsRef.current, newStudentObj];
     setStudents(updatedStudents);
     localStorage.setItem("shubdeep_attendance_students", JSON.stringify(updatedStudents));
     
@@ -501,9 +660,9 @@ export default function FaceAttendanceWorkspace() {
     setNewDept("");
     setSamplingStudent(null);
     setCurrentMode("Idle");
+    setSamplingCount(0);
 
-    // Display alert
-    alert(`30 face samples captured! Registered student ${newStudentObj.name}. Ensure you click 'Train Face Recognizer' next.`);
+    alert(`30 face samples captured! Registered student ${newStudentObj.name}. Try starting Tracking now to verify the real-time match!`);
   };
 
   // --- SYSTEM LOG ACTIONS ---
@@ -705,8 +864,8 @@ export default function FaceAttendanceWorkspace() {
             <span>⏱️ EXPIRES IN: {formatTime(timeLeft)}</span>
           </div>
           <div className="flex items-center gap-2 font-marker font-bold border-2 border-[#2C2C2C] bg-white rounded-xl px-2.5 py-1.5 shadow-[2px_2px_0_#2C2C2C]">
-            <span className={`w-2.5 h-2.5 rounded-full animate-pulse border border-[#2C2C2C] ${cameraActive ? "bg-emerald-500 shadow-[0_0_4px_#10b981]" : "bg-red-500"}`}></span>
-            <span className="text-[#2C2C2C] tracking-wide">CAMERA: {cameraActive ? "ONLINE" : "STANDBY"}</span>
+            <span className={`w-2.5 h-2.5 rounded-full animate-pulse border border-[#2C2C2C] ${cameraActive ? (isDemoSimulation ? "bg-amber-500 shadow-[0_0_4px_#f59e0b]" : "bg-emerald-500 shadow-[0_0_4px_#10b981]") : "bg-red-500"}`}></span>
+            <span className="text-[#2C2C2C] tracking-wide">CAMERA: {cameraActive ? (isDemoSimulation ? "DEMO SIMULATOR" : "ONLINE") : "STANDBY"}</span>
           </div>
           <button 
             onClick={handleResetLogs}
@@ -824,6 +983,12 @@ export default function FaceAttendanceWorkspace() {
               Mode: {currentMode}
             </span>
           </div>
+
+          {isDemoSimulation && (
+            <div className="bg-amber-50 border-b-3 border-[#2C2C2C] text-[#92400e] px-5 py-2 text-[10px] font-marker font-bold flex items-center gap-1.5">
+              <span>⚠️ NO WEBCAM DETECTED: Running in automated demo simulator mode.</span>
+            </div>
+          )}
 
           {/* Simulated Webcam video display box */}
           <div className="flex-1 bg-[#1E293B] relative overflow-hidden flex items-center justify-center p-2.5">

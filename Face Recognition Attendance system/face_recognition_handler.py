@@ -24,9 +24,9 @@ def detect_faces(gray_frame):
     """
     faces = face_cascade.detectMultiScale(
         gray_frame,
-        scaleFactor=1.2,
-        minNeighbors=5,
-        minSize=(100, 100)
+        scaleFactor=1.1,       # Finer multi-scale search factor
+        minNeighbors=9,        # Higher minNeighbors (from 5) filters out false background noise
+        minSize=(120, 120)     # Exclude smaller background blobs/textures
     )
     return faces
 
@@ -147,9 +147,9 @@ class FaceRecognizer:
             # LBPH returns distance as confidence.
             # 0 is a perfect match. Lower is better. Typically:
             # - < 65: Excellent match
-            # - < 105: Acceptable match in webcam environments
-            # - > 105: Unreliable / Unknown
-            if confidence < 105:
+            # - < 78: Strict match to prevent false identifications of shadows/chairs
+            # - > 78: Unreliable / Unknown
+            if confidence < 78:
                 student_info = self.label_mapping.get(label_id)
                 if student_info:
                     return student_info["student_id"], student_info["name"], confidence
