@@ -54,6 +54,34 @@ export default function FaceAttendanceWorkspace() {
   // Track last marked time to avoid rapid multiple logs
   const lastMarkedRef = useRef({});
 
+  // Refs to avoid stale closures in canvas animation loop
+  const currentModeRef = useRef("Idle");
+  const trackingActiveRef = useRef(false);
+  const samplingStudentRef = useRef(null);
+  const samplingCountRef = useRef(0);
+  const studentsRef = useRef([]);
+
+  // Keep refs in sync with React state
+  useEffect(() => {
+    currentModeRef.current = currentMode;
+  }, [currentMode]);
+
+  useEffect(() => {
+    trackingActiveRef.current = trackingActive;
+  }, [trackingActive]);
+
+  useEffect(() => {
+    samplingStudentRef.current = samplingStudent;
+  }, [samplingStudent]);
+
+  useEffect(() => {
+    samplingCountRef.current = samplingCount;
+  }, [samplingCount]);
+
+  useEffect(() => {
+    studentsRef.current = students;
+  }, [students]);
+
   // Verify token and seed databases on mount
   useEffect(() => {
     setMounted(true);
@@ -254,7 +282,7 @@ export default function FaceAttendanceWorkspace() {
       faceY = 170 + Math.cos(frameCount * 0.035) * 8;
 
       // 3. Handle Sampling Mode
-      if (currentMode === "Sampling" && samplingStudent) {
+      if (currentModeRef.current === "Sampling" && samplingStudentRef.current) {
         // Draw blue capture crosshair
         ctx.strokeStyle = "#0EA5E9";
         ctx.lineWidth = 3;
@@ -289,11 +317,11 @@ export default function FaceAttendanceWorkspace() {
         // Overlay text
         ctx.fillStyle = "#0EA5E9";
         ctx.font = "bold 12px sans-serif";
-        ctx.fillText(`SAMPLING: ${samplingCount + 1}/${samplingLimit}`, x, y - 10);
+        ctx.fillText(`SAMPLING: ${samplingCountRef.current + 1}/${samplingLimit}`, x, y - 10);
       }
 
       // 4. Handle Tracking / Recognition Mode
-      else if (currentMode === "Tracking" && trackingActive) {
+      else if (currentModeRef.current === "Tracking" && trackingActiveRef.current) {
         const boxSize = 140;
         const x = faceX - boxSize / 2;
         const y = faceY - boxSize / 2;
@@ -310,7 +338,7 @@ export default function FaceAttendanceWorkspace() {
           labelColor = "#10B981"; // Green match
           
           // Pick the last enrolled student (user registered) or default seed
-          const matchTarget = students[students.length - 1] || DEFAULT_STUDENTS[0];
+          const matchTarget = studentsRef.current[studentsRef.current.length - 1] || DEFAULT_STUDENTS[0];
           labelText = `${matchTarget.name} (${matchTarget.studentId})`;
           
           // Mark attendance in database
