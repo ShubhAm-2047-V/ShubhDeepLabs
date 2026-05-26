@@ -165,7 +165,7 @@ ${context || "No context provided."}`;
 
 // Call Gemini API using native fetch
 async function callGemini(message, context, history, apiKey) {
-  logger.log("[LLM Gemini] Connecting to Gemini API (gemini-1.5-flash)...", "info");
+  logger.log("[LLM Gemini] Connecting to Gemini API (gemini-2.5-flash)...", "info");
 
   const systemInstruction = `You are a helpful customer support agent for Shubdeep Labs.
 Answer the user's question using ONLY the factual context provided. If the context does not contain the answer, say "I'm sorry, I don't have that information in my knowledge base. Please contact our support coordinators."
@@ -188,7 +188,7 @@ ${context || "No context provided."}`;
   });
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

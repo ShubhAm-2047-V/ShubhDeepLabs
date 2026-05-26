@@ -27,7 +27,7 @@ export async function POST(req) {
     let reply = "";
 
     if (geminiKey) {
-      addLog("[LLM Gemini] Handshaking with Gemini API (gemini-1.5-flash)...", "info");
+      addLog("[LLM Gemini] Handshaking with Gemini API (gemini-2.5-flash)...", "info");
 
       const systemInstruction = `You are a helpful customer support agent for Shubdeep Labs.
 Answer the user's question using ONLY the factual context provided. If the context does not contain the answer, say "I'm sorry, I don't have that information in my knowledge base. Please contact our support coordinators."
@@ -49,7 +49,7 @@ ${context || "No context provided."}`;
       });
 
       try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`;
         const response = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
