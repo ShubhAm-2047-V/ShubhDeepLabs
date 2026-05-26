@@ -87,13 +87,9 @@ def train_recognizer():
             pil_img = Image.open(path).convert('L')
             img_numpy = np.array(pil_img, 'uint8')
             
-            # Detect face in the sample image to double check and crop (if not already done)
-            # The samples should already be cropped, but doing it again adds robustness
-            faces = face_cascade.detectMultiScale(img_numpy)
-            
-            for (x, y, w, h) in faces:
-                face_samples.append(img_numpy[y:y+h, x:x+w])
-                labels.append(label_id)
+            # Since the samples are already cropped faces, we append them directly
+            face_samples.append(img_numpy)
+            labels.append(label_id)
         except Exception as e:
             print(f"Error loading sample {path}: {str(e)}")
             continue
@@ -151,9 +147,9 @@ class FaceRecognizer:
             # LBPH returns distance as confidence.
             # 0 is a perfect match. Lower is better. Typically:
             # - < 65: Excellent match
-            # - < 85: Decent match
-            # - > 85: Unreliable / Unknown
-            if confidence < 80:
+            # - < 105: Acceptable match in webcam environments
+            # - > 105: Unreliable / Unknown
+            if confidence < 105:
                 student_info = self.label_mapping.get(label_id)
                 if student_info:
                     return student_info["student_id"], student_info["name"], confidence
