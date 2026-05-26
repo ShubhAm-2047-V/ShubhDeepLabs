@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Layers, Cpu, Award, FileText, Lock, ArrowRight, Sparkles, Terminal, Gift } from "lucide-react";
+import { Layers, Cpu, Award, FileText, Lock, ArrowRight, Sparkles, Terminal, Gift, MessageSquare } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
  
@@ -24,6 +24,7 @@ export default function Navbar() {
     { name: "Project Topics", href: "/#categories", icon: Layers },
     { name: "Daily Offer", href: "/offers", icon: Gift },
     { name: "Success Stories", href: "/#portfolio", icon: Award },
+    { name: "AI Chatbot", href: "/chatbot", icon: MessageSquare },
     { name: "Common Doubts", href: "/#faq", icon: FileText },
   ];
  
