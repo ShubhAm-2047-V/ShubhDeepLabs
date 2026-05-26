@@ -1,0 +1,16 @@
+{
+  "name": "advanced-ai-customer-care-chatbot",
+  "version": "1.0.0",
+  "description": "Intelligent messaging center with customizable document indexing (RAG) and interactive dashboard console log views.",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "bun install && cd backend && bun install && cd ../frontend && bun install && bun install lucide-react",
+    "start": "concurrently \"bun run start:backend\" \"bun run start:frontend\"",
+    "start:backend": "cd backend && bun run start",
+    "start:frontend": "cd frontend && bun run dev",
+    "build": "cd frontend && bun run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

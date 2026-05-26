@@ -39,3 +39,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Ignore in sub-projects recursively
+node_modules/
+dist/
+.next/
+build/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.vercel/
+
