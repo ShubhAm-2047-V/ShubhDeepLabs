@@ -60,6 +60,31 @@ export default function FaceAttendanceWorkspace() {
   const samplingStudentRef = useRef(null);
   const samplingCountRef = useRef(0);
   const studentsRef = useRef([]);
+  const detectedFacesRef = useRef([]);
+  const trackerTaskRef = useRef(null);
+
+  // Load tracking.js and face classifier from CDN on mount
+  useEffect(() => {
+    const script1 = document.createElement("script");
+    script1.src = "https://cdnjs.cloudflare.com/ajax/libs/tracking.js/1.1.3/tracking-min.js";
+    script1.async = true;
+    
+    script1.onload = () => {
+      const script2 = document.createElement("script");
+      script2.src = "https://cdnjs.cloudflare.com/ajax/libs/tracking.js/1.1.3/data/face-min.js";
+      script2.async = true;
+      script2.onload = () => {
+        addSystemLog("Client-side face detection module loaded successfully.", "info");
+      };
+      document.body.appendChild(script2);
+    };
+    document.body.appendChild(script1);
+    
+    return () => {
+      // Clean up script tags if component unmounts
+      if (document.body.contains(script1)) document.body.removeChild(script1);
+    };
+  }, []);
 
   // Keep refs in sync with React state
   useEffect(() => {
@@ -185,6 +210,28 @@ export default function FaceAttendanceWorkspace() {
       setCameraActive(true);
       addSystemLog("Webcam connection established. Frame stream active.", "info");
       
+      // Initialize tracking.js tracker on the video stream
+      if (window.tracking && window.tracking.ObjectTracker) {
+        try {
+          const tracker = new window.tracking.ObjectTracker('face');
+          tracker.setInitialScale(4);
+          tracker.setStepSize(2);
+          tracker.setEdgesDensity(0.1);
+          
+          tracker.on('track', (event) => {
+            detectedFacesRef.current = event.data || [];
+          });
+          
+          trackerTaskRef.current = window.tracking.track(videoRef.current, tracker);
+          addSystemLog("Face detector registered on video stream.", "info");
+        } catch (trackerErr) {
+          console.error("Tracker initialization failed:", trackerErr);
+          addSystemLog("Tracker startup warning. Running in fallback mode.", "warn");
+        }
+      } else {
+        addSystemLog("Tracking library not loaded yet. Running in standby mock.", "warn");
+      }
+
       // Start canvas drawing loops
       setTimeout(() => {
         startCanvasLoop();
@@ -208,6 +255,12 @@ export default function FaceAttendanceWorkspace() {
       frameIdRef.current = null;
     }
     
+    if (trackerTaskRef.current) {
+      trackerTaskRef.current.stop();
+      trackerTaskRef.current = null;
+    }
+    detectedFacesRef.current = [];
+
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
@@ -276,124 +329,128 @@ export default function FaceAttendanceWorkspace() {
         ctx.fillText("[Webcam Mock Feed Running]", width / 2, height / 2 + 80);
       }
 
-      // 2. Simulate Face coordinates
-      // Slowly float face positions for organic feeling
-      faceX = 240 + Math.sin(frameCount * 0.02) * 15;
-      faceY = 170 + Math.cos(frameCount * 0.035) * 8;
-
-      // 3. Handle Sampling Mode
-      if (currentModeRef.current === "Sampling" && samplingStudentRef.current) {
-        // Draw blue capture crosshair
-        ctx.strokeStyle = "#0EA5E9";
-        ctx.lineWidth = 3;
-        ctx.setLineDash([]);
-        
-        // Draw box around "detected" face
-        const boxSize = 140;
-        const x = faceX - boxSize / 2;
-        const y = faceY - boxSize / 2;
-        ctx.strokeRect(x, y, boxSize, boxSize);
-
-        // Corner markings
-        ctx.fillStyle = "#0EA5E9";
-        ctx.fillRect(x - 5, y - 5, 20, 5);
-        ctx.fillRect(x - 5, y - 5, 5, 20);
-        ctx.fillRect(x + boxSize - 15, y - 5, 20, 5);
-        ctx.fillRect(x + boxSize, y - 5, 5, 20);
-        ctx.fillRect(x - 5, y + boxSize, 20, 5);
-        ctx.fillRect(x - 5, y + boxSize - 15, 5, 20);
-        ctx.fillRect(x + boxSize - 15, y + boxSize, 20, 5);
-        ctx.fillRect(x + boxSize, y + boxSize - 15, 5, 20);
-
-        // Scan animation inside box
-        ctx.strokeStyle = "rgba(14, 165, 233, 0.4)";
-        ctx.beginPath();
-        scanLine += scanDirection;
-        if (scanLine > y + boxSize - 10 || scanLine < y + 10) scanDirection *= -1;
-        ctx.moveTo(x + 10, scanLine);
-        ctx.lineTo(x + boxSize - 10, scanLine);
-        ctx.stroke();
-
-        // Overlay text
-        ctx.fillStyle = "#0EA5E9";
-        ctx.font = "bold 12px sans-serif";
-        ctx.fillText(`SAMPLING: ${samplingCountRef.current + 1}/${samplingLimit}`, x, y - 10);
+      // 2. Fetch Face coordinates
+      let faces = [];
+      if (streamRef.current) {
+        faces = detectedFacesRef.current || [];
+      } else if (cameraActive) {
+        // Fallback simulation when camera is in simulated placeholder mode
+        const simX = 240 + Math.sin(frameCount * 0.02) * 15;
+        const simY = 170 + Math.cos(frameCount * 0.035) * 8;
+        faces = [{ x: simX - 65, y: simY - 65, width: 130, height: 130, isSimulated: true }];
       }
 
-      // 4. Handle Tracking / Recognition Mode
-      else if (currentModeRef.current === "Tracking" && trackingActiveRef.current) {
-        const boxSize = 140;
-        const x = faceX - boxSize / 2;
-        const y = faceY - boxSize / 2;
+      // If faces are detected in the feed
+      if (faces.length > 0) {
+        const rect = faces[0];
+        
+        // Horizontal mirroring correction
+        const x = rect.isSimulated ? rect.x : (width - rect.x - rect.width);
+        const y = rect.y;
+        const w = rect.width;
+        const h = rect.height;
 
-        // Perform mock periodic face identification (every 45 frames ~ 1.5s)
-        const scanPeriod = 50;
-        const scanIndex = frameCount % scanPeriod;
-        
-        let labelColor = "#EAB308"; // Scanning yellow
-        let labelText = "IDENTIFYING FACE...";
-        
-        if (scanIndex > 35) {
-          // Identify! Match against students
-          labelColor = "#10B981"; // Green match
-          
-          // Pick the last enrolled student (user registered) or default seed
-          const matchTarget = studentsRef.current[studentsRef.current.length - 1] || DEFAULT_STUDENTS[0];
-          labelText = `${matchTarget.name} (${matchTarget.studentId})`;
-          
-          // Mark attendance in database
-          if (scanIndex === 36) {
-            triggerMarkAttendance(matchTarget);
-          }
+        // 3. Handle Sampling Mode
+        if (currentModeRef.current === "Sampling" && samplingStudentRef.current) {
+          // Draw blue capture crosshair
+          ctx.strokeStyle = "#0EA5E9";
+          ctx.lineWidth = 3;
+          ctx.setLineDash([]);
+          ctx.strokeRect(x, y, w, h);
+
+          // Corner markings
+          ctx.fillStyle = "#0EA5E9";
+          ctx.fillRect(x - 5, y - 5, 20, 5);
+          ctx.fillRect(x - 5, y - 5, 5, 20);
+          ctx.fillRect(x + w - 15, y - 5, 20, 5);
+          ctx.fillRect(x + w, y - 5, 5, 20);
+          ctx.fillRect(x - 5, y + h, 20, 5);
+          ctx.fillRect(x - 5, y + h - 15, 5, 20);
+          ctx.fillRect(x + w - 15, y + h, 20, 5);
+          ctx.fillRect(x + w, y + h - 15, 5, 20);
+
+          // Scan animation inside box
+          ctx.strokeStyle = "rgba(14, 165, 233, 0.4)";
+          ctx.beginPath();
+          scanLine += scanDirection;
+          if (scanLine > y + h - 10 || scanLine < y + 10) scanDirection *= -1;
+          ctx.moveTo(x + 10, scanLine);
+          ctx.lineTo(x + w - 10, scanLine);
+          ctx.stroke();
+
+          // Overlay text
+          ctx.fillStyle = "#0EA5E9";
+          ctx.font = "bold 12px sans-serif";
+          ctx.fillText(`SAMPLING: ${samplingCountRef.current + 1}/${samplingLimit}`, x, y - 10);
         }
 
-        // Draw bounding box
-        ctx.strokeStyle = labelColor;
-        ctx.lineWidth = 3;
-        ctx.setLineDash([]);
-        ctx.strokeRect(x, y, boxSize, boxSize);
+        // 4. Handle Tracking / Recognition Mode
+        else if (currentModeRef.current === "Tracking" && trackingActiveRef.current) {
+          // Perform mock periodic face identification (every 50 frames ~ 1.5s)
+          const scanPeriod = 50;
+          const scanIndex = frameCount % scanPeriod;
+          
+          let labelColor = "#EAB308"; // Scanning yellow
+          let labelText = "IDENTIFYING FACE...";
+          
+          if (scanIndex > 35) {
+            // Identify! Match against students
+            labelColor = "#10B981"; // Green match
+            
+            // Pick the last enrolled student (user registered) or default seed
+            const matchTarget = studentsRef.current[studentsRef.current.length - 1] || DEFAULT_STUDENTS[0];
+            labelText = `${matchTarget.name} (${matchTarget.studentId})`;
+            
+            // Mark attendance in database
+            if (scanIndex === 36) {
+              triggerMarkAttendance(matchTarget);
+            }
+          }
 
-        // Corner designs
-        ctx.fillStyle = labelColor;
-        ctx.fillRect(x - 5, y - 5, 20, 5);
-        ctx.fillRect(x - 5, y - 5, 5, 20);
-        ctx.fillRect(x + boxSize - 15, y - 5, 20, 5);
-        ctx.fillRect(x + boxSize, y - 5, 5, 20);
-        ctx.fillRect(x - 5, y + boxSize, 20, 5);
-        ctx.fillRect(x - 5, y + boxSize - 15, 5, 20);
-        ctx.fillRect(x + boxSize - 15, y + boxSize, 20, 5);
-        ctx.fillRect(x + boxSize, y + boxSize - 15, 5, 20);
+          // Draw bounding box
+          ctx.strokeStyle = labelColor;
+          ctx.lineWidth = 3;
+          ctx.setLineDash([]);
+          ctx.strokeRect(x, y, w, h);
 
-        // Scan Line
-        ctx.strokeStyle = `${labelColor}40`; // transparency
-        ctx.beginPath();
-        scanLine += scanDirection * 1.5;
-        if (scanLine > y + boxSize - 10 || scanLine < y + 10) scanDirection *= -1;
-        ctx.moveTo(x + 10, scanLine);
-        ctx.lineTo(x + boxSize - 10, scanLine);
-        ctx.stroke();
+          // Corner designs
+          ctx.fillStyle = labelColor;
+          ctx.fillRect(x - 5, y - 5, 20, 5);
+          ctx.fillRect(x - 5, y - 5, 5, 20);
+          ctx.fillRect(x + w - 15, y - 5, 20, 5);
+          ctx.fillRect(x + w, y - 5, 5, 20);
+          ctx.fillRect(x - 5, y + h, 20, 5);
+          ctx.fillRect(x - 5, y + h - 15, 5, 20);
+          ctx.fillRect(x + w - 15, y + h, 20, 5);
+          ctx.fillRect(x + w, y + h - 15, 5, 20);
 
-        // Print details
-        ctx.fillStyle = labelColor;
-        ctx.font = "bold 13px sans-serif";
-        ctx.fillText(labelText, x, y - 10);
-      }
+          // Scan Line
+          ctx.strokeStyle = `${labelColor}40`; // transparency
+          ctx.beginPath();
+          scanLine += scanDirection * 1.5;
+          if (scanLine > y + h - 10 || scanLine < y + 10) scanDirection *= -1;
+          ctx.moveTo(x + 10, scanLine);
+          ctx.lineTo(x + w - 10, scanLine);
+          ctx.stroke();
 
-      // 5. Handle Idle Mode
-      else {
-        // Just draw yellow boundary box around detected face
-        const boxSize = 130;
-        const x = faceX - boxSize / 2;
-        const y = faceY - boxSize / 2;
+          // Print details
+          ctx.fillStyle = labelColor;
+          ctx.font = "bold 13px sans-serif";
+          ctx.fillText(labelText, x, y - 10);
+        }
 
-        ctx.strokeStyle = "#F59E0B";
-        ctx.lineWidth = 2;
-        ctx.setLineDash([6, 4]); // dashed box for standby
-        ctx.strokeRect(x, y, boxSize, boxSize);
+        // 5. Handle Idle Mode
+        else {
+          // Just draw yellow boundary box around detected face
+          ctx.strokeStyle = "#F59E0B";
+          ctx.lineWidth = 2;
+          ctx.setLineDash([6, 4]); // dashed box for standby
+          ctx.strokeRect(x, y, w, h);
 
-        ctx.fillStyle = "#F59E0B";
-        ctx.font = "bold 11px sans-serif";
-        ctx.fillText("FACE DETECTED (STANDBY)", x, y - 10);
+          ctx.fillStyle = "#F59E0B";
+          ctx.font = "bold 11px sans-serif";
+          ctx.fillText("FACE DETECTED (STANDBY)", x, y - 10);
+        }
       }
 
       frameIdRef.current = requestAnimationFrame(draw);
