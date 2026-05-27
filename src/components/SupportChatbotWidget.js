@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { MessageSquare, X, Send, Sparkles, Brain, ArrowRight, MessageCircle } from "lucide-react";
+import { MessageSquare, X, Send, Sparkles, Brain, ArrowRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
@@ -143,7 +143,7 @@ export default function SupportChatbotWidget() {
   };
 
   return (
-    <div className="fixed bottom-24 right-6 z-40 flex flex-col items-end font-marker">
+    <div className="fixed bottom-[10rem] right-6 z-40 flex flex-col items-end font-marker">
       
       {/* ── FLOAT DIALOG PANEL ── */}
       <AnimatePresence>
@@ -293,7 +293,7 @@ export default function SupportChatbotWidget() {
         {isOpen ? (
           <X className="w-6 h-6 animate-fade-in" />
         ) : (
-          <MessageCircle className="w-6 h-6 animate-fade-in text-[#2C2C2C]" />
+          <MessageSquare className="w-6 h-6 animate-fade-in text-[#2C2C2C]" />
         )}
       </motion.button>
     </div>
