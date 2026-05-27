@@ -51,6 +51,16 @@ export default function SupportChatbotWidget() {
     return () => clearTimeout(t);
   }, [isOpen]);
 
+  // Lock body scroll when chatbot modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [isOpen]);
+
   useEffect(() => {
     if (isOpen) {
       setShowNudge(false);
@@ -143,159 +153,175 @@ export default function SupportChatbotWidget() {
   };
 
   return (
-    <div className="fixed bottom-[10rem] right-6 z-40 flex flex-col items-end font-marker">
+    <div className="font-marker">
       
-      {/* ── FLOAT DIALOG PANEL ── */}
+      {/* ── CENTERED DIALOG MODAL ── */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.85 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 30, scale: 0.85 }}
-            className="w-[330px] sm:w-[360px] h-[460px] bg-white border-3 border-[#2C2C2C] rounded-2xl shadow-[5px_6px_0_#2C2C2C] overflow-hidden flex flex-col mb-4 relative"
+            key="support-chatbot-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[110] flex items-center justify-center p-4"
+            style={{ backgroundColor: "rgba(44,44,44,0.55)", backdropFilter: "blur(6px)" }}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setIsOpen(false);
+            }}
           >
-            {/* Whiteboard Header */}
-            <div className="bg-[#FFF59D] border-b-3 border-[#2C2C2C] p-3 flex justify-between items-center relative">
-              {/* Notebook binding styling */}
-              <div className="absolute top-1 left-4 flex gap-1.5 pointer-events-none">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#FAF6EE] border border-[#2C2C2C]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[#FAF6EE] border border-[#2C2C2C]" />
-                <div className="w-2.5 h-2.5 rounded-full bg-[#FAF6EE] border border-[#2C2C2C]" />
-              </div>
-
-              <div className="flex items-center gap-2.5 pl-14">
-                <div className="w-7 h-7 bg-[#FFF176] rounded-lg border-1.5 border-[#2C2C2C] flex items-center justify-center shadow-[1px_1.5px_0_#2C2C2C]">
-                  <Brain size={14} className="text-[#2C2C2C]" />
+            <motion.div
+              initial={{ opacity: 0, y: 30, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 30, scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 350, damping: 25 }}
+              className="w-full max-w-[380px] h-[500px] bg-white border-3 border-[#2C2C2C] rounded-2xl shadow-[6px_8px_0_#2C2C2C] overflow-hidden flex flex-col relative"
+            >
+              {/* Whiteboard Header */}
+              <div className="bg-[#FFF59D] border-b-3 border-[#2C2C2C] p-3 flex justify-between items-center relative shrink-0">
+                {/* Notebook binding styling */}
+                <div className="absolute top-1 left-4 flex gap-1.5 pointer-events-none">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#FAF6EE] border border-[#2C2C2C]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#FAF6EE] border border-[#2C2C2C]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#FAF6EE] border border-[#2C2C2C]" />
                 </div>
-                <div>
-                  <h3 className="text-xs font-marker font-extrabold text-[#2C2C2C] leading-none">Support Desk AI</h3>
-                  <span className="text-[8px] font-sans font-bold text-[#6A6A6A] leading-none">Online &amp; Active</span>
-                </div>
-              </div>
 
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-1 rounded-lg border border-[#2C2C2C]/20 hover:border-[#2C2C2C] hover:bg-white/80 transition-all text-[#2C2C2C]"
-              >
-                <X size={14} />
-              </button>
-            </div>
-
-            {/* RAG Rule Sheet messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 notebook-ruled">
-              {messages.map((msg) => (
-                <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-[85%] rounded-xl p-3 text-xs shadow-[1.5px_2px_0_#2C2C2C] border border-[#2C2C2C] ${
-                    msg.sender === "user" 
-                      ? "bg-[#FFF9C4] text-[#2C2C2C] rounded-tr-none" 
-                      : "bg-white text-[#2C2C2C] rounded-tl-none"
-                  }`}>
-                    <p className="font-sans font-semibold whitespace-pre-line leading-relaxed">{msg.text}</p>
+                <div className="flex items-center gap-2.5 pl-14">
+                  <div className="w-7 h-7 bg-[#FFF176] rounded-lg border-1.5 border-[#2C2C2C] flex items-center justify-center shadow-[1px_1.5px_0_#2C2C2C]">
+                    <Brain size={14} className="text-[#2C2C2C]" />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-marker font-extrabold text-[#2C2C2C] leading-none">Support Desk AI</h3>
+                    <span className="text-[8px] font-sans font-bold text-[#6A6A6A] leading-none">Online &amp; Active</span>
                   </div>
                 </div>
-              ))}
 
-              {isTyping && (
-                <div className="flex justify-start">
-                  <div className="bg-white border border-[#2C2C2C] rounded-xl rounded-tl-none p-2.5 shadow-[1.5px_2px_0_#2C2C2C]">
-                    <div className="flex gap-1 items-center">
-                      <span className="w-1.5 h-1.5 bg-[#2C2C2C] rounded-full animate-bounce"></span>
-                      <span className="w-1.5 h-1.5 bg-[#2C2C2C] rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                      <span className="w-1.5 h-1.5 bg-[#2C2C2C] rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="p-1 rounded-lg border border-[#2C2C2C]/20 hover:border-[#2C2C2C] hover:bg-white/80 transition-all text-[#2C2C2C]"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+
+              {/* RAG Rule Sheet messages */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-3 notebook-ruled">
+                {messages.map((msg) => (
+                  <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+                    <div className={`max-w-[85%] rounded-xl p-3 text-xs shadow-[1.5px_2px_0_#2C2C2C] border border-[#2C2C2C] ${
+                      msg.sender === "user" 
+                        ? "bg-[#FFF9C4] text-[#2C2C2C] rounded-tr-none" 
+                        : "bg-white text-[#2C2C2C] rounded-tl-none"
+                    }`}>
+                      <p className="font-sans font-semibold whitespace-pre-line leading-relaxed text-xs sm:text-sm">{msg.text}</p>
                     </div>
                   </div>
+                ))}
+
+                {isTyping && (
+                  <div className="flex justify-start">
+                    <div className="bg-white border border-[#2C2C2C] rounded-xl rounded-tl-none p-2.5 shadow-[1.5px_2px_0_#2C2C2C]">
+                      <div className="flex gap-1 items-center">
+                        <span className="w-1.5 h-1.5 bg-[#2C2C2C] rounded-full animate-bounce"></span>
+                        <span className="w-1.5 h-1.5 bg-[#2C2C2C] rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                        <span className="w-1.5 h-1.5 bg-[#2C2C2C] rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                <div ref={chatEndRef} />
+              </div>
+
+              {/* Dialog Footer Actions */}
+              <div className="p-3 border-t-2.5 border-[#2C2C2C] bg-[#FAF6EE] flex flex-col gap-2 shrink-0">
+                {/* Quick reply pills */}
+                <div className="flex flex-wrap gap-1">
+                  <button 
+                    onClick={() => handleQuickReply("What are your pricing plans?")}
+                    className="text-[9px] px-2 py-0.5 bg-white border border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-full shadow-[1px_1px_0_#2C2C2C] transition-all font-bold"
+                  >
+                    💰 Pricing
+                  </button>
+                  <button 
+                    onClick={() => handleQuickReply("What features do I get?")}
+                    className="text-[9px] px-2 py-0.5 bg-white border border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-full shadow-[1px_1px_0_#2C2C2C] transition-all font-bold"
+                  >
+                    ✨ Stacks &amp; Stuffs
+                  </button>
+                  <button 
+                    onClick={() => handleQuickReply("How can I call you?")}
+                    className="text-[9px] px-2 py-0.5 bg-white border border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-full shadow-[1px_1px_0_#2C2C2C] transition-all font-bold"
+                  >
+                    📞 Contact
+                  </button>
                 </div>
-              )}
-              <div ref={chatEndRef} />
-            </div>
 
-            {/* Dialog Footer Actions */}
-            <div className="p-3 border-t-2.5 border-[#2C2C2C] bg-[#FAF6EE] flex flex-col gap-2 shrink-0">
-              
-              {/* Quick reply pills */}
-              <div className="flex flex-wrap gap-1">
-                <button 
-                  onClick={() => handleQuickReply("What are your pricing plans?")}
-                  className="text-[9px] px-2 py-0.5 bg-white border border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-full shadow-[1px_1px_0_#2C2C2C] transition-all font-bold"
-                >
-                  💰 Pricing
-                </button>
-                <button 
-                  onClick={() => handleQuickReply("What features do I get?")}
-                  className="text-[9px] px-2 py-0.5 bg-white border border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-full shadow-[1px_1px_0_#2C2C2C] transition-all font-bold"
-                >
-                  ✨ Stacks &amp; Stuffs
-                </button>
-                <button 
-                  onClick={() => handleQuickReply("How can I call you?")}
-                  className="text-[9px] px-2 py-0.5 bg-white border border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-full shadow-[1px_1px_0_#2C2C2C] transition-all font-bold"
-                >
-                  📞 Contact
-                </button>
+                <div className="flex gap-1.5">
+                  <input
+                    type="text"
+                    placeholder="Ask a question..."
+                    className="flex-1 bg-white border-2 border-[#2C2C2C] rounded-lg px-2.5 py-1.5 text-xs text-[#2C2C2C] focus:outline-none focus:bg-[#FFF9C4]/5 font-sans font-semibold"
+                    value={inputVal}
+                    onChange={(e) => setInputVal(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                    disabled={isTyping}
+                  />
+                  <button 
+                    onClick={() => handleSendMessage()}
+                    disabled={isTyping || !inputVal.trim()}
+                    className="btn-sketch py-1 px-3 text-xs inline-flex items-center justify-center shadow-[1.5px_2.0px_0_#2C2C2C]"
+                  >
+                    <Send size={11} />
+                  </button>
+                </div>
+                
+                <div className="flex items-center justify-between text-[8px] text-[#8A8A8A] font-sans pt-1">
+                  <span>Direct consultation active</span>
+                  <a 
+                    href="https://wa.me/919028833275"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-marker font-bold text-[#2C2C2C] flex items-center gap-0.5 hover:underline"
+                  >
+                    WhatsApp Support <ArrowRight size={8} />
+                  </a>
+                </div>
               </div>
-
-              <div className="flex gap-1.5">
-                <input
-                  type="text"
-                  placeholder="Ask a question..."
-                  className="flex-1 bg-white border-2 border-[#2C2C2C] rounded-lg px-2.5 py-1.5 text-xs text-[#2C2C2C] focus:outline-none focus:bg-[#FFF9C4]/5 font-sans font-semibold"
-                  value={inputVal}
-                  onChange={(e) => setInputVal(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-                  disabled={isTyping}
-                />
-                <button 
-                  onClick={() => handleSendMessage()}
-                  disabled={isTyping || !inputVal.trim()}
-                  className="btn-sketch py-1 px-3 text-xs inline-flex items-center justify-center shadow-[1.5px_2.0px_0_#2C2C2C]"
-                >
-                  <Send size={11} />
-                </button>
-              </div>
-              
-              <div className="flex items-center justify-between text-[8px] text-[#8A8A8A] font-sans pt-1">
-                <span>Direct consultation active</span>
-                <a 
-                  href="https://wa.me/919028833275"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-marker font-bold text-[#2C2C2C] flex items-center gap-0.5 hover:underline"
-                >
-                  WhatsApp Support <ArrowRight size={8} />
-                </a>
-              </div>
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* ── FLOAT NUDGE CALLOUT ── */}
-      <AnimatePresence>
-        {showNudge && !isOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.85, x: 20 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.85 }}
-            className="mb-2 bg-[#FFF59D] border-2 border-[#2C2C2C] px-3 py-1.5 rounded-xl shadow-[2px_3px_0_#2C2C2C] text-[11px] font-bold text-[#2C2C2C] text-right pointer-events-none"
-          >
-            🤖 Need help choosing a project? Ask me!
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* ── FLOATING TRIGGER BUTTON CONTAINER (fixed bottom-right) ── */}
+      <div className="fixed bottom-[10rem] right-6 z-40 flex flex-col items-end gap-3">
+        {/* FLOAT NUDGE CALLOUT */}
+        <AnimatePresence>
+          {showNudge && !isOpen && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85, x: 20 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.85 }}
+              className="mb-1 bg-[#FFF59D] border-2 border-[#2C2C2C] px-3 py-1.5 rounded-xl shadow-[2px_3px_0_#2C2C2C] text-[11px] font-bold text-[#2C2C2C] text-right pointer-events-none"
+            >
+              🤖 Need help choosing a project? Ask me!
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      {/* ── FLOATING TRIGGER BUTTON ── */}
-      <motion.button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 bg-[#FFF59D] rounded-full flex items-center justify-center text-[#2C2C2C] shadow-[3px_4px_0_#2C2C2C] hover:bg-[#FFF9C4] hover:shadow-[4px_5px_0_#2C2C2C] transition-all border-2.5 border-[#2C2C2C] cursor-pointer"
-        whileTap={{ scale: 0.9 }}
-        whileHover={{ scale: 1.05 }}
-      >
-        {isOpen ? (
-          <X className="w-6 h-6 animate-fade-in" />
-        ) : (
-          <MessageSquare className="w-6 h-6 animate-fade-in text-[#2C2C2C]" />
-        )}
-      </motion.button>
+        {/* TRIGGER BUTTON */}
+        <motion.button
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-14 h-14 bg-[#FFF59D] rounded-full flex items-center justify-center text-[#2C2C2C] shadow-[3px_4px_0_#2C2C2C] hover:bg-[#FFF9C4] hover:shadow-[4px_5px_0_#2C2C2C] transition-all border-2.5 border-[#2C2C2C] cursor-pointer"
+          whileTap={{ scale: 0.9 }}
+          whileHover={{ scale: 1.05 }}
+        >
+          {isOpen ? (
+            <X className="w-6 h-6 animate-fade-in" />
+          ) : (
+            <MessageSquare className="w-6 h-6 animate-fade-in text-[#2C2C2C]" />
+          )}
+        </motion.button>
+      </div>
+
     </div>
   );
 }
