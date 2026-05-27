@@ -113,11 +113,10 @@ function renderMessageText(text, userQuery) {
       const label = labelMatch ? labelMatch[1] : part;
       let url = urlMatch ? urlMatch[1].replace(/[*\]\).,;!?']+$/, "") : "#";
       
-      if (url.includes("wa.me/919028833275")) {
-        const cleanBase = url.split("?")[0];
+      if (url.includes("wa.me") || url.includes("whatsapp")) {
         const prefix = "Hi! I would like to consult about my project: ";
         const fullText = prefix + (userQuery || "");
-        url = `${cleanBase}?text=${encodeURIComponent(fullText)}`;
+        url = `https://api.whatsapp.com/send?phone=919028833275&text=${encodeURIComponent(fullText)}`;
       }
       return (
         <a 
@@ -133,11 +132,10 @@ function renderMessageText(text, userQuery) {
     } else if (part.startsWith("http://") || part.startsWith("https://")) {
       const cleanUrl = part.replace(/[*\]\).,;!?']+$/, "");
       let hrefUrl = cleanUrl;
-      if (cleanUrl.includes("wa.me/919028833275")) {
-        const cleanBase = cleanUrl.split("?")[0];
+      if (cleanUrl.includes("wa.me") || cleanUrl.includes("whatsapp")) {
         const prefix = "Hi! I would like to consult about my project: ";
         const fullText = prefix + (userQuery || "");
-        hrefUrl = `${cleanBase}?text=${encodeURIComponent(fullText)}`;
+        hrefUrl = `https://api.whatsapp.com/send?phone=919028833275&text=${encodeURIComponent(fullText)}`;
       }
       return (
         <a 
