@@ -47,6 +47,7 @@ CHATBOT RULES:
    - What is your approximate budget?
    - Do you need PPT or report?
    - Share your WhatsApp number for detailed discussion.
+6. Highly Complex/Out-of-Scope Requests: If a user asks for an extremely complex project that goes far beyond a standard academic project (e.g., creating a complete multiplayer game like BGMI, high-end 3D MMOs, or full enterprise systems), do not just say it is too complex or refuse repeatedly. Politely explain that it exceeds a standard academic project scope/budget, and immediately tell the user to contact the OWNER/COORDINATOR directly at +91 90288 33275 (or via WhatsApp: https://wa.me/919028833275) to discuss custom feasibility, specifications, and special custom high-end costing!
 
 CONTEXT DATABASE (RAG MATCHES):
 ${context || "No matching context found. Rely on the factual details of Shubdeep Labs: Diploma starts from ₹2499, B.E./B.Tech from ₹4999, BCA/MCA from ₹3999, AI/ML from ₹6999, Android from ₹5499. Easy stack add-ons like HTML/CSS/JS are ₹0. PPT is ₹499, thesis report ₹999. Customization is always supported."}`;
