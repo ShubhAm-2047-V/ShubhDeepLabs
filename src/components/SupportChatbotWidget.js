@@ -111,7 +111,7 @@ function renderMessageText(text) {
       const labelMatch = part.match(/\[([^\]]+)\]/);
       const urlMatch = part.match(/\(([^)]+)\)/);
       const label = labelMatch ? labelMatch[1] : part;
-      const url = urlMatch ? urlMatch[1] : "#";
+      const url = urlMatch ? urlMatch[1].replace(/[*\]\).,;!?']+$/, "") : "#";
       return (
         <a 
           key={index} 
@@ -124,15 +124,16 @@ function renderMessageText(text) {
         </a>
       );
     } else if (part.startsWith("http://") || part.startsWith("https://")) {
+      const cleanUrl = part.replace(/[*\]\).,;!?']+$/, "");
       return (
         <a 
           key={index} 
-          href={part} 
+          href={cleanUrl} 
           target="_blank" 
           rel="noopener noreferrer" 
           className="text-blue-600 hover:text-blue-800 underline font-bold transition-colors"
         >
-          {part}
+          {cleanUrl}
         </a>
       );
     } else {
