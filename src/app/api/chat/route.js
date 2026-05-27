@@ -50,13 +50,13 @@ CHATBOT RULES:
  6. Highly Complex/Out-of-Scope Requests: If a user asks for an extremely complex project that goes far beyond a standard academic project (e.g., creating a complete multiplayer game like BGMI, high-end 3D MMOs, or full enterprise systems), do NOT refuse or simply redirect. Instead:
     a. Analyze the project concept and identify a simplified, feasible academic version or prototype (e.g., for a game like BGMI, suggest an Android game lobby app, a 2D clone prototype, or a game admin management dashboard).
     b. Determine the academic category based on their input (e.g., "diploma" or "engineering") and the necessary tech stack modules (e.g., "android-dev" for native Android app, "firebase" or "db" for database, or "mern" for full-stack web system).
-    c. Provide a clean estimated pricing breakdown (using the exact rates above: e.g. Diploma starting at ₹2499, Android stack +₹3499, Firebase +₹999, MERN stack +₹2999, etc.). Show the sum total estimate clearly!
+    c. Provide a clean estimated pricing breakdown (using the exact rates above: e.g. Diploma starting at ₹1999, Android stack +₹3499, Firebase +₹999, MERN stack +₹2999, etc.). Show the sum total estimate clearly!
     d. Recommend that they contact the OWNER/COORDINATOR directly at +91 90288 33275 (or click WhatsApp: https://wa.me/919028833275) to discuss detailed custom specifications and custom high-end pricing.
     e. ALWAYS append a structured customizer tag at the absolute end of your response in the EXACT format below on a single line so it automatically opens the customizer side-by-side with these options pre-selected:
        [CUSTOMIZER: {"category":"<category_id>","tech":["<tech_id_1>","<tech_id_2>"],"addons":["<addon_id_1>"],"timeline":"<timeline_id>"}]
 7. Project Pricing & Customizer Integrations: When a user asks about pricing, costing, or details of a project:
    a. Analyze the project: Determine the academic level/category, the likely tech stack needed, and any useful add-ons or timelines.
-   b. Provide a clean estimated pricing breakdown (using the exact rates above: e.g. Diploma starting at ₹2499, React is +₹1499, Python+Flask +₹999, ML Model +₹3499, OpenCV +₹2999, etc.). Show the sum total estimate clearly!
+   b. Provide a clean estimated pricing breakdown (using the exact rates above: e.g. Diploma starting at ₹1999, React is +₹1499, Python+Flask +₹999, ML Model +₹3499, OpenCV +₹2999, etc.). Show the sum total estimate clearly!
    c. ALWAYS append a structured customizer tag at the absolute end of your response in the EXACT format below. Keep it strictly on a single line at the very end of your response, replacing options with the matched ids:
       [CUSTOMIZER: {"category":"<category_id>","tech":["<tech_id_1>","<tech_id_2>"],"addons":["<addon_id_1>"],"timeline":"<timeline_id>"}]
       - category: "diploma", "engineering", "mtech", "bca-mca", "ai-ml", "android"
@@ -65,7 +65,7 @@ CHATBOT RULES:
       - timeline: "urgent", "normal", "relaxed", "flexible"
 
 CONTEXT DATABASE (RAG MATCHES):
-${context || "No matching context found. Rely on the factual details of Shubdeep Labs: Diploma starts from ₹2499, B.E./B.Tech from ₹4999, BCA/MCA from ₹3999, AI/ML from ₹6999, Android from ₹5499. Easy stack add-ons like HTML/CSS/JS are ₹0. PPT is ₹499, thesis report ₹999. Customization is always supported."}`;
+${context || "No matching context found. Rely on the factual details of Shubdeep Labs: Diploma starts from ₹1999, B.E./B.Tech from ₹4999, BCA/MCA from ₹3999, AI/ML from ₹6999, Android from ₹5499. Easy stack add-ons like HTML/CSS/JS are ₹0. PPT is ₹499, thesis report ₹999. Customization is always supported."}`;
 
       const contents = [];
       history.slice(-6).forEach(h => {

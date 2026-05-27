@@ -10,7 +10,7 @@ const SUPPORT_CONTEXT = [
   {
     keywords: ["price", "pricing", "cost", "budget", "fees", "tier", "plan", "easy", "medium", "hard", "mtech", "diploma", "engineering", "bca", "mca", "ai", "ml", "android", "category", "categories"],
     content: `PROJECT CATEGORIES BASE PRICING:
-- Diploma: Starting from ₹2499
+- Diploma: Starting from ₹1999
 - Engineering (B.E/B.Tech): Starting from ₹4999
 - M.Tech / Research: Starting from ₹8999
 - BCA / MCA: Starting from ₹3999

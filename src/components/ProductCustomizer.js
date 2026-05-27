@@ -29,7 +29,7 @@ const STEPS = [
     hint: "Choose the one matching your college course — sets your base price",
     type: "single",
     options: [
-      { id: "diploma",     label: "Diploma",                  icon: Laptop,     color: "bg-[#FFF9C4]", border: "border-[#FFCA28]", accent: "#FFCA28", price: 2499 },
+      { id: "diploma",     label: "Diploma",                  icon: Laptop,     color: "bg-[#FFF9C4]", border: "border-[#FFCA28]", accent: "#FFCA28", price: 1999 },
       { id: "engineering", label: "Engineering (B.E./B.Tech)", icon: Code,       color: "bg-[#E8F5E9]", border: "border-[#66BB6A]", accent: "#66BB6A", price: 4999 },
       { id: "mtech",       label: "M.Tech / Research",        icon: Cpu,        color: "bg-[#E1F5FE]", border: "border-[#42A5F5]", accent: "#42A5F5", price: 8999 },
       { id: "bca-mca",     label: "BCA / MCA",                icon: Database,   color: "bg-[#F3E5F5]", border: "border-[#AB47BC]", accent: "#AB47BC", price: 3999 },
