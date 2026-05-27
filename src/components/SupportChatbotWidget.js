@@ -100,7 +100,7 @@ ADVANCED PROJECT RECOMMENDATIONS:
 ];
 
 // Helper function to render text with clickable links (supporting plain URLs and markdown style [label](url))
-function renderMessageText(text) {
+function renderMessageText(text, userQuery) {
   if (!text) return null;
   const regex = /(\[[^\]]+\]\(https?:\/\/[^\s)]+\)|https?:\/\/[^\s]+?(?=[.,;!?']?(\s|$)))/g;
   const parts = text.split(regex);
@@ -111,7 +111,14 @@ function renderMessageText(text) {
       const labelMatch = part.match(/\[([^\]]+)\]/);
       const urlMatch = part.match(/\(([^)]+)\)/);
       const label = labelMatch ? labelMatch[1] : part;
-      const url = urlMatch ? urlMatch[1].replace(/[*\]\).,;!?']+$/, "") : "#";
+      let url = urlMatch ? urlMatch[1].replace(/[*\]\).,;!?']+$/, "") : "#";
+      
+      if (url.includes("wa.me/919028833275")) {
+        const cleanBase = url.split("?")[0];
+        const prefix = "Hi! I would like to consult about my project: ";
+        const fullText = prefix + (userQuery || "");
+        url = `${cleanBase}?text=${encodeURIComponent(fullText)}`;
+      }
       return (
         <a 
           key={index} 
@@ -125,10 +132,17 @@ function renderMessageText(text) {
       );
     } else if (part.startsWith("http://") || part.startsWith("https://")) {
       const cleanUrl = part.replace(/[*\]\).,;!?']+$/, "");
+      let hrefUrl = cleanUrl;
+      if (cleanUrl.includes("wa.me/919028833275")) {
+        const cleanBase = cleanUrl.split("?")[0];
+        const prefix = "Hi! I would like to consult about my project: ";
+        const fullText = prefix + (userQuery || "");
+        hrefUrl = `${cleanBase}?text=${encodeURIComponent(fullText)}`;
+      }
       return (
         <a 
           key={index} 
-          href={cleanUrl} 
+          href={hrefUrl} 
           target="_blank" 
           rel="noopener noreferrer" 
           className="text-blue-600 hover:text-blue-800 underline font-bold transition-colors"
@@ -318,19 +332,30 @@ export default function SupportChatbotWidget() {
 
               {/* RAG Rule Sheet messages */}
               <div className="flex-1 overflow-y-auto p-4 space-y-3 notebook-ruled">
-                {messages.map((msg) => (
-                  <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
-                    <div className={`max-w-[85%] rounded-xl p-3 text-xs shadow-[1.5px_2px_0_#2C2C2C] border border-[#2C2C2C] ${
-                      msg.sender === "user" 
-                        ? "bg-[#FFF9C4] text-[#2C2C2C] rounded-tr-none" 
-                        : "bg-white text-[#2C2C2C] rounded-tl-none"
-                    }`}>
-                      <p className="font-sans font-semibold whitespace-pre-line leading-relaxed text-xs sm:text-sm">
-                        {renderMessageText(msg.text)}
-                      </p>
+                {messages.map((msg, index) => {
+                  let associatedUserMsg = "";
+                  if (msg.sender === "bot") {
+                    for (let i = index - 1; i >= 0; i--) {
+                      if (messages[i].sender === "user") {
+                        associatedUserMsg = messages[i].text;
+                        break;
+                      }
+                    }
+                  }
+                  return (
+                    <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+                      <div className={`max-w-[85%] rounded-xl p-3 text-xs shadow-[1.5px_2px_0_#2C2C2C] border border-[#2C2C2C] ${
+                        msg.sender === "user" 
+                          ? "bg-[#FFF9C4] text-[#2C2C2C] rounded-tr-none" 
+                          : "bg-white text-[#2C2C2C] rounded-tl-none"
+                      }`}>
+                        <p className="font-sans font-semibold whitespace-pre-line leading-relaxed text-xs sm:text-sm">
+                          {renderMessageText(msg.text, associatedUserMsg)}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
 
                 {isTyping && (
                   <div className="flex justify-start">
