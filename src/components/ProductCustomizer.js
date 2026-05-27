@@ -8,7 +8,9 @@ import {
   Clock, FileText, Presentation, BookOpen, MessageSquare,
   Cpu, LayoutDashboard, ShieldCheck, Zap, ArrowRight,
   Globe, Flame, Eye, Link, Server,
+  Gift, Tag, Star, AlertCircle, RefreshCw, Copy, Check,
 } from "lucide-react";
+import { dbService } from "@/lib/supabase";
 
 // ─── HELPERS ───────────────────────────────────────────────────────────────────
 
@@ -350,6 +352,241 @@ function SummaryScreen({ selections, onBack, onReset }) {
   );
 }
 
+// ─── OFFERS PANEL ─────────────────────────────────────────────────────────────
+
+function OffersPanel() {
+  const [activeOffer, setActiveOffer] = useState({
+    title: "First 8 Special Students of Diploma get 30% OFF + Assured Free Gift!",
+    subtext: "* T&C apply. Connect on WhatsApp to reserve your discount spot.",
+    ribbon: "Special Offer!",
+    emoji: "🎁",
+  });
+  const [offers, setOffers]     = useState([]);
+  const [loading, setLoading]   = useState(true);
+  const [copied, setCopied]     = useState(false);
+
+  // Scratch card states
+  const canvasRef = useRef(null);
+  const [isRevealed,  setIsRevealed]  = useState(false);
+  const [isDrawing,   setIsDrawing]   = useState(false);
+  const [lastPos,     setLastPos]     = useState({ x: 0, y: 0 });
+  const [erasedPct,   setErasedPct]   = useState(0);
+  const [boosterCode, setBoosterCode] = useState("STUDENT5EXTRA");
+  const [scratchCfg,  setScratchCfg]  = useState({ discountPercent: 5, codes: ["STUDENT5EXTRA", "COUPON5HUB", "VIVABOOST5", "FINAL5PASS"] });
+
+  useEffect(() => { fetchData(); }, []);
+
+  async function fetchData() {
+    setLoading(true);
+    try {
+      const active = await dbService.getActiveOffer();
+      if (active) setActiveOffer(active);
+      const all = await dbService.getOffers();
+      setOffers(all);
+      const cfg = await dbService.getScratchSettings();
+      if (cfg) {
+        setScratchCfg(cfg);
+        const codes = cfg.codes || ["STUDENT5EXTRA"];
+        let code = codes[Math.floor(Math.random() * codes.length)];
+        code = code.replace(/\d+/g, String(cfg.discountPercent || 5));
+        setBoosterCode(code);
+      }
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
+  }
+
+  useEffect(() => {
+    if (!isRevealed) setTimeout(initCanvas, 60);
+  }, [isRevealed, boosterCode, loading]);
+
+  function initCanvas() {
+    const c = canvasRef.current;
+    if (!c) return;
+    const rect = c.getBoundingClientRect();
+    const dpr  = window.devicePixelRatio || 1;
+    c.width    = (rect.width  || 280) * dpr;
+    c.height   = (rect.height || 140) * dpr;
+    c.style.width  = `${rect.width}px`;
+    c.style.height = `${rect.height}px`;
+    const ctx = c.getContext("2d");
+    ctx.scale(dpr, dpr);
+    ctx.fillStyle = "#263238";
+    ctx.fillRect(0, 0, rect.width, rect.height);
+    for (let i = 0; i < 2000; i++) {
+      ctx.fillStyle = Math.random() > 0.4 ? "#1E272C" : "#37474F";
+      ctx.fillRect(Math.random() * rect.width, Math.random() * rect.height, Math.random() * 2, Math.random() * 2);
+    }
+    ctx.strokeStyle = "#FFF59D"; ctx.lineWidth = 2; ctx.setLineDash([6, 5]);
+    ctx.strokeRect(10, 10, rect.width - 20, rect.height - 20);
+    ctx.setLineDash([]);
+    ctx.font = "22px Arial"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText("🔥", rect.width / 2, rect.height / 2 - 22);
+    ctx.fillStyle = "#FFF9C4"; ctx.font = "bold 16px sans-serif";
+    ctx.fillText("SCRATCH TO REVEAL CODE", rect.width / 2, rect.height / 2 + 4);
+    ctx.fillStyle = "#ECEFF1"; ctx.font = "bold 10px sans-serif";
+    ctx.fillText("✏️ Click & drag to scratch!", rect.width / 2, rect.height / 2 + 24);
+    setErasedPct(0);
+  }
+
+  function coords(e) {
+    const r = canvasRef.current.getBoundingClientRect();
+    const cx = e.touches ? e.touches[0].clientX : e.clientX;
+    const cy = e.touches ? e.touches[0].clientY : e.clientY;
+    return { x: cx - r.left, y: cy - r.top };
+  }
+  function scratchAt(x, y) {
+    const ctx = canvasRef.current?.getContext("2d"); if (!ctx) return;
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.beginPath(); ctx.arc(x, y, 18, 0, Math.PI * 2); ctx.fill();
+  }
+  function scratchLine(x1, y1, x2, y2) {
+    const ctx = canvasRef.current?.getContext("2d"); if (!ctx) return;
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+    ctx.lineWidth = 36; ctx.lineCap = "round"; ctx.stroke();
+  }
+  function checkPct() {
+    const c = canvasRef.current; if (!c) return;
+    const d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data;
+    let t = 0; for (let i = 3; i < d.length; i += 4) if (d[i] === 0) t++;
+    const p = Math.round((t / (d.length / 4)) * 100);
+    setErasedPct(p);
+    if (p >= 35 && !isRevealed) setIsRevealed(true);
+  }
+
+  function handleStart(e) { if (isRevealed) return; const p = coords(e); setIsDrawing(true); setLastPos(p); scratchAt(p.x, p.y); }
+  function handleMove(e)  { if (!isDrawing || isRevealed) return; if (e.cancelable) e.preventDefault(); const p = coords(e); scratchLine(lastPos.x, lastPos.y, p.x, p.y); setLastPos(p); }
+  function handleEnd()    { if (!isDrawing) return; setIsDrawing(false); checkPct(); }
+
+  function copyCode() {
+    navigator.clipboard?.writeText(boosterCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
+  const waOfferUrl = `https://wa.me/919028833275?text=${encodeURIComponent(`Hello! I want to claim the Daily Special: "${activeOffer.title}" + Booster Code: ${boosterCode}`)}`;
+
+  if (loading) return (
+    <div className="flex flex-col items-center justify-center py-16 gap-3">
+      <RefreshCw className="w-8 h-8 animate-spin text-[#2C2C2C]" />
+      <p className="font-marker text-sm text-[#6A6A6A]">Fetching latest offers...</p>
+    </div>
+  );
+
+  return (
+    <motion.div
+      key="offers-panel"
+      initial={{ opacity: 0, x: 30 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: -30 }}
+      transition={{ duration: 0.2 }}
+      className="flex flex-col gap-5"
+    >
+      {/* ── ACTIVE DEAL BANNER ── */}
+      <div className="relative bg-[#FFF9C4] border-2 border-[#2C2C2C] rounded-2xl p-4 shadow-[4px_5px_0_#2C2C2C] overflow-hidden">
+        {/* Live badge */}
+        <span className="absolute top-2 right-2 bg-[#81C784] border border-[#2C2C2C] font-marker font-bold text-[9px] px-2 py-0.5 rounded-full shadow-[1px_1px_0_#2C2C2C] flex items-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#2E7D32] animate-ping" /> LIVE
+        </span>
+        <div className="flex items-start gap-3">
+          <span className="text-3xl shrink-0">{activeOffer.emoji || "🎁"}</span>
+          <div className="flex-1 min-w-0">
+            <span className="inline-block bg-[#EF5350] text-white font-marker font-bold text-[9px] px-2 py-0.5 rounded uppercase tracking-wider mb-1">
+              {activeOffer.ribbon || "Special Offer!"}
+            </span>
+            <h3 className="font-marker font-extrabold text-[#2C2C2C] text-sm leading-tight">
+              {activeOffer.title}
+            </h3>
+            <p className="font-sans text-[10px] text-[#6A6A6A] mt-1 leading-tight">
+              {activeOffer.subtext}
+            </p>
+          </div>
+        </div>
+        <a
+          href={waOfferUrl}
+          target="_blank" rel="noopener noreferrer"
+          className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 bg-[#A5D6A7] border-2 border-[#2C2C2C] rounded-xl font-marker font-bold text-[#2C2C2C] text-xs shadow-[2px_3px_0_#2C2C2C] hover:shadow-[3px_4px_0_#2C2C2C] hover:-translate-y-0.5 transition-all"
+        >
+          <MessageSquare className="w-4 h-4 fill-[#2C2C2C]" />
+          Claim this deal on WhatsApp
+          <ArrowRight className="w-3 h-3" />
+        </a>
+      </div>
+
+      {/* ── SCRATCH COUPON ── */}
+      <div className="bg-white border-2 border-[#2C2C2C] rounded-2xl p-4 shadow-[4px_5px_0_#2C2C2C] text-center">
+        <p className="font-marker font-extrabold text-[#2C2C2C] text-sm mb-0.5">✏️ Scratch &amp; Get Extra {scratchCfg.discountPercent}% OFF</p>
+        <p className="font-sans text-[10px] text-[#6A6A6A] mb-3">Scratch the card below to reveal your secret booster code!</p>
+
+        {/* Canvas scratch area */}
+        <div className="relative w-full h-36 border-2 border-[#2C2C2C] rounded-xl overflow-hidden bg-[#FFF9C4] shadow-inner">
+          {/* Revealed code */}
+          {isRevealed && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 z-0">
+              <p className="text-[9px] font-marker font-bold text-[#7B1FA2] uppercase tracking-widest animate-bounce">★ Code Revealed! ★</p>
+              <div className="bg-white border-2 border-dashed border-[#2C2C2C] px-4 py-2 rounded-lg shadow-[2px_2px_0_#2C2C2C] rotate-[-1deg]">
+                <span className="font-mono font-bold text-xl text-[#2C2C2C] tracking-widest select-all">{boosterCode}</span>
+              </div>
+              <button
+                onClick={copyCode}
+                className="flex items-center gap-1.5 text-[10px] font-marker font-bold px-3 py-1 bg-[#FFF59D] border border-[#2C2C2C] rounded-full shadow-[1px_1px_0_#2C2C2C] hover:bg-[#FFCA28] transition-colors"
+              >
+                {copied ? <><Check className="w-3 h-3 text-green-600" /> Copied!</> : <><Copy className="w-3 h-3" /> Copy code</>}
+              </button>
+            </div>
+          )}
+          {/* Scratch canvas */}
+          <canvas
+            ref={canvasRef}
+            onMouseDown={handleStart} onMouseMove={handleMove} onMouseUp={handleEnd} onMouseLeave={handleEnd}
+            onTouchStart={handleStart} onTouchMove={handleMove} onTouchEnd={handleEnd}
+            className="absolute inset-0 w-full h-full cursor-crosshair touch-none select-none rounded-xl z-10 transition-opacity duration-500"
+            style={{ opacity: isRevealed ? 0 : 1, pointerEvents: isRevealed ? "none" : "auto" }}
+          />
+          {!isRevealed && erasedPct > 0 && (
+            <div className="absolute bottom-1 right-2 pointer-events-none">
+              <span className="text-[9px] font-sans font-bold text-[#6A6A6A] bg-white/70 px-1.5 py-0.5 rounded">{erasedPct}% scratched</span>
+            </div>
+          )}
+        </div>
+
+        {isRevealed && (
+          <a
+            href={waOfferUrl}
+            target="_blank" rel="noopener noreferrer"
+            className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 bg-[#E1BEE7] border-2 border-[#2C2C2C] rounded-xl font-marker font-bold text-[#2C2C2C] text-xs shadow-[2px_3px_0_#2C2C2C] hover:bg-[#CE93D8] hover:-translate-y-0.5 transition-all"
+          >
+            Apply Combo Code on WhatsApp <ArrowRight className="w-3 h-3" />
+          </a>
+        )}
+        <p className="text-[9px] font-sans text-[#A0A0A0] mt-2">Valid with active daily deal. Combo discount applies.</p>
+      </div>
+
+      {/* ── ALL OFFERS LIST ── */}
+      {offers.length > 0 && (
+        <div className="space-y-2">
+          <p className="font-marker font-extrabold text-[#2C2C2C] text-xs uppercase tracking-wider">📋 All Running Campaigns</p>
+          {offers.map(o => (
+            <div key={o.id} className={`flex items-start gap-3 p-3 rounded-xl border-2 ${
+              o.isActive ? "bg-[#F1F8E9] border-[#66BB6A]" : "bg-white border-[#2C2C2C]/20 opacity-70"
+            }`}>
+              <span className="text-xl shrink-0">{o.emoji}</span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5 mb-0.5">
+                  <span className="font-marker font-bold text-[10px] text-[#2C2C2C]">{o.ribbon}</span>
+                  {o.isActive && <span className="text-[8px] bg-[#A5D6A7] text-[#1B5E20] font-bold px-1.5 rounded-full">★ ACTIVE</span>}
+                </div>
+                <p className="font-marker font-bold text-[#2C2C2C] text-xs leading-tight">{o.title}</p>
+                <p className="font-sans text-[9px] text-[#6A6A6A] mt-0.5 leading-tight">{o.subtext}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </motion.div>
+  );
+}
+
 // ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
 
 export default function ProductCustomizer() {
@@ -359,6 +596,7 @@ export default function ProductCustomizer() {
   const [showSummary, setShowSummary] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showNudge, setShowNudge]     = useState(false);
+  const [showOffers, setShowOffers]   = useState(false);
   const panelRef = useRef(null);
 
   const step       = STEPS[currentStep];
@@ -447,20 +685,30 @@ export default function ProductCustomizer() {
               style={{ maxHeight: "90vh" }}
             >
               {/* Header */}
-              <div className="relative bg-[#FFF59D] border-b-[3px] border-[#2C2C2C] px-6 py-4 flex items-center justify-between shrink-0">
+              <div className="relative bg-[#FFF59D] border-b-[3px] border-[#2C2C2C] px-4 py-3 flex items-center justify-between shrink-0">
                 <div className="absolute top-3 left-3 w-3 h-3 bg-[#FAF6EE] border-2 border-[#2C2C2C] rounded-full" />
                 <div className="absolute top-3 right-14 w-3 h-3 bg-[#FAF6EE] border-2 border-[#2C2C2C] rounded-full" />
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">🎨</span>
-                  <div>
-                    <h2 className="font-marker font-extrabold text-[#2C2C2C] text-lg leading-none">
-                      Project Customiser
-                    </h2>
-                    <p className="font-marker text-xs text-[#6A6A6A] mt-0.5">
-                      Build your perfect academic project
-                    </p>
-                  </div>
+
+                {/* Tab switcher */}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setShowOffers(false)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 font-marker font-bold text-xs transition-all
+                      ${ !showOffers ? "bg-[#2C2C2C] text-[#FFF59D] border-[#2C2C2C] shadow-[2px_2px_0_#FAF6EE]" : "bg-white/60 text-[#2C2C2C] border-[#2C2C2C]/30 hover:border-[#2C2C2C]" }`}
+                  >
+                    🎨 Customise
+                  </button>
+                  <button
+                    onClick={() => setShowOffers(true)}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 font-marker font-bold text-xs transition-all relative
+                      ${ showOffers ? "bg-[#EF5350] text-white border-[#2C2C2C] shadow-[2px_2px_0_#2C2C2C]" : "bg-white/60 text-[#2C2C2C] border-[#2C2C2C]/30 hover:border-[#EF5350]" }`}
+                  >
+                    🔥 Offers
+                    <span className="absolute -top-1.5 -right-1.5 w-2.5 h-2.5 bg-[#EF5350] border border-[#2C2C2C] rounded-full animate-ping" />
+                    <span className="absolute -top-1.5 -right-1.5 w-2.5 h-2.5 bg-[#EF5350] border border-[#2C2C2C] rounded-full" />
+                  </button>
                 </div>
+
                 <button
                   id="customizer-close"
                   onClick={() => setOpen(false)}
@@ -471,7 +719,7 @@ export default function ProductCustomizer() {
               </div>
 
               {/* Progress bar */}
-              {!showSummary && (
+              {!showSummary && !showOffers && (
                 <div className="w-full h-2 bg-[#E0E0E0] shrink-0">
                   <motion.div
                     className="h-full bg-[#2C2C2C]"
@@ -482,7 +730,7 @@ export default function ProductCustomizer() {
               )}
 
               {/* Step counter */}
-              {!showSummary && (
+              {!showSummary && !showOffers && (
                 <div className="flex justify-between px-6 pt-3 pb-0 shrink-0">
                   {STEPS.map((s, i) => (
                     <div
@@ -503,7 +751,9 @@ export default function ProductCustomizer() {
               {/* Body */}
               <div className="px-6 py-4 overflow-y-auto flex-1">
                 <AnimatePresence mode="wait">
-                  {showSummary ? (
+                  {showOffers ? (
+                    <OffersPanel key="offers" />
+                  ) : showSummary ? (
                     <SummaryScreen
                       key="summary"
                       selections={selections}
@@ -554,7 +804,7 @@ export default function ProductCustomizer() {
               </div>
 
               {/* Footer Nav */}
-              {!showSummary && (
+              {!showSummary && !showOffers && (
                 <div className="px-6 py-4 border-t-2 border-dashed border-[#2C2C2C]/20 flex items-center justify-between gap-3 shrink-0">
                   <button
                     id="customizer-back"
