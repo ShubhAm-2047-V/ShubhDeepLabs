@@ -8,24 +8,94 @@ import Link from "next/link";
 // Context database about Shubdeep Labs for custom RAG local fallback matching
 const SUPPORT_CONTEXT = [
   {
-    keywords: ["price", "pricing", "cost", "budget", "fees", "tier", "plan", "easy", "medium", "hard", "mtech", "diploma"],
-    content: "Shubdeep Labs offers 3 pricing tiers depending on complexity:\n1. Easy Project Plan (₹1999): Simple logic utility, clean UI, draft PPT slides, complete source code.\n2. Medium Project Plan (₹3499): Relational database models, multi-feature UI, PPT, comprehensive thesis report draft, and 2 code revisions.\n3. Hard Project Plan (₹4599): Advanced algorithms (AI/ML/Deep Learning/OpenCV), secure auth dashboards, thesis reports, 3 revisions, Zoom remote setup support, and 1-on-1 code walkthrough explanation."
+    keywords: ["price", "pricing", "cost", "budget", "fees", "tier", "plan", "easy", "medium", "hard", "mtech", "diploma", "engineering", "bca", "mca", "ai", "ml", "android", "category", "categories"],
+    content: `PROJECT CATEGORIES BASE PRICING:
+- Diploma: Starting from ₹2499
+- Engineering (B.E/B.Tech): Starting from ₹4999
+- M.Tech / Research: Starting from ₹8999
+- BCA / MCA: Starting from ₹3999
+- AI / ML: Starting from ₹6999
+- Android App: Starting from ₹5499
+
+TECH STACK PRICING (Optional Add-ons):
+- HTML / CSS / JavaScript: + ₹0
+- Python + Flask: + ₹999
+- React.js: + ₹1499
+- Next.js: + ₹1999
+- MERN Stack: + ₹2999
+- Android (Java/Kotlin): + ₹3499
+- Firebase Integration: + ₹999
+- MySQL / MongoDB: + ₹799
+- AI Integration (Gemini/OpenAI): + ₹2499
+- Machine Learning Model: + ₹3499
+- OpenCV / Face Detection: + ₹2999
+- Full Stack + Deployment: + ₹4499
+- Blockchain / Web3: + ₹5999`
   },
   {
-    keywords: ["deliver", "deliverable", "include", "provide", "get", "ppt", "report", "slides", "viva", "setup", "remote"],
-    content: "Every project (Medium and Hard) includes:\n- 100% Original Codebase: Structured freshly for your guidelines.\n- PowerPoint Presentation (PPT) Slides: Draft outlining core logic, database design, and architecture charts.\n- Comprehensive Thesis Report Draft: Dynamic explanation of data flow diagrams (DFD), requirements, system design, testing phases, and conclusion.\n- Viva Preparation Guidance Sheet: Prep guides explaining exact controllers and logic.\n- Remote Installation Support: Guided compiler & database deployment support over Zoom or AnyDesk."
+    keywords: ["deliver", "deliverable", "include", "provide", "get", "ppt", "report", "slides", "viva", "setup", "remote", "what do i receive", "receive"],
+    content: `WHAT STUDENTS WILL RECEIVE:
+- Complete Source Code & Project Files
+- Thesis Report & PPT Presentation Slides (Available separately as add-ons)
+- Detailed Documentation & Setup Guidance
+- Bouncing Demo Support & Basic Customization Support
+
+ADD-ONS PRICING SHEET:
+- PPT Presentation: + ₹499
+- Thesis Report: + ₹999
+- Viva Guidance Sheet: + ₹399
+- Remote Setup (Zoom): + ₹699
+- Cloud Deployment: + ₹1499
+- Code Walkthrough Doc: + ₹599`
   },
   {
-    keywords: ["contact", "phone", "number", "call", "whatsapp", "email", "mail", "office", "hour", "timing", "address"],
-    content: "You can contact our Coordinator Registry Office:\n- Phone/WhatsApp: +91 90288 33275\n- Email support: shubdeeplabs@gmail.com\n- Office Timings: Monday to Saturday, 9:30 AM to 7:00 PM."
+    keywords: ["deadline", "timeline", "charge", "days", "urgent", "standard", "relaxed", "flexible", "rush"],
+    content: `DEADLINE CHARGES:
+- 1–3 Days (Urgent): + ₹2499
+- 4–7 Days (Standard): + ₹999
+- 8–14 Days (Relaxed): + ₹0
+- Flexible / No Rush: + ₹0`
   },
   {
-    keywords: ["refund", "guarantee", "cancel", "money", "revision", "change", "modify", "edit"],
-    content: "Policies:\n- Revisions: 2 free revisions for Medium, 3 revisions for Hard. Must align with initial scope.\n- Refund Guarantee: 100% full money-back guarantee if our engineering team fails to deliver or compile your project. No refunds are granted once the final compiled source code is handed over."
+    keywords: ["recommend", "suggestion", "ideas", "topic", "easy", "advanced", "list", "options", "suitable", "outline"],
+    content: `EASY PROJECT RECOMMENDATIONS:
+- AI Resume Analyzer
+- Smart Notes Summarizer
+- AI Background Remover
+- Expense Tracker
+- AI Color Palette Generator
+- Portfolio Builder
+- Mock Interview AI
+
+ADVANCED PROJECT RECOMMENDATIONS:
+- AI Plant Disease Detector
+- Face Recognition Attendance System
+- AI Customer Support Chatbot
+- Hospital Management System
+- RFID Attendance Portal
+- Blockchain Voting System`
   },
   {
-    keywords: ["service", "project", "degree", "diploma", "bca", "mca", "tech", "cs", "it", "ai", "ml", "iot", "blockchain"],
-    content: "We custom build academic final year and mini-semester projects for Diploma, B.E., B.Tech, M.Tech, BCA, and MCA students. Study areas include: AI/ML pipelines, Full-Stack Web Development, Native Android Apps, IoT prototyping, OpenCV computer vision, Blockchain, and Python Flask REST APIs."
+    keywords: ["faq", "viva", "source", "laptop", "run", "custom", "deploy", "unique", "support"],
+    content: `COMMON FAQS:
+- Q: Will source code be provided?
+  A: Yes, complete source code is included.
+- Q: Will the project run on my laptop?
+  A: Yes, setup guidance will be provided.
+- Q: Can the project be customized?
+  A: Yes, features and UI can be customized.
+- Q: Is deployment included?
+  A: Deployment is optional and available as an add-on.
+- Q: Will PPT and report be included?
+  A: Available separately as add-ons.
+- Q: Can I get urgent delivery?
+  A: Yes, urgent delivery is available with additional charges.
+- Q: Which technologies are used?
+  A: Technologies depend on project requirements and selected stack.
+- Q: Is this project unique?
+  A: Yes, projects are customized based on requirements.
+- Q: Will support be provided after delivery?
+  A: Basic support and setup help will be provided.`
   }
 ];
 
@@ -233,25 +303,37 @@ export default function SupportChatbotWidget() {
 
               {/* Dialog Footer Actions */}
               <div className="p-3 border-t-2.5 border-[#2C2C2C] bg-[#FAF6EE] flex flex-col gap-2 shrink-0">
-                {/* Quick reply pills */}
+                {/* Quick reply pills representing Starter Messages */}
                 <div className="flex flex-wrap gap-1">
                   <button 
-                    onClick={() => handleQuickReply("What are your pricing plans?")}
+                    onClick={() => handleQuickReply("Need help selecting your project?")}
                     className="text-[9px] px-2 py-0.5 bg-white border border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-full shadow-[1px_1px_0_#2C2C2C] transition-all font-bold"
                   >
-                    💰 Pricing
+                    🚀 Need Selection Help?
                   </button>
                   <button 
-                    onClick={() => handleQuickReply("What features do I get?")}
+                    onClick={() => handleQuickReply("Get instant project pricing.")}
                     className="text-[9px] px-2 py-0.5 bg-white border border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-full shadow-[1px_1px_0_#2C2C2C] transition-all font-bold"
                   >
-                    ✨ Stacks &amp; Stuffs
+                    💰 Project Costing
                   </button>
                   <button 
-                    onClick={() => handleQuickReply("How can I call you?")}
+                    onClick={() => handleQuickReply("Choose your project category to continue.")}
                     className="text-[9px] px-2 py-0.5 bg-white border border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-full shadow-[1px_1px_0_#2C2C2C] transition-all font-bold"
                   >
-                    📞 Contact
+                    🎓 Course Level
+                  </button>
+                  <button 
+                    onClick={() => handleQuickReply("Need urgent delivery? Ask for quick pricing.")}
+                    className="text-[9px] px-2 py-0.5 bg-white border border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-full shadow-[1px_1px_0_#2C2C2C] transition-all font-bold"
+                  >
+                    ⚡ Urgent Delivery
+                  </button>
+                  <button 
+                    onClick={() => handleQuickReply("Looking for easy but impressive final year projects?")}
+                    className="text-[9px] px-2 py-0.5 bg-white border border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-full shadow-[1px_1px_0_#2C2C2C] transition-all font-bold"
+                  >
+                    💡 Easy Project Ideas
                   </button>
                 </div>
 
