@@ -599,6 +599,41 @@ export default function ProductCustomizer() {
   const [showOffers, setShowOffers]   = useState(false);
   const panelRef = useRef(null);
 
+  // Listen for custom event to open the customizer with pre-selected choices from the chatbot
+  useEffect(() => {
+    const handleOpenCustomizer = (e) => {
+      const { category, tech, addons, timeline, showSummary: forceSummary } = e.detail || {};
+      
+      setSelections({
+        category: category || null,
+        tech: tech || [],
+        addons: addons || [],
+        timeline: timeline || null
+      });
+      
+      setHasInteracted(true);
+      setShowOffers(false);
+      
+      if (forceSummary) {
+        setShowSummary(true);
+      } else {
+        setShowSummary(false);
+        // If a category is selected, let's fast forward to the stack step (step 1)
+        if (category) {
+          setCurrentStep(1);
+        } else {
+          setCurrentStep(0);
+        }
+      }
+      
+      setOpen(true);
+      setShowNudge(false);
+    };
+
+    window.addEventListener("open-customizer", handleOpenCustomizer);
+    return () => window.removeEventListener("open-customizer", handleOpenCustomizer);
+  }, []);
+
   const step       = STEPS[currentStep];
   const totalSteps = STEPS.length;
 

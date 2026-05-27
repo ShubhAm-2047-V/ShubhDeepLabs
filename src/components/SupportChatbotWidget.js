@@ -253,10 +253,25 @@ export default function SupportChatbotWidget() {
 
       const data = await response.json();
       
+      const rawText = data.reply || "";
+      const customizerMatch = rawText.match(/\[CUSTOMIZER:\s*({[\s\S]*?})\s*\]/);
+      let selections = null;
+      let cleanReplyText = rawText;
+      
+      if (customizerMatch) {
+        try {
+          selections = JSON.parse(customizerMatch[1]);
+          cleanReplyText = rawText.replace(/\[CUSTOMIZER:\s*({[\s\S]*?})\s*\]/, "").trim();
+        } catch (e) {
+          console.error("Failed to parse customizer selections:", e);
+        }
+      }
+      
       const botMsg = {
         id: `bot-${Date.now()}`,
         sender: "bot",
-        text: data.reply
+        text: cleanReplyText,
+        selections: selections
       };
       
       setMessages((prev) => [...prev, botMsg]);
@@ -350,6 +365,34 @@ export default function SupportChatbotWidget() {
                         <p className="font-sans font-semibold whitespace-pre-line leading-relaxed text-xs sm:text-sm">
                           {renderMessageText(msg.text, associatedUserMsg)}
                         </p>
+                        {msg.selections && (
+                          <div className="mt-3 pt-2.5 border-t border-[#2C2C2C]/10 flex flex-col gap-1.5">
+                            <button
+                              onClick={() => {
+                                const customEvent = new CustomEvent("open-customizer", {
+                                  detail: {
+                                    category: msg.selections.category,
+                                    tech: msg.selections.tech,
+                                    addons: msg.selections.addons,
+                                    timeline: msg.selections.timeline || "normal",
+                                    showSummary: false
+                                  }
+                                });
+                                window.dispatchEvent(customEvent);
+                              }}
+                              className="w-full py-1.5 px-3 bg-[#90CAF9] hover:bg-[#64B5F6] border-2 border-[#2C2C2C] rounded-xl font-marker font-bold text-[#2C2C2C] text-xs shadow-[1.5px_2px_0_#2C2C2C] active:scale-[0.98] transition-all flex items-center justify-center gap-1.5 cursor-pointer select-none"
+                            >
+                              <Sparkles size={11} className="text-[#2C2C2C]" />
+                              🎨 Customise Project Now!
+                            </button>
+                            <span className="text-[9px] font-sans text-center text-[#6A6A6A]">
+                              Pre-selected: {msg.selections.category ? msg.selections.category.toUpperCase() : ""}{" "}
+                              {msg.selections.tech && msg.selections.tech.length > 0 
+                                ? `+ [${msg.selections.tech.map(t => t.toUpperCase()).join(", ")}]` 
+                                : ""}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   );
