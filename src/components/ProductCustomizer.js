@@ -42,19 +42,19 @@ const STEPS = [
     hint: "Select all that apply — each adds to your estimate",
     type: "multi",
     options: [
-      { id: "html",           label: "HTML / CSS / JS",          icon: Globe,          color: "bg-[#FFF9C4]", border: "border-[#FFCA28]", accent: "#FFCA28", price: 899  },
-      { id: "python-flask",   label: "Python + Flask",           icon: Code,           color: "bg-[#E8F5E9]", border: "border-[#66BB6A]", accent: "#66BB6A", price: 999  },
-      { id: "react",          label: "React.js",                 icon: LayoutDashboard,color: "bg-[#E1F5FE]", border: "border-[#42A5F5]", accent: "#42A5F5", price: 1499 },
-      { id: "nextjs",         label: "Next.js",                  icon: Zap,            color: "bg-[#F3E5F5]", border: "border-[#AB47BC]", accent: "#AB47BC", price: 1999 },
-      { id: "mern",           label: "MERN Stack",               icon: Server,         color: "bg-[#FFEBEE]", border: "border-[#EF5350]", accent: "#EF5350", price: 2999 },
-      { id: "android-dev",    label: "Android (Java/Kotlin)",    icon: Smartphone,     color: "bg-[#E8F5E9]", border: "border-[#26A69A]", accent: "#26A69A", price: 3499 },
-      { id: "firebase",       label: "Firebase Integration",     icon: Flame,          color: "bg-[#FFF9C4]", border: "border-[#FFCA28]", accent: "#FFCA28", price: 1399 },
-      { id: "db",             label: "MySQL / MongoDB",          icon: Database,       color: "bg-[#E1F5FE]", border: "border-[#42A5F5]", accent: "#42A5F5", price: 799  },
-      { id: "ai-integration", label: "AI Integration",          icon: Brain,          color: "bg-[#F3E5F5]", border: "border-[#AB47BC]", accent: "#AB47BC", price: 2499 },
-      { id: "ml-model",       label: "ML Model",                 icon: Cpu,            color: "bg-[#FFEBEE]", border: "border-[#EF5350]", accent: "#EF5350", price: 3499 },
-      { id: "opencv",         label: "OpenCV / Face Detection",  icon: Eye,            color: "bg-[#E8F5E9]", border: "border-[#26A69A]", accent: "#26A69A", price: 2999 },
-      { id: "fullstack",      label: "Full Stack + Deploy",      icon: Network,        color: "bg-[#FFF9C4]", border: "border-[#FFCA28]", accent: "#FFCA28", price: 4499 },
-      { id: "blockchain",     label: "Blockchain / Web3",        icon: Link,           color: "bg-[#E1F5FE]", border: "border-[#42A5F5]", accent: "#42A5F5", price: 5999 },
+      { id: "html",           label: "HTML / CSS / JS",          icon: Globe,          color: "bg-[#FFF9C4]", border: "border-[#FFCA28]", accent: "#FFCA28", price: 899,  desc: "Websites & landing pages"       },
+      { id: "python-flask",   label: "Python + Flask",           icon: Code,           color: "bg-[#E8F5E9]", border: "border-[#66BB6A]", accent: "#66BB6A", price: 999,  desc: "REST APIs & ML backends"         },
+      { id: "react",          label: "React.js",                 icon: LayoutDashboard,color: "bg-[#E1F5FE]", border: "border-[#42A5F5]", accent: "#42A5F5", price: 1499, desc: "Interactive web dashboards"       },
+      { id: "nextjs",         label: "Next.js",                  icon: Zap,            color: "bg-[#F3E5F5]", border: "border-[#AB47BC]", accent: "#AB47BC", price: 1999, desc: "Full-stack SSR web apps"          },
+      { id: "mern",           label: "MERN Stack",               icon: Server,         color: "bg-[#FFEBEE]", border: "border-[#EF5350]", accent: "#EF5350", price: 2999, desc: "End-to-end JS portals"            },
+      { id: "android-dev",    label: "Android (Java/Kotlin)",    icon: Smartphone,     color: "bg-[#E8F5E9]", border: "border-[#26A69A]", accent: "#26A69A", price: 3499, desc: "Native Android apps"              },
+      { id: "firebase",       label: "Firebase Integration",     icon: Flame,          color: "bg-[#FFF9C4]", border: "border-[#FFCA28]", accent: "#FFCA28", price: 1399, desc: "Auth, real-time DB & hosting"      },
+      { id: "db",             label: "MySQL / MongoDB",          icon: Database,       color: "bg-[#E1F5FE]", border: "border-[#42A5F5]", accent: "#42A5F5", price: 799,  desc: "Database design & queries"       },
+      { id: "ai-integration", label: "AI Integration",          icon: Brain,          color: "bg-[#F3E5F5]", border: "border-[#AB47BC]", accent: "#AB47BC", price: 2499, desc: "Gemini, GPT, Claude & more"        },
+      { id: "ml-model",       label: "ML Model",                 icon: Cpu,            color: "bg-[#FFEBEE]", border: "border-[#EF5350]", accent: "#EF5350", price: 3499, desc: "Predictions & classification"     },
+      { id: "opencv",         label: "OpenCV / Face Detection",  icon: Eye,            color: "bg-[#E8F5E9]", border: "border-[#26A69A]", accent: "#26A69A", price: 2999, desc: "Face & object recognition"        },
+      { id: "fullstack",      label: "Full Stack + Deploy",      icon: Network,        color: "bg-[#FFF9C4]", border: "border-[#FFCA28]", accent: "#FFCA28", price: 4499, desc: "App + live cloud deployment"       },
+      { id: "blockchain",     label: "Blockchain / Web3",        icon: Link,           color: "bg-[#E1F5FE]", border: "border-[#42A5F5]", accent: "#42A5F5", price: 5999, desc: "Smart contracts & DApps"          },
     ],
   },
   {
@@ -138,6 +138,12 @@ function OptionCard({ option, selected, onToggle, isBase = false }) {
       <span className="font-marker font-bold text-[#2C2C2C] text-center leading-tight text-[11px]">
         {option.label}
       </span>
+      {option.desc && (
+        <span className={`text-[9px] font-sans text-center leading-tight px-1 transition-colors
+          ${isSelected ? "text-[#2C2C2C]/70" : "text-[#8A8A8A]"}`}>
+          {option.desc}
+        </span>
+      )}
       <span
         className={`text-[10px] font-bold font-mono rounded-full px-2 py-0.5 whitespace-nowrap transition-colors
           ${isSelected ? "bg-[#2C2C2C] text-[#FFF59D]" : "bg-[#F0F0F0] text-[#5A5A5A]"}`}
