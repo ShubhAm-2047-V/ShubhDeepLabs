@@ -9,7 +9,7 @@ export async function POST(req) {
   };
 
   try {
-    const { message, history = [], context = "" } = await req.json();
+    const { message, history = [], context = "", apiKey } = await req.json();
 
     if (!message) {
       return NextResponse.json({ error: "Message is required." }, { status: 400 });
@@ -23,11 +23,11 @@ export async function POST(req) {
       addLog(`[RAG Context] No matching document context found. Using baseline knowledge.`, "warn");
     }
 
-    const geminiKey = process.env.GEMINI_API_KEY;
+    const geminiKey = apiKey || process.env.GEMINI_API_KEY;
     let reply = "";
 
     if (geminiKey) {
-      addLog("[LLM Gemini] Handshaking with Gemini API (gemini-2.5-flash)...", "info");
+      addLog("[LLM Gemini] Handshaking with Gemini API...", "info");
 
       const systemInstruction = `You are a helpful customer support agent for Shubdeep Labs.
 Answer the user's question using ONLY the factual context provided. If the context does not contain the answer, say "I'm sorry, I don't have that information in my knowledge base. Please contact our support coordinators."
