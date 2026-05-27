@@ -78,14 +78,14 @@ ${context || "No matching context found. Rely on the factual details of Shubdeep
         const data = await response.json();
         if (data.error) {
           addLog(`[LLM Gemini Error] ${data.error.message}`, "error");
-          reply = "I encountered an error querying the Gemini service.";
+          reply = `I encountered an error querying the Gemini service: ${data.error.message}`;
         } else {
           reply = data.candidates[0].content.parts[0].text;
           addLog("[LLM Gemini] Response received and parsed successfully.", "info");
         }
       } catch (error) {
         addLog(`[LLM Gemini Connection Failed] ${error.message}`, "error");
-        reply = "Failed to query Gemini API.";
+        reply = `Failed to query Gemini API: ${error.message}`;
       }
     } else {
       // Sandbox Simulator Mode
