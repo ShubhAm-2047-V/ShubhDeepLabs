@@ -42,19 +42,32 @@ const STEPS = [
     hint: "Select all that apply — each adds to your estimate",
     type: "multi",
     options: [
-      { id: "html",           label: "HTML / CSS / JS",          icon: Globe,          color: "bg-[#FFF9C4]", border: "border-[#FFCA28]", accent: "#FFCA28", price: 899,  desc: "Websites & landing pages"       },
-      { id: "python-flask",   label: "Python + Flask",           icon: Code,           color: "bg-[#E8F5E9]", border: "border-[#66BB6A]", accent: "#66BB6A", price: 999,  desc: "REST APIs & ML backends"         },
-      { id: "react",          label: "React.js",                 icon: LayoutDashboard,color: "bg-[#E1F5FE]", border: "border-[#42A5F5]", accent: "#42A5F5", price: 1499, desc: "Interactive web dashboards"       },
-      { id: "nextjs",         label: "Next.js",                  icon: Zap,            color: "bg-[#F3E5F5]", border: "border-[#AB47BC]", accent: "#AB47BC", price: 1999, desc: "Full-stack SSR web apps"          },
-      { id: "mern",           label: "MERN Stack",               icon: Server,         color: "bg-[#FFEBEE]", border: "border-[#EF5350]", accent: "#EF5350", price: 2999, desc: "End-to-end JS portals"            },
-      { id: "android-dev",    label: "Android (Java/Kotlin)",    icon: Smartphone,     color: "bg-[#E8F5E9]", border: "border-[#26A69A]", accent: "#26A69A", price: 3499, desc: "Native Android apps"              },
-      { id: "firebase",       label: "Firebase Integration",     icon: Flame,          color: "bg-[#FFF9C4]", border: "border-[#FFCA28]", accent: "#FFCA28", price: 1399, desc: "Auth, real-time DB & hosting"      },
-      { id: "db",             label: "MySQL / MongoDB",          icon: Database,       color: "bg-[#E1F5FE]", border: "border-[#42A5F5]", accent: "#42A5F5", price: 799,  desc: "Database design & queries"       },
-      { id: "ai-integration", label: "AI Integration",          icon: Brain,          color: "bg-[#F3E5F5]", border: "border-[#AB47BC]", accent: "#AB47BC", price: 2499, desc: "Gemini, GPT, Claude & more"        },
-      { id: "ml-model",       label: "ML Model",                 icon: Cpu,            color: "bg-[#FFEBEE]", border: "border-[#EF5350]", accent: "#EF5350", price: 3499, desc: "Predictions & classification"     },
-      { id: "opencv",         label: "OpenCV / Face Detection",  icon: Eye,            color: "bg-[#E8F5E9]", border: "border-[#26A69A]", accent: "#26A69A", price: 2999, desc: "Face & object recognition"        },
-      { id: "fullstack",      label: "Full Stack + Deploy",      icon: Network,        color: "bg-[#FFF9C4]", border: "border-[#FFCA28]", accent: "#FFCA28", price: 4499, desc: "App + live cloud deployment"       },
-      { id: "blockchain",     label: "Blockchain / Web3",        icon: Link,           color: "bg-[#E1F5FE]", border: "border-[#42A5F5]", accent: "#42A5F5", price: 5999, desc: "Smart contracts & DApps"          },
+      { id: "html",           label: "HTML / CSS / JS",          icon: Globe,          color: "bg-[#FFF9C4]", border: "border-[#FFCA28]", accent: "#FFCA28", price: 899,  desc: "Websites & landing pages",
+        tooltip: "The language of every website. HTML builds the page, CSS makes it look pretty, and JavaScript makes buttons work. 🧱\n\nBest for: College website, portfolio page, form-based project, simple admin panel." },
+      { id: "python-flask",   label: "Python + Flask",           icon: Code,           color: "bg-[#E8F5E9]", border: "border-[#66BB6A]", accent: "#66BB6A", price: 999,  desc: "REST APIs & ML backends",
+        tooltip: "Python is like giving instructions in plain English to a computer. Flask turns those instructions into a web server. 🐍\n\nBest for: Attendance system, login portal, data dashboard, anything that connects to a database." },
+      { id: "react",          label: "React.js",                 icon: LayoutDashboard,color: "bg-[#E1F5FE]", border: "border-[#42A5F5]", accent: "#42A5F5", price: 1499, desc: "Interactive web dashboards",
+        tooltip: "React makes websites feel like apps — pages change instantly without reloading. ⚡\n\nBest for: Dashboard, booking system, real-time tracker, admin panel with live updates." },
+      { id: "nextjs",         label: "Next.js",                  icon: Zap,            color: "bg-[#F3E5F5]", border: "border-[#AB47BC]", accent: "#AB47BC", price: 1999, desc: "Full-stack SSR web apps",
+        tooltip: "Next.js handles both the frontend (what users see) and backend (server) in one place. Loads super fast. 🚀\n\nBest for: E-commerce site, college portal, professional web app, SaaS platform." },
+      { id: "mern",           label: "MERN Stack",               icon: Server,         color: "bg-[#FFEBEE]", border: "border-[#EF5350]", accent: "#EF5350", price: 2999, desc: "End-to-end JS portals",
+        tooltip: "MERN = MongoDB + Express + React + Node.js. The full package — build both the website and the server using just JavaScript. 🏗️\n\nBest for: Social platform, hospital system, full-featured web app." },
+      { id: "android-dev",    label: "Android (Java/Kotlin)",    icon: Smartphone,     color: "bg-[#E8F5E9]", border: "border-[#26A69A]", accent: "#26A69A", price: 3499, desc: "Native Android apps",
+        tooltip: "Build a real app that gets installed on Android phones — just like apps on Play Store. 📱\n\nBest for: Attendance app, student tool, delivery tracker, anything your examiner can open on a phone." },
+      { id: "firebase",       label: "Firebase Integration",     icon: Flame,          color: "bg-[#FFF9C4]", border: "border-[#FFCA28]", accent: "#FFCA28", price: 1399, desc: "Auth, real-time DB & hosting",
+        tooltip: "Google's magic toolkit — adds login (Google/email), a real-time database, and file storage to any project without building a server from scratch. 🔥\n\nBest for: Adding user login, live chat, or data sync to web/Android projects." },
+      { id: "db",             label: "MySQL / MongoDB",          icon: Database,       color: "bg-[#E1F5FE]", border: "border-[#42A5F5]", accent: "#42A5F5", price: 799,  desc: "Database design & queries",
+        tooltip: "Every project needs a database — it's the filing cabinet of your app. MySQL stores data in tables (like Excel), MongoDB stores flexible data. 🗄️\n\nBest for: Student records, product lists, order history — basically any project that stores data." },
+      { id: "ai-integration", label: "AI Integration",          icon: Brain,          color: "bg-[#F3E5F5]", border: "border-[#AB47BC]", accent: "#AB47BC", price: 2499, desc: "Gemini, GPT, Claude & more",
+        tooltip: "Add a brain to your project! Connect ChatGPT, Google Gemini, or Claude via API — no need to train any model yourself. 🤖\n\nBest for: Chatbot, smart reply, AI assistant, resume analyser, content generator." },
+      { id: "ml-model",       label: "ML Model",                 icon: Cpu,            color: "bg-[#FFEBEE]", border: "border-[#EF5350]", accent: "#EF5350", price: 3499, desc: "Predictions & classification",
+        tooltip: "Train a computer to make smart decisions on its own using data. Uses Python libraries. 🧠\n\nBest for: Disease prediction, price forecasting, spam detection, student result analysis — data science projects." },
+      { id: "opencv",         label: "OpenCV / Face Detection",  icon: Eye,            color: "bg-[#E8F5E9]", border: "border-[#26A69A]", accent: "#26A69A", price: 2999, desc: "Face & object recognition",
+        tooltip: "Give your project eyes! Use a camera to detect faces, count people, read QR codes, or recognise objects. 👁️\n\nBest for: Face attendance system, security camera project, object detection, number plate reader." },
+      { id: "fullstack",      label: "Full Stack + Deploy",      icon: Network,        color: "bg-[#FFF9C4]", border: "border-[#FFCA28]", accent: "#FFCA28", price: 4499, desc: "App + live cloud deployment",
+        tooltip: "Build the complete app (frontend + backend) AND put it live on the internet so anyone with a link can use it. ☁️\n\nBest for: Projects that need to be live & accessible — demo-ready for viva or clients." },
+      { id: "blockchain",     label: "Blockchain / Web3",        icon: Link,           color: "bg-[#E1F5FE]", border: "border-[#42A5F5]", accent: "#42A5F5", price: 5999, desc: "Smart contracts & DApps",
+        tooltip: "Blockchain is a tamper-proof digital record. Build things that can never be faked or deleted — very unique for college projects! 🔗\n\nBest for: Digital certificates, voting system, supply chain tracker, NFT platform." },
     ],
   },
   {
@@ -112,7 +125,9 @@ function buildWhatsAppMessage(selections) {
 // ─── OPTION CARD ─────────────────────────────────────────────────────────────
 
 function OptionCard({ option, selected, onToggle, isBase = false }) {
-  const Icon = option.icon;
+  const cardRef  = useRef(null);
+  const [tipPos, setTipPos] = useState(null);
+  const Icon     = option.icon;
   const isSelected = Array.isArray(selected) ? selected.includes(option.id) : selected === option.id;
 
   const priceLabel = isBase
@@ -121,36 +136,81 @@ function OptionCard({ option, selected, onToggle, isBase = false }) {
     ? "Free 🌿"
     : `+ ${formatINR(option.price)}`;
 
+  function handleMouseEnter() {
+    if (!option.tooltip || !cardRef.current) return;
+    const r = cardRef.current.getBoundingClientRect();
+    setTipPos({ x: r.left + r.width / 2, y: r.top });
+  }
+
   return (
-    <button
-      id={`customizer-option-${option.id}`}
-      onClick={() => onToggle(option.id)}
-      className={`relative flex flex-col items-center justify-center gap-1.5 rounded-xl border-2 transition-all duration-150 cursor-pointer select-none p-3
-        ${isSelected
-          ? `${option.color} ${option.border} shadow-[3px_3px_0_#2C2C2C] scale-[0.97] ring-2 ring-[#2C2C2C]`
-          : "bg-white border-[#2C2C2C]/30 hover:border-[#2C2C2C] hover:shadow-[2px_2px_0_#2C2C2C] hover:scale-[0.98]"
-        }`}
-    >
-      {isSelected && (
-        <span className="absolute top-1 right-1.5 text-[10px] font-black text-[#2C2C2C]">✓</span>
-      )}
-      <Icon className="w-5 h-5 shrink-0" style={{ color: option.accent }} />
-      <span className="font-marker font-bold text-[#2C2C2C] text-center leading-tight text-[11px]">
-        {option.label}
-      </span>
-      {option.desc && (
-        <span className={`text-[9px] font-sans text-center leading-tight px-1 transition-colors
-          ${isSelected ? "text-[#2C2C2C]/70" : "text-[#8A8A8A]"}`}>
-          {option.desc}
-        </span>
-      )}
-      <span
-        className={`text-[10px] font-bold font-mono rounded-full px-2 py-0.5 whitespace-nowrap transition-colors
-          ${isSelected ? "bg-[#2C2C2C] text-[#FFF59D]" : "bg-[#F0F0F0] text-[#5A5A5A]"}`}
+    <>
+      {/* Fixed-position tooltip — escapes modal overflow clipping */}
+      <AnimatePresence>
+        {tipPos && option.tooltip && (
+          <motion.div
+            initial={{ opacity: 0, y: 8, scale: 0.94 }}
+            animate={{ opacity: 1, y: 0,  scale: 1    }}
+            exit={{   opacity: 0, y: 8, scale: 0.94 }}
+            transition={{ duration: 0.15 }}
+            className="fixed z-[200] pointer-events-none"
+            style={{ left: tipPos.x, top: tipPos.y, transform: "translate(-50%, calc(-100% - 12px))" }}
+          >
+            <div className="w-64 bg-[#1E1E1E] rounded-2xl p-4 border-2 border-[#FFF59D] shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
+              <p className="font-marker font-extrabold text-[#FFF59D] text-xs mb-2">
+                {option.label}
+              </p>
+              {option.tooltip.split("\n\n").map((para, i) => (
+                <p key={i} className={`font-sans text-[11px] leading-relaxed ${
+                  i === 0 ? "text-[#E0E0E0] mb-2" : "text-[#A5D6A7] font-semibold"
+                }`}>
+                  {para}
+                </p>
+              ))}
+            </div>
+            {/* Caret arrow */}
+            <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0"
+              style={{ borderLeft: "7px solid transparent", borderRight: "7px solid transparent", borderTop: "7px solid #1E1E1E" }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <button
+        ref={cardRef}
+        id={`customizer-option-${option.id}`}
+        onClick={() => onToggle(option.id)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={() => setTipPos(null)}
+        className={`w-full relative flex flex-col items-center justify-center gap-1.5 rounded-xl border-2 transition-all duration-150 cursor-pointer select-none p-3
+          ${isSelected
+            ? `${option.color} ${option.border} shadow-[3px_3px_0_#2C2C2C] scale-[0.97] ring-2 ring-[#2C2C2C]`
+            : "bg-white border-[#2C2C2C]/30 hover:border-[#2C2C2C] hover:shadow-[2px_2px_0_#2C2C2C] hover:scale-[0.98]"
+          }`}
       >
-        {priceLabel}
-      </span>
-    </button>
+        {isSelected && (
+          <span className="absolute top-1 right-1.5 text-[10px] font-black text-[#2C2C2C]">✓</span>
+        )}
+        <Icon className="w-5 h-5 shrink-0" style={{ color: option.accent }} />
+        <span className="font-marker font-bold text-[#2C2C2C] text-center leading-tight text-[11px]">
+          {option.label}
+        </span>
+        {option.desc && (
+          <span className={`text-[9px] font-sans text-center leading-tight px-1 transition-colors
+            ${isSelected ? "text-[#2C2C2C]/70" : "text-[#8A8A8A]"}`}>
+            {option.desc}
+          </span>
+        )}
+        <span
+          className={`text-[10px] font-bold font-mono rounded-full px-2 py-0.5 whitespace-nowrap transition-colors
+            ${isSelected ? "bg-[#2C2C2C] text-[#FFF59D]" : "bg-[#F0F0F0] text-[#5A5A5A]"}`}
+        >
+          {priceLabel}
+        </span>
+        {option.tooltip && (
+          <span className="absolute bottom-1 left-1.5 text-[8px] text-[#B0B0B0] font-sans">hold to know more</span>
+        )}
+      </button>
+    </>
   );
 }
 
