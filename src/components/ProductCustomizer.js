@@ -381,7 +381,7 @@ function SummaryScreen({ selections, onBack, onReset, customPrices }) {
 
 // ─── OFFERS PANEL ─────────────────────────────────────────────────────────────
 
-function OffersPanel() {
+function OffersPanel({ selections = {}, customPrices = {} }) {
   const [activeOffer, setActiveOffer] = useState({
     title: "First 8 Special Students of Diploma get 30% OFF + Assured Free Gift!",
     subtext: "* T&C apply. Connect on WhatsApp to reserve your discount spot.",
@@ -491,7 +491,22 @@ function OffersPanel() {
     setTimeout(() => setCopied(false), 2000);
   }
 
-  const waOfferUrl = `https://wa.me/919028833275?text=${encodeURIComponent(`Hello! I want to claim the Daily Special: "${activeOffer.title}" + Booster Code: ${boosterCode}`)}`;
+  const waOfferUrl = (() => {
+    const hasCategory = selections && !!selections.category;
+    if (!hasCategory) {
+      return `https://wa.me/919028833275?text=${encodeURIComponent(`Hello ShubDeep Labs! 👋\n\nI want to claim the Daily Special: "${activeOffer.title}" + Booster Code: ${boosterCode}`)}`;
+    }
+    
+    const cat    = STEPS[0].options.find(o => o.id === selections.category)?.label || "—";
+    const techs  = (selections.tech   || []).map(id => STEPS[1].options.find(o => o.id === id)?.label).filter(Boolean).join(", ") || "—";
+    const addons = (selections.addons || []).map(id => STEPS[2].options.find(o => o.id === id)?.label).filter(Boolean).join(", ") || "None";
+    const time   = STEPS[3].options.find(o => o.id === selections.timeline)?.label || "—";
+    const { total } = calculateTotal(selections, customPrices);
+    
+    return `https://wa.me/919028833275?text=${encodeURIComponent(
+      `Hello ShubDeep Labs! 👋\n\nI want to claim the Daily Special: "${activeOffer.title}"\n🎟️ Booster Code: ${boosterCode}\n\nMy Project Requirement:\n🎓 Level: ${cat}\n⚙️ Tech Stack: ${techs}\n✨ Add-Ons: ${addons}\n⏱️ Timeline: ${time}\n💰 My Estimate: ${formatINR(total)}\n\nPlease confirm the final combo quote for my custom project!`
+    )}`;
+  })();
 
   if (loading) return (
     <div className="flex flex-col items-center justify-center py-16 gap-3">
@@ -852,7 +867,7 @@ export default function ProductCustomizer() {
               <div className="px-6 py-4 overflow-y-auto flex-1">
                 <AnimatePresence mode="wait">
                   {showOffers ? (
-                    <OffersPanel key="offers" />
+                    <OffersPanel key="offers" selections={selections} customPrices={customPrices} />
                   ) : showSummary ? (
                     <SummaryScreen
                       key="summary"
