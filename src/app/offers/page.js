@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import toast from "react-hot-toast";
+import { STEPS, calculateTotal, formatINR } from "@/components/ProductCustomizer";
 
 export default function DailyOffers() {
   const [activeOffer, setActiveOffer] = useState({
@@ -29,8 +30,33 @@ export default function DailyOffers() {
   const [erasedPercentage, setErasedPercentage] = useState(0);
   const [scratchSettings, setScratchSettings] = useState({ discountPercent: 5, codes: ["STUDENT5EXTRA", "COUPON5HUB", "VIVABOOST5", "FINAL5PASS"] });
 
+  // Customizer selections & pricing sync
+  const [selections, setSelections] = useState({ category: null, tech: [], addons: [], timeline: null });
+  const [customPrices, setCustomPrices] = useState({});
+
   useEffect(() => {
     fetchDeals();
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const local = localStorage.getItem("shubdeeplabs_selections");
+      if (local) {
+        try {
+          setSelections(JSON.parse(local));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleSelectionsChange = (e) => {
+      setSelections(e.detail);
+    };
+    window.addEventListener("customizer-selections-changed", handleSelectionsChange);
+    return () => window.removeEventListener("customizer-selections-changed", handleSelectionsChange);
   }, []);
 
   const fetchDeals = async () => {
@@ -57,6 +83,12 @@ export default function DailyOffers() {
         randomCode = randomCode.replace(/\d+/g, String(percent));
         setBoosterCode(randomCode);
       }
+
+      // Fetch customizer prices
+      const prices = await dbService.getCustomizerPrices();
+      if (prices) {
+        setCustomPrices(prices);
+      }
     } catch (e) {
       console.error("Failed to load offers database registries:", e);
       toast.error("Offline Mode: Loaded cached catalog.");
@@ -64,6 +96,44 @@ export default function DailyOffers() {
       setLoading(false);
     }
   };
+
+  const waOfferUrl = (() => {
+    const hasCategory = selections && !!selections.category;
+    if (!hasCategory) {
+      return `https://wa.me/919028833275?text=${encodeURIComponent(
+        `Hello ShubDeep Labs! 👋\n\nI want to claim the Daily Special Deal: "${activeOffer.title}"!`
+      )}`;
+    }
+    
+    const cat    = STEPS[0].options.find(o => o.id === selections.category)?.label || "—";
+    const techs  = (selections.tech   || []).map(id => STEPS[1].options.find(o => o.id === id)?.label).filter(Boolean).join(", ") || "—";
+    const addons = (selections.addons || []).map(id => STEPS[2].options.find(o => o.id === id)?.label).filter(Boolean).join(", ") || "None";
+    const time   = STEPS[3].options.find(o => o.id === selections.timeline)?.label || "—";
+    const { total } = calculateTotal(selections, customPrices);
+    
+    return `https://wa.me/919028833275?text=${encodeURIComponent(
+      `Hello ShubDeep Labs! 👋\n\nI want to claim the Daily Special Deal: "${activeOffer.title}"!\n\nMy Project Requirement:\n🎓 Level: ${cat}\n⚙️ Tech Stack: ${techs}\n✨ Add-Ons: ${addons}\n⏱️ Timeline: ${time}\n💰 My Estimate: ${formatINR(total)}\n\nPlease confirm the final quote for my custom project!`
+    )}`;
+  })();
+
+  const waComboUrl = (() => {
+    const hasCategory = selections && !!selections.category;
+    if (!hasCategory) {
+      return `https://wa.me/919028833275?text=${encodeURIComponent(
+        `Hello ShubDeep Labs! 👋\n\nI want to order my academic project and use the active Daily Offer "${activeOffer.title}" plus my secret Booster Code "${boosterCode}"!`
+      )}`;
+    }
+    
+    const cat    = STEPS[0].options.find(o => o.id === selections.category)?.label || "—";
+    const techs  = (selections.tech   || []).map(id => STEPS[1].options.find(o => o.id === id)?.label).filter(Boolean).join(", ") || "—";
+    const addons = (selections.addons || []).map(id => STEPS[2].options.find(o => o.id === id)?.label).filter(Boolean).join(", ") || "None";
+    const time   = STEPS[3].options.find(o => o.id === selections.timeline)?.label || "—";
+    const { total } = calculateTotal(selections, customPrices);
+    
+    return `https://wa.me/919028833275?text=${encodeURIComponent(
+      `Hello ShubDeep Labs! 👋\n\nI want to claim the Daily Special: "${activeOffer.title}"\n🎟️ Booster Code: ${boosterCode}\n\nMy Project Requirement:\n🎓 Level: ${cat}\n⚙️ Tech Stack: ${techs}\n✨ Add-Ons: ${addons}\n⏱️ Timeline: ${time}\n💰 My Estimate: ${formatINR(total)}\n\nPlease confirm the final combo quote for my custom project!`
+    )}`;
+  })();
 
   // Initialize scratch card canvas
   useEffect(() => {
@@ -344,7 +414,7 @@ useEffect(() => {
                   {/* Claim Button linking to WhatsApp */}
                   <div className="pt-4 flex flex-col sm:flex-row items-center gap-4">
                     <a
-                      href={`https://wa.me/919028833275?text=Hello%2C%20I%20want%20to%20claim%20the%20Daily%20Special%20Deal%20"${encodeURIComponent(activeOffer.title)}"!`}
+                      href={waOfferUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-sketch w-full sm:w-auto text-center py-4 px-8 inline-flex items-center justify-center shadow-[3px_4px_0_#2C2C2C]"
@@ -464,7 +534,7 @@ useEffect(() => {
                 {isRevealed && (
                   <div className="mt-5 pt-4 border-t border-dashed border-[#2C2C2C]/10 animate-fade-in">
                     <a
-                      href={`https://wa.me/919028833275?text=Hello%2C%20I%20want%20to%20order%20my%20academic%20project%20and%20use%20the%20active%20Daily%20Offer%20"${encodeURIComponent(activeOffer.title)}"%20plus%20my%20secret%20Booster%20Code%20"${boosterCode}"!`}
+                      href={waComboUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-center w-full px-4 py-3 bg-[#E1BEE7] border-2 border-[#2C2C2C] rounded-xl text-sm font-bold text-[#2C2C2C] hover:bg-[#CE93D8] transition-all shadow-[2px_2.5px_0_#2C2C2C] hover:translate-y-0.5"

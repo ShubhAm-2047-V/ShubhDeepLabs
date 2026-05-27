@@ -11,6 +11,7 @@ import {
 import toast from "react-hot-toast";
 import { dbService } from "@/lib/supabase";
 import ThreeScene from "@/components/ThreeScene";
+import { STEPS, calculateTotal, formatINR } from "@/components/ProductCustomizer";
 
 export default function Home() {
   // Contact Form States
@@ -62,6 +63,42 @@ export default function Home() {
     emoji: "🎁",
   });
 
+  const [selections, setSelections] = useState({ category: null, tech: [], addons: [], timeline: null });
+  const [customPrices, setCustomPrices] = useState({});
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const local = localStorage.getItem("shubdeeplabs_selections");
+      if (local) {
+        try {
+          setSelections(JSON.parse(local));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleSelectionsChange = (e) => {
+      setSelections(e.detail);
+    };
+    window.addEventListener("customizer-selections-changed", handleSelectionsChange);
+    return () => window.removeEventListener("customizer-selections-changed", handleSelectionsChange);
+  }, []);
+
+  useEffect(() => {
+    const loadPrices = async () => {
+      try {
+        const prices = await dbService.getCustomizerPrices();
+        if (prices) setCustomPrices(prices);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    loadPrices();
+  }, []);
+
   useEffect(() => {
     const fetchActiveOffer = async () => {
       try {
@@ -75,6 +112,25 @@ export default function Home() {
     };
     fetchActiveOffer();
   }, []);
+
+  const waOfferUrl = (() => {
+    const hasCategory = selections && !!selections.category;
+    if (!hasCategory) {
+      return `https://wa.me/919028833275?text=${encodeURIComponent(
+        `Hello ShubDeep Labs! 👋\n\nI want to claim the Daily Special Deal: "${activeOffer.title}"!`
+      )}`;
+    }
+    
+    const cat    = STEPS[0].options.find(o => o.id === selections.category)?.label || "—";
+    const techs  = (selections.tech   || []).map(id => STEPS[1].options.find(o => o.id === id)?.label).filter(Boolean).join(", ") || "—";
+    const addons = (selections.addons || []).map(id => STEPS[2].options.find(o => o.id === id)?.label).filter(Boolean).join(", ") || "None";
+    const time   = STEPS[3].options.find(o => o.id === selections.timeline)?.label || "—";
+    const { total } = calculateTotal(selections, customPrices);
+    
+    return `https://wa.me/919028833275?text=${encodeURIComponent(
+      `Hello ShubDeep Labs! 👋\n\nI want to claim the Daily Special Deal: "${activeOffer.title}"!\n\nMy Project Requirement:\n🎓 Level: ${cat}\n⚙️ Tech Stack: ${techs}\n✨ Add-Ons: ${addons}\n⏱️ Timeline: ${time}\n💰 My Estimate: ${formatINR(total)}\n\nPlease confirm the final quote for my custom project!`
+    )}`;
+  })();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -498,7 +554,7 @@ export default function Home() {
               </div>
 
               <a
-                href={`https://wa.me/919028833275?text=Hello%2C%20I%20want%20to%20claim%20the%20deal%20"${encodeURIComponent(activeOffer.title)}"!`}
+                href={waOfferUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-sketch py-3.5 px-6 text-sm shrink-0"

@@ -14,14 +14,14 @@ import { dbService } from "@/lib/supabase";
 
 // ─── HELPERS ───────────────────────────────────────────────────────────────────
 
-function formatINR(n) {
+export function formatINR(n) {
   if (n === 0) return "₹0";
   return "₹" + n.toLocaleString("en-IN");
 }
 
 // ─── DATA ──────────────────────────────────────────────────────────────────────
 
-const STEPS = [
+export const STEPS = [
   {
     id: "category",
     title: "Pick Your Field",
@@ -104,7 +104,7 @@ const STEPS = [
 
 // ─── PRICE CALCULATOR ─────────────────────────────────────────────────────────
 
-function calculateTotal(selections, customPrices = {}) {
+export function calculateTotal(selections, customPrices = {}) {
   const isDiploma = selections.category === "diploma";
   const getVal = (id, def) => (customPrices[id] !== undefined ? customPrices[id] : def);
 
@@ -137,7 +137,7 @@ function calculateTotal(selections, customPrices = {}) {
   return { basePrice, techPrice, addonPrice, timelinePrice, total: basePrice + techPrice + addonPrice + timelinePrice };
 }
 
-function buildWhatsAppMessage(selections, customPrices) {
+export function buildWhatsAppMessage(selections, customPrices) {
   const cat    = STEPS[0].options.find(o => o.id === selections.category)?.label || "—";
   const techs  = (selections.tech   || []).map(id => STEPS[1].options.find(o => o.id === id)?.label).filter(Boolean).join(", ") || "—";
   const addons = (selections.addons || []).map(id => STEPS[2].options.find(o => o.id === id)?.label).filter(Boolean).join(", ") || "None";
@@ -642,6 +642,29 @@ export default function ProductCustomizer() {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const [customPrices, setCustomPrices] = useState({});
   const panelRef = useRef(null);
+
+  // Load initial selections from localStorage to avoid hydration mismatch
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const local = localStorage.getItem("shubdeeplabs_selections");
+      if (local) {
+        try {
+          setSelections(JSON.parse(local));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+  }, []);
+
+  // Save selections to localStorage and dispatch update event
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("shubdeeplabs_selections", JSON.stringify(selections));
+      const ev = new CustomEvent("customizer-selections-changed", { detail: selections });
+      window.dispatchEvent(ev);
+    }
+  }, [selections]);
 
   useEffect(() => {
     async function loadPrices() {
