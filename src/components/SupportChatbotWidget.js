@@ -99,6 +99,48 @@ ADVANCED PROJECT RECOMMENDATIONS:
   }
 ];
 
+// Helper function to render text with clickable links (supporting plain URLs and markdown style [label](url))
+function renderMessageText(text) {
+  if (!text) return null;
+  const regex = /(\[[^\]]+\]\(https?:\/\/[^\s)]+\)|https?:\/\/[^\s]+?(?=[.,;!?']?(\s|$)))/g;
+  const parts = text.split(regex);
+  
+  return parts.map((part, index) => {
+    if (!part) return null;
+    if (part.startsWith("[") && part.includes("](")) {
+      const labelMatch = part.match(/\[([^\]]+)\]/);
+      const urlMatch = part.match(/\(([^)]+)\)/);
+      const label = labelMatch ? labelMatch[1] : part;
+      const url = urlMatch ? urlMatch[1] : "#";
+      return (
+        <a 
+          key={index} 
+          href={url} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="text-blue-600 hover:text-blue-800 underline font-bold transition-colors"
+        >
+          {label}
+        </a>
+      );
+    } else if (part.startsWith("http://") || part.startsWith("https://")) {
+      return (
+        <a 
+          key={index} 
+          href={part} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="text-blue-600 hover:text-blue-800 underline font-bold transition-colors"
+        >
+          {part}
+        </a>
+      );
+    } else {
+      return <span key={index}>{part}</span>;
+    }
+  }).filter(Boolean);
+}
+
 export default function SupportChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
@@ -282,7 +324,9 @@ export default function SupportChatbotWidget() {
                         ? "bg-[#FFF9C4] text-[#2C2C2C] rounded-tr-none" 
                         : "bg-white text-[#2C2C2C] rounded-tl-none"
                     }`}>
-                      <p className="font-sans font-semibold whitespace-pre-line leading-relaxed text-xs sm:text-sm">{msg.text}</p>
+                      <p className="font-sans font-semibold whitespace-pre-line leading-relaxed text-xs sm:text-sm">
+                        {renderMessageText(msg.text)}
+                      </p>
                     </div>
                   </div>
                 ))}
