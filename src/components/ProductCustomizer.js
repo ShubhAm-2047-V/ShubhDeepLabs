@@ -597,7 +597,28 @@ export default function ProductCustomizer() {
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showNudge, setShowNudge]     = useState(false);
   const [showOffers, setShowOffers]   = useState(false);
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const panelRef = useRef(null);
+
+  // Broadcast customizer open state
+  useEffect(() => {
+    const ev = new CustomEvent("customizer-state", { detail: { open } });
+    window.dispatchEvent(ev);
+    window.__customizerOpen = open;
+  }, [open]);
+
+  // Listen to chatbot state
+  useEffect(() => {
+    setIsChatbotOpen(!!window.__chatbotOpen);
+    const handleChatbotState = (e) => {
+      setIsChatbotOpen(e.detail.open);
+      if (e.detail.open && typeof window !== "undefined" && window.innerWidth < 1024) {
+        setOpen(false);
+      }
+    };
+    window.addEventListener("chatbot-state", handleChatbotState);
+    return () => window.removeEventListener("chatbot-state", handleChatbotState);
+  }, []);
 
   // Listen for custom event to open the customizer with pre-selected choices from the chatbot
   useEffect(() => {
@@ -705,7 +726,9 @@ export default function ProductCustomizer() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8"
+            className={`fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 transition-all duration-300 ${
+              isChatbotOpen ? "lg:justify-end lg:pr-16" : ""
+            }`}
             style={{ backgroundColor: "rgba(44,44,44,0.55)", backdropFilter: "blur(6px)" }}
           >
             {/* Modal card */}
@@ -716,7 +739,9 @@ export default function ProductCustomizer() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 30 }}
               transition={{ type: "spring", stiffness: 340, damping: 28 }}
-              className="w-full max-w-2xl bg-[#FAF6EE] border-[3px] border-[#2C2C2C] rounded-2xl shadow-[8px_10px_0_#2C2C2C] overflow-hidden flex flex-col"
+              className={`w-full ${
+                isChatbotOpen ? "lg:max-w-lg xl:max-w-xl" : "max-w-2xl"
+              } bg-[#FAF6EE] border-[3px] border-[#2C2C2C] rounded-2xl shadow-[8px_10px_0_#2C2C2C] overflow-hidden flex flex-col transition-all duration-300`}
               style={{ maxHeight: "90vh" }}
             >
               {/* Header */}

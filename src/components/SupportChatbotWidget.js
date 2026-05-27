@@ -114,9 +114,7 @@ function renderMessageText(text, userQuery) {
       let url = urlMatch ? urlMatch[1].replace(/[*\]\).,;!?']+$/, "") : "#";
       
       if (url.includes("wa.me") || url.includes("whatsapp")) {
-        const prefix = "Hi! I would like to consult about my project: ";
-        const fullText = prefix + (userQuery || "");
-        url = `https://api.whatsapp.com/send?phone=919028833275&text=${encodeURIComponent(fullText)}`;
+        url = `https://api.whatsapp.com/send?phone=919028833275&text=${encodeURIComponent(userQuery || "")}`;
       }
       return (
         <a 
@@ -133,9 +131,7 @@ function renderMessageText(text, userQuery) {
       const cleanUrl = part.replace(/[*\]\).,;!?']+$/, "");
       let hrefUrl = cleanUrl;
       if (cleanUrl.includes("wa.me") || cleanUrl.includes("whatsapp")) {
-        const prefix = "Hi! I would like to consult about my project: ";
-        const fullText = prefix + (userQuery || "");
-        hrefUrl = `https://api.whatsapp.com/send?phone=919028833275&text=${encodeURIComponent(fullText)}`;
+        hrefUrl = `https://api.whatsapp.com/send?phone=919028833275&text=${encodeURIComponent(userQuery || "")}`;
       }
       return (
         <a 
@@ -156,6 +152,7 @@ function renderMessageText(text, userQuery) {
 
 export default function SupportChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
   const [messages, setMessages] = useState([
     { 
       id: "support-msg-1", 
@@ -167,6 +164,26 @@ export default function SupportChatbotWidget() {
   const [isTyping, setIsTyping] = useState(false);
   const [showNudge, setShowNudge] = useState(false);
   const chatEndRef = useRef(null);
+
+  // Broadcast chatbot open state
+  useEffect(() => {
+    const ev = new CustomEvent("chatbot-state", { detail: { open: isOpen } });
+    window.dispatchEvent(ev);
+    window.__chatbotOpen = isOpen;
+  }, [isOpen]);
+
+  // Listen to customizer state
+  useEffect(() => {
+    setIsCustomizerOpen(!!window.__customizerOpen);
+    const handleCustomizerState = (e) => {
+      setIsCustomizerOpen(e.detail.open);
+      if (e.detail.open && typeof window !== "undefined" && window.innerWidth < 1024) {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener("customizer-state", handleCustomizerState);
+    return () => window.removeEventListener("customizer-state", handleCustomizerState);
+  }, []);
 
   useEffect(() => {
     // Show a floating nudge bubble after 8 seconds
@@ -275,6 +292,21 @@ export default function SupportChatbotWidget() {
       };
       
       setMessages((prev) => [...prev, botMsg]);
+      
+      if (selections) {
+        setTimeout(() => {
+          const customEvent = new CustomEvent("open-customizer", {
+            detail: {
+              category: selections.category,
+              tech: selections.tech,
+              addons: selections.addons,
+              timeline: selections.timeline || "normal",
+              showSummary: false
+            }
+          });
+          window.dispatchEvent(customEvent);
+        }, 600);
+      }
     } catch (err) {
       // Fallback: If network or Gemini is not configured, deliver matching static RAG content
       setTimeout(() => {
@@ -303,8 +335,13 @@ export default function SupportChatbotWidget() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[110] flex items-center justify-center p-4"
-            style={{ backgroundColor: "rgba(44,44,44,0.55)", backdropFilter: "blur(6px)" }}
+            className={`fixed inset-0 z-[110] flex items-center justify-center p-4 transition-all duration-300 ${
+              isCustomizerOpen ? "lg:justify-start lg:pl-16 pointer-events-none" : ""
+            }`}
+            style={{ 
+              backgroundColor: isCustomizerOpen ? "rgba(44,44,44,0)" : "rgba(44,44,44,0.55)", 
+              backdropFilter: isCustomizerOpen ? "none" : "blur(6px)" 
+            }}
             onClick={(e) => {
               if (e.target === e.currentTarget) setIsOpen(false);
             }}
@@ -314,7 +351,7 @@ export default function SupportChatbotWidget() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.9 }}
               transition={{ type: "spring", stiffness: 350, damping: 25 }}
-              className="w-full max-w-[460px] h-[580px] max-h-[85vh] bg-white border-3 border-[#2C2C2C] rounded-2xl shadow-[6px_8px_0_#2C2C2C] overflow-hidden flex flex-col relative"
+              className="w-full max-w-[460px] h-[580px] max-h-[85vh] bg-white border-3 border-[#2C2C2C] rounded-2xl shadow-[6px_8px_0_#2C2C2C] overflow-hidden flex flex-col relative pointer-events-auto"
             >
               {/* Whiteboard Header */}
               <div className="bg-[#FFF59D] border-b-3 border-[#2C2C2C] p-3 flex justify-between items-center relative shrink-0">
