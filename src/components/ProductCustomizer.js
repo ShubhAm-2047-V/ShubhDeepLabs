@@ -115,7 +115,7 @@ function calculateTotal(selections, customPrices = {}) {
     const opt = STEPS[1].options.find(o => o.id === id);
     if (!opt) return s;
     const origPrice = getVal(opt.id, opt.price);
-    const price = isDiploma ? Math.round(origPrice / 2) : origPrice;
+    const price = isDiploma ? Math.floor(origPrice / 2) : origPrice;
     return s + price;
   }, 0);
   
@@ -123,7 +123,7 @@ function calculateTotal(selections, customPrices = {}) {
     const opt = STEPS[2].options.find(o => o.id === id);
     if (!opt) return s;
     const origPrice = getVal(opt.id, opt.price);
-    const price = isDiploma ? Math.round(origPrice / 2) : origPrice;
+    const price = isDiploma ? Math.floor(origPrice / 2) : origPrice;
     return s + price;
   }, 0);
   
@@ -131,7 +131,7 @@ function calculateTotal(selections, customPrices = {}) {
     const opt = STEPS[3].options.find(o => o.id === selections.timeline);
     if (!opt) return 0;
     const origPrice = getVal(opt.id, opt.price);
-    return isDiploma ? Math.round(origPrice / 2) : origPrice;
+    return isDiploma ? Math.floor(origPrice / 2) : origPrice;
   })();
   
   return { basePrice, techPrice, addonPrice, timelinePrice, total: basePrice + techPrice + addonPrice + timelinePrice };
@@ -887,7 +887,7 @@ export default function ProductCustomizer() {
                           const isDiploma = selections.category === "diploma";
                           const basePrice = customPrices[option.id] !== undefined ? customPrices[option.id] : option.price;
                           const displayPrice = (step.id !== "category" && isDiploma)
-                            ? Math.round(basePrice / 2)
+                            ? Math.floor(basePrice / 2)
                             : basePrice;
                           return (
                             <OptionCard
