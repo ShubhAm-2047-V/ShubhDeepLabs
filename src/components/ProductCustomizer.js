@@ -105,10 +105,26 @@ const STEPS = [
 // ─── PRICE CALCULATOR ─────────────────────────────────────────────────────────
 
 function calculateTotal(selections) {
+  const isDiploma = selections.category === "diploma";
   const basePrice     = STEPS[0].options.find(o => o.id === selections.category)?.price || 0;
-  const techPrice     = (selections.tech   || []).reduce((s, id) => s + (STEPS[1].options.find(o => o.id === id)?.price || 0), 0);
-  const addonPrice    = (selections.addons || []).reduce((s, id) => s + (STEPS[2].options.find(o => o.id === id)?.price || 0), 0);
-  const timelinePrice = STEPS[3].options.find(o => o.id === selections.timeline)?.price || 0;
+  
+  const techPrice     = (selections.tech   || []).reduce((s, id) => {
+    const origPrice = STEPS[1].options.find(o => o.id === id)?.price || 0;
+    const price = isDiploma ? Math.round(origPrice / 2) : origPrice;
+    return s + price;
+  }, 0);
+  
+  const addonPrice    = (selections.addons || []).reduce((s, id) => {
+    const origPrice = STEPS[2].options.find(o => o.id === id)?.price || 0;
+    const price = isDiploma ? Math.round(origPrice / 2) : origPrice;
+    return s + price;
+  }, 0);
+  
+  const timelinePrice = (() => {
+    const origPrice = STEPS[3].options.find(o => o.id === selections.timeline)?.price || 0;
+    return isDiploma ? Math.round(origPrice / 2) : origPrice;
+  })();
+  
   return { basePrice, techPrice, addonPrice, timelinePrice, total: basePrice + techPrice + addonPrice + timelinePrice };
 }
 
@@ -126,17 +142,19 @@ function buildWhatsAppMessage(selections) {
 
 // ─── OPTION CARD ─────────────────────────────────────────────────────────────
 
-function OptionCard({ option, selected, onToggle, isBase = false }) {
+function OptionCard({ option, selected, onToggle, isBase = false, displayPrice }) {
   const cardRef  = useRef(null);
   const [tipPos, setTipPos] = useState(null);
   const Icon     = option.icon;
   const isSelected = Array.isArray(selected) ? selected.includes(option.id) : selected === option.id;
 
+  const actualPrice = displayPrice !== undefined ? displayPrice : option.price;
+
   const priceLabel = isBase
-    ? `from ${formatINR(option.price)}`
-    : option.price === 0
+    ? `from ${formatINR(actualPrice)}`
+    : actualPrice === 0
     ? "Free 🌿"
-    : `+ ${formatINR(option.price)}`;
+    : `+ ${formatINR(actualPrice)}`;
 
   function handleMouseEnter() {
     if (!option.tooltip || !cardRef.current) return;
@@ -842,15 +860,22 @@ export default function ProductCustomizer() {
 
                       {/* Options grid */}
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        {step.options.map(option => (
-                          <OptionCard
-                            key={option.id}
-                            option={option}
-                            selected={step.type === "single" ? selections[step.id] : selections[step.id] || []}
-                            onToggle={handleToggle}
-                            isBase={step.id === "category"}
-                          />
-                        ))}
+                        {step.options.map(option => {
+                          const isDiploma = selections.category === "diploma";
+                          const displayPrice = (step.id !== "category" && isDiploma)
+                            ? Math.round(option.price / 2)
+                            : option.price;
+                          return (
+                            <OptionCard
+                              key={option.id}
+                              option={option}
+                              displayPrice={displayPrice}
+                              selected={step.type === "single" ? selections[step.id] : selections[step.id] || []}
+                              onToggle={handleToggle}
+                              isBase={step.id === "category"}
+                            />
+                          );
+                        })}
                       </div>
 
                       {step.type === "multi" && (
