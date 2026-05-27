@@ -174,7 +174,7 @@ export default function SupportChatbotWidget() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 30, scale: 0.9 }}
               transition={{ type: "spring", stiffness: 350, damping: 25 }}
-              className="w-full max-w-[380px] h-[500px] bg-white border-3 border-[#2C2C2C] rounded-2xl shadow-[6px_8px_0_#2C2C2C] overflow-hidden flex flex-col relative"
+              className="w-full max-w-[460px] h-[580px] max-h-[85vh] bg-white border-3 border-[#2C2C2C] rounded-2xl shadow-[6px_8px_0_#2C2C2C] overflow-hidden flex flex-col relative"
             >
               {/* Whiteboard Header */}
               <div className="bg-[#FFF59D] border-b-3 border-[#2C2C2C] p-3 flex justify-between items-center relative shrink-0">
