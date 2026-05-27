@@ -225,18 +225,13 @@ export default function ProductCustomizer() {
   }, []);
 
   useEffect(() => {
-    if (open) setShowNudge(false);
-  }, [open]);
-
-  // Click outside to close
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (panelRef.current && !panelRef.current.contains(e.target)) {
-        setOpen(false);
-      }
+    if (open) {
+      setShowNudge(false);
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
     }
-    if (open) document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => { document.body.style.overflow = ""; };
   }, [open]);
 
   function handleToggle(id) {
@@ -287,262 +282,276 @@ export default function ProductCustomizer() {
   const progress = showSummary ? 100 : ((currentStep) / totalSteps) * 100;
 
   return (
-    /* Position above WhatsApp button: bottom-[6rem] so they don't overlap */
-    <div className="fixed bottom-[5.5rem] right-6 z-50 flex flex-col items-end gap-3" ref={panelRef}>
-
-      {/* ── PANEL ── */}
+    <>
+      {/* ── FULL-SCREEN MODAL OVERLAY ── */}
       <AnimatePresence>
         {open && (
           <motion.div
-            key="panel"
-            initial={{ opacity: 0, scale: 0.85, y: 20, originX: 1, originY: 1 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.85, y: 20 }}
-            transition={{ type: "spring", stiffness: 380, damping: 28 }}
-            className="w-[320px] sm:w-[360px] bg-[#FAF6EE] border-[3px] border-[#2C2C2C] rounded-2xl shadow-[6px_8px_0_#2C2C2C] overflow-hidden"
-            style={{ maxHeight: "82vh" }}
+            key="overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8"
+            style={{ backgroundColor: "rgba(44,44,44,0.55)", backdropFilter: "blur(6px)" }}
           >
-            {/* Header */}
-            <div className="relative bg-[#FFF59D] border-b-[3px] border-[#2C2C2C] px-4 py-3 flex items-center justify-between">
-              {/* Binder holes */}
-              <div className="absolute top-2 left-2.5 w-2.5 h-2.5 bg-[#FAF6EE] border border-[#2C2C2C] rounded-full" />
-              <div className="absolute top-2 right-10 w-2.5 h-2.5 bg-[#FAF6EE] border border-[#2C2C2C] rounded-full" />
+            {/* Modal card */}
+            <motion.div
+              key="panel"
+              ref={panelRef}
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 30 }}
+              transition={{ type: "spring", stiffness: 340, damping: 28 }}
+              className="w-full max-w-2xl bg-[#FAF6EE] border-[3px] border-[#2C2C2C] rounded-2xl shadow-[8px_10px_0_#2C2C2C] overflow-hidden flex flex-col"
+              style={{ maxHeight: "90vh" }}
+            >
+              {/* Header */}
+              <div className="relative bg-[#FFF59D] border-b-[3px] border-[#2C2C2C] px-6 py-4 flex items-center justify-between shrink-0">
+                {/* Binder holes */}
+                <div className="absolute top-3 left-3 w-3 h-3 bg-[#FAF6EE] border-2 border-[#2C2C2C] rounded-full" />
+                <div className="absolute top-3 right-14 w-3 h-3 bg-[#FAF6EE] border-2 border-[#2C2C2C] rounded-full" />
 
-              <div className="flex items-center gap-2">
-                <span className="text-lg">🎨</span>
-                <div>
-                  <h2 className="font-marker font-extrabold text-[#2C2C2C] text-sm leading-none">
-                    Project Customiser
-                  </h2>
-                  <p className="font-marker text-[10px] text-[#6A6A6A] mt-0.5">
-                    Build your perfect academic project
-                  </p>
-                </div>
-              </div>
-              <button
-                id="customizer-close"
-                onClick={() => setOpen(false)}
-                className="w-7 h-7 flex items-center justify-center rounded-full border-2 border-[#2C2C2C] text-[#2C2C2C] hover:bg-[#FFCDD2] transition-colors"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            {/* Progress bar */}
-            {!showSummary && (
-              <div className="w-full h-1.5 bg-[#E0E0E0]">
-                <motion.div
-                  className="h-full bg-[#2C2C2C]"
-                  animate={{ width: `${progress}%` }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
-            )}
-
-            {/* Step counter */}
-            {!showSummary && (
-              <div className="flex justify-between px-4 pt-2 pb-0">
-                {STEPS.map((s, i) => (
-                  <div
-                    key={s.id}
-                    className={`flex items-center gap-1 text-[10px] font-marker font-bold transition-colors duration-200
-                      ${i === currentStep ? "text-[#2C2C2C]" : i < currentStep ? "text-[#66BB6A]" : "text-[#C0C0C0]"}`}
-                  >
-                    <span className={`w-4 h-4 rounded-full border flex items-center justify-center text-[9px]
-                      ${i === currentStep ? "border-[#2C2C2C] bg-[#FFF59D]" : i < currentStep ? "border-[#66BB6A] bg-[#E8F5E9]" : "border-[#C0C0C0]"}`}>
-                      {i < currentStep ? "✓" : i + 1}
-                    </span>
-                    <span className="hidden sm:inline">{s.emoji}</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">🎨</span>
+                  <div>
+                    <h2 className="font-marker font-extrabold text-[#2C2C2C] text-lg leading-none">
+                      Project Customiser
+                    </h2>
+                    <p className="font-marker text-xs text-[#6A6A6A] mt-0.5">
+                      Build your perfect academic project
+                    </p>
                   </div>
-                ))}
-              </div>
-            )}
-
-            {/* Body */}
-            <div className="px-4 py-3 overflow-y-auto" style={{ maxHeight: "calc(82vh - 160px)" }}>
-              <AnimatePresence mode="wait">
-                {showSummary ? (
-                  <SummaryScreen
-                    key="summary"
-                    selections={selections}
-                    onBack={handleBack}
-                    onReset={handleReset}
-                  />
-                ) : (
-                  <motion.div
-                    key={`step-${currentStep}`}
-                    initial={{ opacity: 0, x: 30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -30 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex flex-col gap-3"
-                  >
-                    {/* Step header */}
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xl">{step.emoji}</span>
-                        <h3 className="font-marker font-extrabold text-[#2C2C2C] text-base">
-                          {step.title}
-                        </h3>
-                      </div>
-                      <p className="text-xs font-sans text-[#6A6A6A]">{step.hint}</p>
-                    </div>
-
-                    {/* Options grid */}
-                    <div className={`grid gap-2 ${step.options.length > 4 ? "grid-cols-2" : "grid-cols-2"}`}>
-                      {step.options.map((option) => (
-                        <OptionCard
-                          key={option.id}
-                          option={option}
-                          selected={
-                            step.type === "single"
-                              ? selections[step.id]
-                              : selections[step.id] || []
-                          }
-                          onToggle={handleToggle}
-                          small={step.options.length > 4}
-                        />
-                      ))}
-                    </div>
-
-                    {/* Multi-select hint */}
-                    {step.type === "multi" && (
-                      <p className="text-[10px] font-marker text-[#6A6A6A] text-center">
-                        Tap to select / deselect multiple options
-                      </p>
-                    )}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Footer Nav (only shown when not in summary) */}
-            {!showSummary && (
-              <div className="px-4 py-3 border-t-2 border-dashed border-[#2C2C2C]/20 flex items-center justify-between gap-3">
-                <button
-                  id="customizer-back"
-                  onClick={handleBack}
-                  disabled={currentStep === 0}
-                  className="flex items-center gap-1 text-xs font-marker font-bold text-[#5A5A5A] disabled:opacity-30 hover:text-[#2C2C2C] transition-colors"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                  Back
-                </button>
-
-                <div className="text-[10px] font-marker text-[#C0C0C0]">
-                  Step {currentStep + 1} of {totalSteps}
                 </div>
-
                 <button
-                  id="customizer-next"
-                  onClick={handleNext}
-                  disabled={!canProceed()}
-                  className={`flex items-center gap-1.5 text-xs font-marker font-extrabold px-4 py-2 rounded-xl border-2 border-[#2C2C2C] transition-all
-                    ${canProceed()
-                      ? "bg-[#2C2C2C] text-[#FAF6EE] shadow-[2px_3px_0_#FAF6EE] hover:shadow-[3px_4px_0_#A5D6A7] hover:-translate-y-0.5 cursor-pointer"
-                      : "bg-[#E0E0E0] text-[#A0A0A0] cursor-not-allowed opacity-60"
-                    }`}
+                  id="customizer-close"
+                  onClick={() => setOpen(false)}
+                  className="w-9 h-9 flex items-center justify-center rounded-full border-2 border-[#2C2C2C] text-[#2C2C2C] hover:bg-[#FFCDD2] transition-colors"
                 >
-                  {currentStep === totalSteps - 1 ? (
-                    <>
-                      See Summary
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                    </>
-                  ) : (
-                    <>
-                      Next
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </>
-                  )}
+                  <X className="w-5 h-5" />
                 </button>
               </div>
-            )}
+
+              {/* Progress bar */}
+              {!showSummary && (
+                <div className="w-full h-2 bg-[#E0E0E0] shrink-0">
+                  <motion.div
+                    className="h-full bg-[#2C2C2C]"
+                    animate={{ width: `${progress}%` }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </div>
+              )}
+
+              {/* Step counter */}
+              {!showSummary && (
+                <div className="flex justify-between px-6 pt-3 pb-0 shrink-0">
+                  {STEPS.map((s, i) => (
+                    <div
+                      key={s.id}
+                      className={`flex items-center gap-1.5 text-xs font-marker font-bold transition-colors duration-200
+                        ${i === currentStep ? "text-[#2C2C2C]" : i < currentStep ? "text-[#66BB6A]" : "text-[#C0C0C0]"}`}
+                    >
+                      <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center text-[10px]
+                        ${i === currentStep ? "border-[#2C2C2C] bg-[#FFF59D]" : i < currentStep ? "border-[#66BB6A] bg-[#E8F5E9]" : "border-[#C0C0C0]"}`}>
+                        {i < currentStep ? "✓" : i + 1}
+                      </span>
+                      <span className="hidden sm:inline">{s.emoji} {s.title}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Body */}
+              <div className="px-6 py-4 overflow-y-auto flex-1">
+                <AnimatePresence mode="wait">
+                  {showSummary ? (
+                    <SummaryScreen
+                      key="summary"
+                      selections={selections}
+                      onBack={handleBack}
+                      onReset={handleReset}
+                    />
+                  ) : (
+                    <motion.div
+                      key={`step-${currentStep}`}
+                      initial={{ opacity: 0, x: 30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -30 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex flex-col gap-4"
+                    >
+                      {/* Step header */}
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-2xl">{step.emoji}</span>
+                          <h3 className="font-marker font-extrabold text-[#2C2C2C] text-xl">
+                            {step.title}
+                          </h3>
+                        </div>
+                        <p className="text-sm font-sans text-[#6A6A6A]">{step.hint}</p>
+                      </div>
+
+                      {/* Options grid */}
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        {step.options.map((option) => (
+                          <OptionCard
+                            key={option.id}
+                            option={option}
+                            selected={
+                              step.type === "single"
+                                ? selections[step.id]
+                                : selections[step.id] || []
+                            }
+                            onToggle={handleToggle}
+                            small={false}
+                          />
+                        ))}
+                      </div>
+
+                      {/* Multi-select hint */}
+                      {step.type === "multi" && (
+                        <p className="text-xs font-marker text-[#6A6A6A] text-center">
+                          Tap to select / deselect multiple options
+                        </p>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Footer Nav (only shown when not in summary) */}
+              {!showSummary && (
+                <div className="px-6 py-4 border-t-2 border-dashed border-[#2C2C2C]/20 flex items-center justify-between gap-3 shrink-0">
+                  <button
+                    id="customizer-back"
+                    onClick={handleBack}
+                    disabled={currentStep === 0}
+                    className="flex items-center gap-1 text-sm font-marker font-bold text-[#5A5A5A] disabled:opacity-30 hover:text-[#2C2C2C] transition-colors"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                    Back
+                  </button>
+
+                  <div className="text-xs font-marker text-[#C0C0C0]">
+                    Step {currentStep + 1} of {totalSteps}
+                  </div>
+
+                  <button
+                    id="customizer-next"
+                    onClick={handleNext}
+                    disabled={!canProceed()}
+                    className={`flex items-center gap-2 text-sm font-marker font-extrabold px-6 py-2.5 rounded-xl border-2 border-[#2C2C2C] transition-all
+                      ${canProceed()
+                        ? "bg-[#2C2C2C] text-[#FAF6EE] shadow-[2px_3px_0_#FAF6EE] hover:shadow-[3px_4px_0_#A5D6A7] hover:-translate-y-0.5 cursor-pointer"
+                        : "bg-[#E0E0E0] text-[#A0A0A0] cursor-not-allowed opacity-60"
+                      }`}
+                  >
+                    {currentStep === totalSteps - 1 ? (
+                      <>
+                        See Summary
+                        <CheckCircle2 className="w-4 h-4" />
+                      </>
+                    ) : (
+                      <>
+                        Next
+                        <ChevronRight className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* ── NUDGE TOOLTIP ── */}
-      <AnimatePresence>
-        {showNudge && !open && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, x: 10 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.8, x: 10 }}
-            className="mr-1 pointer-events-none"
-          >
-            <div className="bg-[#FAF6EE] text-[#2C2C2C] px-3 py-1.5 rounded-xl text-sm font-marker font-semibold shadow-md whitespace-nowrap border-2 border-[#2C2C2C]">
-              🎨 Customise Your Project!
+      {/* ── FAB + NUDGE (fixed bottom-right) ── */}
+      <div className="fixed bottom-[5.5rem] right-6 z-50 flex flex-col items-end gap-3">
+
+        {/* ── NUDGE TOOLTIP ── */}
+        <AnimatePresence>
+          {showNudge && !open && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, x: 10 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.8, x: 10 }}
+              className="mr-1 pointer-events-none"
+            >
+              <div className="bg-[#FAF6EE] text-[#2C2C2C] px-3 py-1.5 rounded-xl text-sm font-marker font-semibold shadow-md whitespace-nowrap border-2 border-[#2C2C2C]">
+                🎨 Customise Your Project!
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ── TRIGGER BUTTON ── */}
+        <div className="flex items-center group font-marker">
+          {/* Text badge shown on hover */}
+          <div className="mr-3 scale-0 group-hover:scale-100 origin-right transition-transform duration-200 pointer-events-none">
+            <div className="bg-[#FAF6EE] text-[#2C2C2C] px-3.5 py-1.5 rounded-xl text-sm font-semibold shadow-md whitespace-nowrap border-2 border-[#2C2C2C]">
+              Customise Project!
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* ── TRIGGER BUTTON ── */}
-      <div className="flex items-center group font-marker">
-        {/* Text badge shown on hover */}
-        <div className="mr-3 scale-0 group-hover:scale-100 origin-right transition-transform duration-200 pointer-events-none">
-          <div className="bg-[#FAF6EE] text-[#2C2C2C] px-3.5 py-1.5 rounded-xl text-sm font-semibold shadow-md whitespace-nowrap border-2 border-[#2C2C2C]">
-            Customise Project!
           </div>
-        </div>
 
-        <motion.button
-          id="customizer-fab"
-          onClick={() => { setOpen((p) => !p); setShowNudge(false); }}
-          aria-label="Open Project Customiser"
-          className={`w-14 h-14 rounded-full flex items-center justify-center text-[#2C2C2C] shadow-[3px_4px_0_#2C2C2C] hover:shadow-[4px_5px_0_#2C2C2C] transition-all duration-200 border-2 border-[#2C2C2C] relative
-            ${open ? "bg-[#FFCDD2]" : "bg-[#90CAF9]"}`}
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{
-            scale: 1,
-            opacity: 1,
-            y: open ? 0 : [0, -6, 0],
-          }}
-          transition={{
-            scale: { delay: 1.2, duration: 0.3 },
-            opacity: { delay: 1.2, duration: 0.3 },
-            y: {
-              repeat: open ? 0 : Infinity,
-              duration: 3.5,
-              ease: "easeInOut",
-            },
-          }}
-          whileTap={{ scale: 0.9 }}
-          whileHover={{ scale: 1.05 }}
-        >
-          {/* Ping dot when has selection */}
-          {hasInteracted && !open && (
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-[#EF5350] rounded-full border border-[#2C2C2C] animate-ping" />
-          )}
-          {hasInteracted && !open && (
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-[#EF5350] rounded-full border border-[#2C2C2C]" />
-          )}
-
-          <AnimatePresence mode="wait">
-            {open ? (
-              <motion.span
-                key="close"
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                <X className="w-6 h-6" />
-              </motion.span>
-            ) : (
-              <motion.span
-                key="open"
-                initial={{ rotate: 90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: -90, opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                <Sparkles className="w-6 h-6" />
-              </motion.span>
+          <motion.button
+            id="customizer-fab"
+            onClick={() => { setOpen((p) => !p); setShowNudge(false); }}
+            aria-label="Open Project Customiser"
+            className={`w-14 h-14 rounded-full flex items-center justify-center text-[#2C2C2C] shadow-[3px_4px_0_#2C2C2C] hover:shadow-[4px_5px_0_#2C2C2C] transition-all duration-200 border-2 border-[#2C2C2C] relative
+              ${open ? "bg-[#FFCDD2]" : "bg-[#90CAF9]"}`}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{
+              scale: 1,
+              opacity: 1,
+              y: open ? 0 : [0, -6, 0],
+            }}
+            transition={{
+              scale: { delay: 1.2, duration: 0.3 },
+              opacity: { delay: 1.2, duration: 0.3 },
+              y: {
+                repeat: open ? 0 : Infinity,
+                duration: 3.5,
+                ease: "easeInOut",
+              },
+            }}
+            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.05 }}
+          >
+            {/* Ping dot when has selection */}
+            {hasInteracted && !open && (
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-[#EF5350] rounded-full border border-[#2C2C2C] animate-ping" />
             )}
-          </AnimatePresence>
-        </motion.button>
+            {hasInteracted && !open && (
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-[#EF5350] rounded-full border border-[#2C2C2C]" />
+            )}
+
+            <AnimatePresence mode="wait">
+              {open ? (
+                <motion.span
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <X className="w-6 h-6" />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="open"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <Sparkles className="w-6 h-6" />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
