@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import SupportChatbotWidget from "@/components/SupportChatbotWidget";
 import ProductCustomizer from "@/components/ProductCustomizer";
 import CursorGlow from "@/components/CursorGlow";
 import { Toaster } from "react-hot-toast";
@@ -48,6 +49,9 @@ export default function RootLayout({ children }) {
           
           {/* Project Customiser floating widget (above WhatsApp) */}
           <ProductCustomizer />
+
+          {/* Floating AI support chatbot widget */}
+          <SupportChatbotWidget />
 
           {/* Bouncing sticker WhatsApp bubble */}
           <WhatsAppButton />
