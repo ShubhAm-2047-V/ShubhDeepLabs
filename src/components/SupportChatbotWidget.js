@@ -393,13 +393,13 @@ TECH STACK PRICING (Optional Add-ons):
               {/* Whiteboard Header */}
               <div className="bg-[#FFF59D] border-b-3 border-[#2C2C2C] p-3 flex justify-between items-center relative shrink-0">
                 {/* Notebook binding styling */}
-                <div className="absolute top-1 left-4 flex gap-1.5 pointer-events-none">
+                <div className="absolute top-1 left-4 hidden sm:flex gap-1.5 pointer-events-none">
                   <div className="w-2.5 h-2.5 rounded-full bg-[#FAF6EE] border border-[#2C2C2C]" />
                   <div className="w-2.5 h-2.5 rounded-full bg-[#FAF6EE] border border-[#2C2C2C]" />
                   <div className="w-2.5 h-2.5 rounded-full bg-[#FAF6EE] border border-[#2C2C2C]" />
                 </div>
 
-                <div className="flex items-center gap-2.5 pl-14">
+                <div className="flex items-center gap-2.5 pl-3 sm:pl-14">
                   <div className="w-7 h-7 bg-[#FFF176] rounded-lg border-1.5 border-[#2C2C2C] flex items-center justify-center shadow-[1px_1.5px_0_#2C2C2C]">
                     <Brain size={14} className="text-[#2C2C2C]" />
                   </div>
@@ -559,7 +559,7 @@ TECH STACK PRICING (Optional Add-ons):
       </AnimatePresence>
 
       {/* ── FLOATING TRIGGER BUTTON CONTAINER (fixed bottom-right) ── */}
-      <div className="fixed bottom-[10rem] right-6 z-40 flex flex-col items-end gap-3">
+      <div className="fixed bottom-[8.5rem] right-4 sm:bottom-[10rem] sm:right-6 z-40 flex flex-col items-end gap-3">
         {/* FLOAT NUDGE CALLOUT */}
         <AnimatePresence>
           {showNudge && !isOpen && (
@@ -567,7 +567,7 @@ TECH STACK PRICING (Optional Add-ons):
               initial={{ opacity: 0, scale: 0.85, x: 20 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
               exit={{ opacity: 0, scale: 0.85 }}
-              className="mb-1 bg-[#FFF59D] border-2 border-[#2C2C2C] px-3 py-1.5 rounded-xl shadow-[2px_3px_0_#2C2C2C] text-[11px] font-bold text-[#2C2C2C] text-right pointer-events-none"
+              className="mb-1 bg-[#FFF59D] border-2 border-[#2C2C2C] px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl shadow-[2px_3px_0_#2C2C2C] text-[10px] sm:text-[11px] font-bold text-[#2C2C2C] text-right pointer-events-none"
             >
               🤖 Need help choosing a project? Ask me!
             </motion.div>
@@ -577,14 +577,14 @@ TECH STACK PRICING (Optional Add-ons):
         {/* TRIGGER BUTTON */}
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-14 h-14 bg-[#FFF59D] rounded-full flex items-center justify-center text-[#2C2C2C] shadow-[3px_4px_0_#2C2C2C] hover:bg-[#FFF9C4] hover:shadow-[4px_5px_0_#2C2C2C] transition-all border-2.5 border-[#2C2C2C] cursor-pointer"
+          className="w-12 h-12 sm:w-14 sm:h-14 bg-[#FFF59D] rounded-full flex items-center justify-center text-[#2C2C2C] shadow-[3px_4px_0_#2C2C2C] hover:bg-[#FFF9C4] hover:shadow-[4px_5px_0_#2C2C2C] transition-all border-2.5 border-[#2C2C2C] cursor-pointer"
           whileTap={{ scale: 0.9 }}
           whileHover={{ scale: 1.05 }}
         >
           {isOpen ? (
-            <X className="w-6 h-6 animate-fade-in" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6 animate-fade-in" />
           ) : (
-            <MessageSquare className="w-6 h-6 animate-fade-in text-[#2C2C2C]" />
+            <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 animate-fade-in text-[#2C2C2C]" />
           )}
         </motion.button>
       </div>

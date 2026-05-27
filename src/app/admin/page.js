@@ -238,7 +238,7 @@ export default function AdminDashboard() {
           </p>
         </div>
 
-        <div className="flex items-center space-x-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
           <Link
             href="/admin/offers"
             className="inline-flex items-center px-4 py-2.5 text-sm font-bold tracking-wider text-[#2C2C2C] bg-[#FFF59D] border-2 border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-xl shadow-[2px_2.5px_0_#2C2C2C] active:translate-y-0.5"
@@ -319,9 +319,10 @@ export default function AdminDashboard() {
             </defs>
           </svg>
           <div className="absolute bottom-2 left-4 text-[10px] font-mono text-[#6A6A6A]">LEDGER_LOAD: ACTIVE</div>
-          <div className="absolute top-2 right-4 text-xs text-[#1B5E20] flex items-center bg-[#C8E6C9] px-2.5 py-0.5 border border-[#1B5E20] rounded-full">
-            <span className="w-2 h-2 bg-[#1B5E20] rounded-full mr-1.5 animate-ping" />
-            REGISTRY SYNCHRONIZATION ESTABLISHED
+          <div className="absolute top-2 right-4 text-[9px] sm:text-xs text-[#1B5E20] flex items-center bg-[#C8E6C9] px-2.5 py-0.5 border border-[#1B5E20] rounded-full whitespace-nowrap">
+            <span className="w-2 h-2 bg-[#1B5E20] rounded-full mr-1.5 animate-ping shrink-0" />
+            <span className="hidden sm:inline">REGISTRY SYNCHRONIZATION ESTABLISHED</span>
+            <span className="inline sm:hidden">REGISTRY SYNCED</span>
           </div>
         </div>
       </div>

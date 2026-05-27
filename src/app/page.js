@@ -248,27 +248,27 @@ export default function Home() {
               SIMPLE PROJECTS. SMART SOLUTIONS.
             </div>
             
-            <h1 className="text-4xl sm:text-5xl lg:text-6.5xl font-marker font-black text-[#2C2C2C] leading-none select-none my-6 flex items-center justify-center lg:justify-start">
+            <h1 className="text-3xl sm:text-5xl lg:text-6.5xl font-marker font-black text-[#2C2C2C] leading-none select-none my-6 flex items-center justify-center lg:justify-start">
               {/* Left Column: Your & Our */}
-              <div className="flex flex-col items-end text-[#3F51B5] tracking-wide text-right leading-none mr-4">
-                <span className="h-12 sm:h-18 lg:h-24 flex items-center text-4xl sm:text-5xl lg:text-[4.2rem]">Your</span>
-                <span className="h-12 sm:h-18 lg:h-24 flex items-center text-4xl sm:text-5xl lg:text-[4.2rem]">Our</span>
+              <div className="flex flex-col items-end text-[#3F51B5] tracking-wide text-right leading-none mr-3 sm:mr-4">
+                <span className="h-10 sm:h-18 lg:h-24 flex items-center text-3xl sm:text-5xl lg:text-[4.2rem]">Your</span>
+                <span className="h-10 sm:h-18 lg:h-24 flex items-center text-3xl sm:text-5xl lg:text-[4.2rem]">Our</span>
               </div>
 
               {/* Middle: Common large P */}
-              <div className="flex items-center justify-center shrink-0 w-16 sm:w-22 lg:w-30 h-24 sm:h-36 lg:h-48">
-                <span className="text-8xl sm:text-9.5xl lg:text-[13rem] font-black text-[#2C2C2C] leading-none select-none">
+              <div className="flex items-center justify-center shrink-0 w-12 sm:w-22 lg:w-30 h-20 sm:h-36 lg:h-48">
+                <span className="text-7xl sm:text-9.5xl lg:text-[13rem] font-black text-[#2C2C2C] leading-none select-none">
                   P
                 </span>
               </div>
 
               {/* Right Column: roject & assion */}
-              <div className="flex flex-col items-start leading-none text-left ml-3">
-                <span className="h-12 sm:h-18 lg:h-24 flex items-center text-[#2C2C2C]">
-                  <span className="underline decoration-[#A5D6A7] decoration-4 text-3.5xl sm:text-4.5xl lg:text-[3.5rem]">roject</span>
+              <div className="flex flex-col items-start leading-none text-left ml-2 sm:ml-3">
+                <span className="h-10 sm:h-18 lg:h-24 flex items-center text-[#2C2C2C]">
+                  <span className="underline decoration-[#A5D6A7] decoration-4 text-2.5xl sm:text-4.5xl lg:text-[3.5rem]">roject</span>
                 </span>
-                <span className="h-12 sm:h-18 lg:h-24 flex items-center text-[#2C2C2C]">
-                  <span className="underline decoration-[#EF9A9A] decoration-4 text-3.5xl sm:text-4.5xl lg:text-[3.5rem]">assion</span>
+                <span className="h-10 sm:h-18 lg:h-24 flex items-center text-[#2C2C2C]">
+                  <span className="underline decoration-[#EF9A9A] decoration-4 text-2.5xl sm:text-4.5xl lg:text-[3.5rem]">assion</span>
                 </span>
               </div>
             </h1>

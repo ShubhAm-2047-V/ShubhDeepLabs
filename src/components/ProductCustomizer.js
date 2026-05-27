@@ -236,7 +236,7 @@ function OptionCard({ option, selected, onToggle, isBase = false, displayPrice }
           {priceLabel}
         </span>
         {option.tooltip && (
-          <span className="absolute bottom-1 left-1.5 text-[8px] text-[#B0B0B0] font-sans">hold to know more</span>
+          <span className="absolute bottom-1 left-1.5 text-[8px] text-[#B0B0B0] font-sans hidden sm:block">hold to know more</span>
         )}
       </button>
     </>
@@ -786,8 +786,8 @@ export default function ProductCustomizer() {
             >
               {/* Header */}
               <div className="relative bg-[#FFF59D] border-b-[3px] border-[#2C2C2C] px-4 py-3 flex items-center justify-between shrink-0">
-                <div className="absolute top-3 left-3 w-3 h-3 bg-[#FAF6EE] border-2 border-[#2C2C2C] rounded-full" />
-                <div className="absolute top-3 right-14 w-3 h-3 bg-[#FAF6EE] border-2 border-[#2C2C2C] rounded-full" />
+                <div className="absolute top-3 left-3 w-3 h-3 bg-[#FAF6EE] border-2 border-[#2C2C2C] rounded-full hidden sm:block" />
+                <div className="absolute top-3 right-14 w-3 h-3 bg-[#FAF6EE] border-2 border-[#2C2C2C] rounded-full hidden sm:block" />
 
                 {/* Tab switcher */}
                 <div className="flex items-center gap-2">
@@ -952,7 +952,7 @@ export default function ProductCustomizer() {
       </AnimatePresence>
 
       {/* ── FAB + NUDGE (fixed bottom-right) ── */}
-      <div className="fixed bottom-[5.5rem] right-6 z-50 flex flex-col items-end gap-3">
+      <div className="fixed bottom-[4.75rem] right-4 sm:bottom-[5.5rem] sm:right-6 z-50 flex flex-col items-end gap-3">
 
         {/* Nudge tooltip */}
         <AnimatePresence>
@@ -963,7 +963,7 @@ export default function ProductCustomizer() {
               exit={{ opacity: 0, scale: 0.8, x: 10 }}
               className="mr-1 pointer-events-none"
             >
-              <div className="bg-[#FAF6EE] text-[#2C2C2C] px-3 py-1.5 rounded-xl text-sm font-marker font-semibold shadow-md whitespace-nowrap border-2 border-[#2C2C2C]">
+              <div className="bg-[#FAF6EE] text-[#2C2C2C] px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-xl text-xs sm:text-sm font-marker font-semibold shadow-md whitespace-nowrap border-2 border-[#2C2C2C]">
                 🎨 Customise Your Project!
               </div>
             </motion.div>
@@ -972,7 +972,7 @@ export default function ProductCustomizer() {
 
         {/* Trigger button */}
         <div className="flex items-center group font-marker">
-          <div className="mr-3 scale-0 group-hover:scale-100 origin-right transition-transform duration-200 pointer-events-none">
+          <div className="mr-3 scale-0 group-hover:scale-100 origin-right transition-transform duration-200 pointer-events-none hidden sm:block">
             <div className="bg-[#FAF6EE] text-[#2C2C2C] px-3.5 py-1.5 rounded-xl text-sm font-semibold shadow-md whitespace-nowrap border-2 border-[#2C2C2C]">
               Customise Project!
             </div>
@@ -982,7 +982,7 @@ export default function ProductCustomizer() {
             id="customizer-fab"
             onClick={() => { setOpen(p => !p); setShowNudge(false); }}
             aria-label="Open Project Customiser"
-            className={`w-14 h-14 rounded-full flex items-center justify-center text-[#2C2C2C] shadow-[3px_4px_0_#2C2C2C] hover:shadow-[4px_5px_0_#2C2C2C] transition-all duration-200 border-2 border-[#2C2C2C] relative
+            className={`w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-[#2C2C2C] shadow-[3px_4px_0_#2C2C2C] hover:shadow-[4px_5px_0_#2C2C2C] transition-all duration-200 border-2 border-[#2C2C2C] relative
               ${open ? "bg-[#FFCDD2]" : "bg-[#90CAF9]"}`}
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1, y: open ? 0 : [0, -6, 0] }}
@@ -1003,11 +1003,11 @@ export default function ProductCustomizer() {
             <AnimatePresence mode="wait">
               {open ? (
                 <motion.span key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                  <X className="w-6 h-6" />
+                  <X className="w-5 h-5 sm:w-6 sm:h-6" />
                 </motion.span>
               ) : (
                 <motion.span key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-                  <Sparkles className="w-6 h-6" />
+                  <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
                 </motion.span>
               )}
             </AnimatePresence>

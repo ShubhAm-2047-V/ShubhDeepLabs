@@ -298,8 +298,8 @@ export default function OffersManager() {
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-3xl font-hand font-extrabold text-[#2C2C2C] flex items-center">
-              <Tag className="w-7 h-7 mr-2 text-[#2C2C2C] shrink-0" />
+            <h1 className="text-xl sm:text-3xl font-hand font-extrabold text-[#2C2C2C] flex items-center">
+              <Tag className="w-6 h-6 mr-2 text-[#2C2C2C] shrink-0" />
               DAILY DEALS COORDINATOR DESK
             </h1>
             <p className="text-sm font-marker text-[#6A6A6A] mt-1">
@@ -308,7 +308,7 @@ export default function OffersManager() {
           </div>
         </div>
 
-        <div className="flex items-center space-x-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={fetchOffers}
             className="p-2.5 rounded-xl border-2 border-[#2C2C2C] bg-white hover:bg-[#FAF6EE] text-[#2C2C2C] transition-all cursor-pointer shadow-[2px_2px_0_#2C2C2C]"
@@ -330,13 +330,13 @@ export default function OffersManager() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Form: Add Daily Special (Lined Notebook form) */}
         <div className="lg:col-span-5">
-          <div className="sketch-border bg-[#FCF9F2] p-6 shadow-[4px_5px_0_#2C2C2C] notebook-ruled">
-            <h3 className="text-xl font-marker font-extrabold text-[#2C2C2C] mb-6 underline decoration-2 decoration-[#A5D6A7] flex items-center pl-6 sm:pl-10">
+          <div className="sketch-border bg-[#FCF9F2] p-3 sm:p-6 shadow-[4px_5px_0_#2C2C2C] notebook-ruled">
+            <h3 className="text-xl font-marker font-extrabold text-[#2C2C2C] mb-6 underline decoration-2 decoration-[#A5D6A7] flex items-center pl-4 sm:pl-10">
               <Plus className="w-5 h-5 mr-1 text-[#2C2C2C]" />
               Add Daily Deal Special
             </h3>
 
-            <form onSubmit={handleAddOffer} className="space-y-4 pl-6 sm:pl-10 relative z-10">
+            <form onSubmit={handleAddOffer} className="space-y-4 pl-4 sm:pl-10 relative z-10">
               <div>
                 <label className="block text-xs font-marker font-extrabold text-[#2C2C2C] uppercase mb-1 tracking-wider">Ribbon Tag Accent *</label>
                 <input
@@ -418,13 +418,13 @@ export default function OffersManager() {
           </div>
 
           {/* Scratch Card Booster Settings */}
-          <div className="sketch-border bg-[#FCF9F2] p-6 shadow-[4px_5px_0_#2C2C2C] notebook-ruled mt-6">
-            <h3 className="text-xl font-marker font-extrabold text-[#2C2C2C] mb-6 underline decoration-2 decoration-[#E1BEE7] flex items-center pl-6 sm:pl-10">
+          <div className="sketch-border bg-[#FCF9F2] p-3 sm:p-6 shadow-[4px_5px_0_#2C2C2C] notebook-ruled mt-6">
+            <h3 className="text-xl font-marker font-extrabold text-[#2C2C2C] mb-6 underline decoration-2 decoration-[#E1BEE7] flex items-center pl-4 sm:pl-10">
               <Settings className="w-5 h-5 mr-1 text-[#2C2C2C]" />
               Scratch Card Booster Settings
             </h3>
 
-            <div className="space-y-5 pl-6 sm:pl-10 relative z-10">
+            <div className="space-y-5 pl-4 sm:pl-10 relative z-10">
               {/* Discount Percentage */}
               <div>
                 <label className="block text-xs font-marker font-extrabold text-[#2C2C2C] uppercase mb-1 tracking-wider">

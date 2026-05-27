@@ -252,8 +252,8 @@ export default function PricingManager() {
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-3xl font-hand font-extrabold text-[#2C2C2C] flex items-center">
-              <Coins className="w-7 h-7 mr-2 text-[#2C2C2C] shrink-0" />
+            <h1 className="text-xl sm:text-3xl font-hand font-extrabold text-[#2C2C2C] flex items-center">
+              <Coins className="w-6.5 h-6.5 mr-2 text-[#2C2C2C] shrink-0" />
               PRICING MODULE COORDINATOR DESK
             </h1>
             <p className="text-sm font-marker text-[#6A6A6A] mt-1">
@@ -262,7 +262,7 @@ export default function PricingManager() {
           </div>
         </div>
 
-        <div className="flex items-center space-x-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={fetchPrices}
             className="p-2.5 rounded-xl border-2 border-[#2C2C2C] bg-white hover:bg-[#FAF6EE] text-[#2C2C2C] transition-all cursor-pointer shadow-[2px_2px_0_#2C2C2C]"
@@ -284,12 +284,12 @@ export default function PricingManager() {
       <form onSubmit={handleSavePrices} className="space-y-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {PRICE_ITEMS.map((group) => (
-            <div key={group.group} className="sketch-border bg-[#FCF9F2] p-6 shadow-[4px_5px_0_#2C2C2C] notebook-ruled">
-              <h3 className="text-lg font-marker font-extrabold text-[#2C2C2C] mb-4 pb-2 border-b-2 border-dashed border-[#2C2C2C]/25 flex items-center pl-6 sm:pl-10">
+            <div key={group.group} className="sketch-border bg-[#FCF9F2] p-3 sm:p-6 shadow-[4px_5px_0_#2C2C2C] notebook-ruled">
+              <h3 className="text-lg font-marker font-extrabold text-[#2C2C2C] mb-4 pb-2 border-b-2 border-dashed border-[#2C2C2C]/25 flex items-center pl-4 sm:pl-10">
                 {group.group}
               </h3>
               
-              <div className="space-y-3.5 pl-6 sm:pl-10 relative z-10">
+              <div className="space-y-3.5 pl-4 sm:pl-10 relative z-10">
                 {group.items.map((item) => (
                   <div key={item.id} className="flex items-center justify-between gap-4">
                     <span className="text-xs font-bold font-marker text-[#5A5A5A]">{item.label}</span>

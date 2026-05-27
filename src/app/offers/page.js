@@ -308,7 +308,7 @@ useEffect(() => {
             {/* Left side: The Big chalkboard displaying the Active Daily Deal */}
             <div className="lg:col-span-7 space-y-6">
               
-              <div className="sketch-border bg-[#FCF9F2] p-6 sm:p-8 shadow-[5px_6px_0px_#2C2C2C] relative notebook-ruled overflow-hidden">
+              <div className="sketch-border bg-[#FCF9F2] p-3 sm:p-8 shadow-[5px_6px_0px_#2C2C2C] relative notebook-ruled overflow-hidden">
                 <div className="spiral-binder" />
 
                 {/* Corner Washi Tape decorative stamp */}
@@ -316,7 +316,7 @@ useEffect(() => {
                   Live Deal
                 </div>
 
-                <div className="pl-6 sm:pl-10 space-y-6 relative z-10">
+                <div className="pl-4 sm:pl-10 space-y-6 relative z-10">
                   <div className="flex items-center space-x-3">
                     <div className="w-16 h-16 rounded-full bg-white border-2.5 border-[#2C2C2C] flex items-center justify-center text-4xl shadow-[2.5px_3px_0_#2C2C2C] shrink-0 animate-sketch-float">
                       {activeOffer.emoji || "🎁"}

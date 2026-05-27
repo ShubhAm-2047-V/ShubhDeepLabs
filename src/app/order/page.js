@@ -138,8 +138,8 @@ function OrderForm() {
       </div>
 
       {/* Notebook Ruled Card Sheet */}
-      <div className="sketch-border bg-[#FCF9F2] p-6 md:p-10 shadow-[5px_6px_0px_#2C2C2C] notebook-ruled overflow-hidden">
-        <form onSubmit={handleSubmit} className="space-y-8 relative z-10 pl-6 sm:pl-10">
+      <div className="sketch-border bg-[#FCF9F2] p-3 sm:p-6 md:p-10 shadow-[5px_6px_0px_#2C2C2C] notebook-ruled overflow-hidden">
+        <form onSubmit={handleSubmit} className="space-y-8 relative z-10 pl-4 sm:pl-10">
           
           {/* Section A: Student Ledger details */}
           <div>
