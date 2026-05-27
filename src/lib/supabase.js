@@ -469,9 +469,52 @@ export const dbService = {
       return;
     }
 
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("shubdeep_labs_admin_logged");
+  },
+
+  // CUSTOMIZER PRICING SETTINGS
+  async getCustomizerPrices() {
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { data, error } = await supabase
+          .from("customizer_prices")
+          .select("*");
+        if (error) throw error;
+        if (data && data.length > 0) {
+          const pricesMap = {};
+          data.forEach(row => {
+            pricesMap[row.id] = row.price;
+          });
+          return pricesMap;
+        }
+      } catch (e) {
+        console.error("Supabase getCustomizerPrices error, falling back to LocalStorage:", e);
+      }
     }
+
+    if (typeof window === "undefined") return {};
+    const local = localStorage.getItem("projecthub_customizer_prices");
+    return local ? JSON.parse(local) : {};
+  },
+
+  async saveCustomizerPrices(pricesMap) {
+    if (isSupabaseConfigured && supabase) {
+      try {
+        // Upsert all keys
+        const rows = Object.entries(pricesMap).map(([id, price]) => ({ id, price }));
+        const { error } = await supabase
+          .from("customizer_prices")
+          .upsert(rows);
+        if (error) throw error;
+        return true;
+      } catch (e) {
+        console.error("Supabase saveCustomizerPrices error, falling back to LocalStorage:", e);
+      }
+    }
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem("projecthub_customizer_prices", JSON.stringify(pricesMap));
+    }
+    return true;
   },
 
   checkAdminAuth(callback) {

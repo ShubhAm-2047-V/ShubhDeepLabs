@@ -245,6 +245,13 @@ export default function AdminDashboard() {
           >
             Manage Offers
           </Link>
+
+          <Link
+            href="/admin/prices"
+            className="inline-flex items-center px-4 py-2.5 text-sm font-bold tracking-wider text-[#2C2C2C] bg-[#E1F5FE] border-2 border-[#2C2C2C] hover:bg-[#B3E5FC] rounded-xl shadow-[2px_2.5px_0_#2C2C2C] active:translate-y-0.5"
+          >
+            Manage Prices
+          </Link>
           
           <button
             onClick={fetchOrders}

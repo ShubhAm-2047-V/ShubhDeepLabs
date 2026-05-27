@@ -186,6 +186,43 @@ export default function SupportChatbotWidget() {
   }, []);
 
   useEffect(() => {
+    async function loadPrices() {
+      try {
+        const prices = await dbService.getCustomizerPrices();
+        if (prices && Object.keys(prices).length > 0) {
+          const getVal = (id, def) => (prices[id] !== undefined ? prices[id] : def);
+          
+          SUPPORT_CONTEXT[0].content = `PROJECT CATEGORIES BASE PRICING:
+- Diploma: Starting from ₹${getVal("diploma", 1999)}
+- Engineering (B.E/B.Tech): Starting from ₹${getVal("engineering", 4999)}
+- M.Tech / Research: Starting from ₹${getVal("mtech", 8999)}
+- BCA / MCA: Starting from ₹${getVal("bca-mca", 3999)}
+- AI / ML: Starting from ₹${getVal("ai-ml", 6999)}
+- Android App: Starting from ₹${getVal("android", 5499)}
+
+TECH STACK PRICING (Optional Add-ons):
+- HTML / CSS / JavaScript: + ₹${getVal("html", 0)}
+- Python + Flask: + ₹${getVal("python-flask", 999)}
+- React.js: + ₹${getVal("react", 1499)}
+- Next.js: + ₹${getVal("nextjs", 1999)}
+- MERN Stack: + ₹${getVal("mern", 2999)}
+- Android (Java/Kotlin): + ₹${getVal("android-dev", 3499)}
+- Firebase Integration: + ₹${getVal("firebase", 999)}
+- MySQL / MongoDB: + ₹${getVal("db", 799)}
+- AI Integration (Gemini/OpenAI): + ₹${getVal("ai-integration", 2499)}
+- Machine Learning Model: + ₹${getVal("ml-model", 3499)}
+- OpenCV / Face Detection: + ₹${getVal("opencv", 2999)}
+- Full Stack + Deployment: + ₹${getVal("fullstack", 4499)}
+- Blockchain / Web3: + ₹${getVal("blockchain", 5999)}`;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    loadPrices();
+  }, [isOpen]);
+
+  useEffect(() => {
     // Show a floating nudge bubble after 8 seconds
     const t = setTimeout(() => {
       if (!isOpen) setShowNudge(true);

@@ -75,13 +75,22 @@ create table offers (
   "createdAt" timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
--- 3. Enable Row Level Security (RLS) on both tables
+-- 3. Create the customizer prices table
+create table customizer_prices (
+  id text primary key,
+  price integer not null,
+  "updatedAt" timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- 4. Enable Row Level Security (RLS) on all tables
 alter table orders enable row level security;
 alter table offers enable row level security;
+alter table customizer_prices enable row level security;
 
--- 4. Enable public read and write access rules (for instant client-side queries)
+-- 5. Enable public read and write access rules (for instant client-side queries)
 create policy "Allow public read/write on orders" on orders for all using (true) with check (true);
 create policy "Allow public read/write on offers" on offers for all using (true) with check (true);
+create policy "Allow public read/write on customizer_prices" on customizer_prices for all using (true) with check (true);
 ```
 
 4. Click the **Run** (or `Ctrl + Enter` / `Cmd + Enter`) button in the bottom right corner of the SQL Editor.

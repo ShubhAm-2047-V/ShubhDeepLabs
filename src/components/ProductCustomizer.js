@@ -104,36 +104,45 @@ const STEPS = [
 
 // ─── PRICE CALCULATOR ─────────────────────────────────────────────────────────
 
-function calculateTotal(selections) {
+function calculateTotal(selections, customPrices = {}) {
   const isDiploma = selections.category === "diploma";
-  const basePrice     = STEPS[0].options.find(o => o.id === selections.category)?.price || 0;
+  const getVal = (id, def) => (customPrices[id] !== undefined ? customPrices[id] : def);
+
+  const categoryOpt = STEPS[0].options.find(o => o.id === selections.category);
+  const basePrice = categoryOpt ? getVal(categoryOpt.id, categoryOpt.price) : 0;
   
   const techPrice     = (selections.tech   || []).reduce((s, id) => {
-    const origPrice = STEPS[1].options.find(o => o.id === id)?.price || 0;
+    const opt = STEPS[1].options.find(o => o.id === id);
+    if (!opt) return s;
+    const origPrice = getVal(opt.id, opt.price);
     const price = isDiploma ? Math.round(origPrice / 2) : origPrice;
     return s + price;
   }, 0);
   
   const addonPrice    = (selections.addons || []).reduce((s, id) => {
-    const origPrice = STEPS[2].options.find(o => o.id === id)?.price || 0;
+    const opt = STEPS[2].options.find(o => o.id === id);
+    if (!opt) return s;
+    const origPrice = getVal(opt.id, opt.price);
     const price = isDiploma ? Math.round(origPrice / 2) : origPrice;
     return s + price;
   }, 0);
   
   const timelinePrice = (() => {
-    const origPrice = STEPS[3].options.find(o => o.id === selections.timeline)?.price || 0;
+    const opt = STEPS[3].options.find(o => o.id === selections.timeline);
+    if (!opt) return 0;
+    const origPrice = getVal(opt.id, opt.price);
     return isDiploma ? Math.round(origPrice / 2) : origPrice;
   })();
   
   return { basePrice, techPrice, addonPrice, timelinePrice, total: basePrice + techPrice + addonPrice + timelinePrice };
 }
 
-function buildWhatsAppMessage(selections) {
+function buildWhatsAppMessage(selections, customPrices) {
   const cat    = STEPS[0].options.find(o => o.id === selections.category)?.label || "—";
   const techs  = (selections.tech   || []).map(id => STEPS[1].options.find(o => o.id === id)?.label).filter(Boolean).join(", ") || "—";
   const addons = (selections.addons || []).map(id => STEPS[2].options.find(o => o.id === id)?.label).filter(Boolean).join(", ") || "None";
   const time   = STEPS[3].options.find(o => o.id === selections.timeline)?.label || "—";
-  const { total } = calculateTotal(selections);
+  const { total } = calculateTotal(selections, customPrices);
 
   return encodeURIComponent(
     `Hello ShubDeep Labs! 👋\n\nI used your Project Customizer and here is my requirement:\n\n🎓 Level: ${cat}\n⚙️ Tech Stack: ${techs}\n✨ Add-Ons: ${addons}\n⏱️ Timeline: ${time}\n💰 My Estimate: ${formatINR(total)}\n\nPlease confirm the final quote for my custom project!`
@@ -261,13 +270,13 @@ function PriceTicker({ total, hasBase }) {
 
 // ─── SUMMARY SCREEN ───────────────────────────────────────────────────────────
 
-function SummaryScreen({ selections, onBack, onReset }) {
+function SummaryScreen({ selections, onBack, onReset, customPrices }) {
   const cat    = STEPS[0].options.find(o => o.id === selections.category)?.label || "—";
   const techs  = (selections.tech   || []).map(id => STEPS[1].options.find(o => o.id === id)?.label).filter(Boolean);
   const addons = (selections.addons || []).map(id => STEPS[2].options.find(o => o.id === id)?.label).filter(Boolean);
   const time   = STEPS[3].options.find(o => o.id === selections.timeline)?.label || "—";
-  const { basePrice, techPrice, addonPrice, timelinePrice, total } = calculateTotal(selections);
-  const waUrl  = `https://wa.me/919028833275?text=${buildWhatsAppMessage(selections)}`;
+  const { basePrice, techPrice, addonPrice, timelinePrice, total } = calculateTotal(selections, customPrices);
+  const waUrl  = `https://wa.me/919028833275?text=${buildWhatsAppMessage(selections, customPrices)}`;
 
   return (
     <motion.div
@@ -616,7 +625,20 @@ export default function ProductCustomizer() {
   const [showNudge, setShowNudge]     = useState(false);
   const [showOffers, setShowOffers]   = useState(false);
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+  const [customPrices, setCustomPrices] = useState({});
   const panelRef = useRef(null);
+
+  useEffect(() => {
+    async function loadPrices() {
+      try {
+        const prices = await dbService.getCustomizerPrices();
+        if (prices) setCustomPrices(prices);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    loadPrices();
+  }, [open]);
 
   // Broadcast customizer open state
   useEffect(() => {
@@ -730,7 +752,7 @@ export default function ProductCustomizer() {
   }
 
   const progress = showSummary ? 100 : (currentStep / totalSteps) * 100;
-  const { total } = calculateTotal(selections);
+  const { total } = calculateTotal(selections, customPrices);
   const hasBase    = !!selections.category;
 
   return (
@@ -837,6 +859,7 @@ export default function ProductCustomizer() {
                       selections={selections}
                       onBack={handleBack}
                       onReset={handleReset}
+                      customPrices={customPrices}
                     />
                   ) : (
                     <motion.div
@@ -862,9 +885,10 @@ export default function ProductCustomizer() {
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         {step.options.map(option => {
                           const isDiploma = selections.category === "diploma";
+                          const basePrice = customPrices[option.id] !== undefined ? customPrices[option.id] : option.price;
                           const displayPrice = (step.id !== "category" && isDiploma)
-                            ? Math.round(option.price / 2)
-                            : option.price;
+                            ? Math.round(basePrice / 2)
+                            : basePrice;
                           return (
                             <OptionCard
                               key={option.id}
