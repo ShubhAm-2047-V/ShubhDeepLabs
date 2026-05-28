@@ -12,6 +12,7 @@ const MTECH_PROJECTS = [
     title: "Hybrid Cryptography Cloud Storage",
     tech: "Java + AES + RSA + SHA-256 + Cloud",
     desc: "A secure cloud storage architecture using hybrid encryption (AES-256 for data, RSA-2048 for key sharing, SHA-256 for integrity check). Fully compliant with IEEE cloud parameters.",
+    price: "₹13999",
     accent: "#EF5350",
     tags: ["Cryptography", "Cloud Security", "IEEE Model"],
   },
@@ -19,6 +20,7 @@ const MTECH_PROJECTS = [
     title: "Deep Learning Heart Care Analyzer",
     tech: "Python + TensorFlow + CNN + Flask",
     desc: "A highly precise clinical decision support model trained on medical image datasets. Uses convolutional layers to classify heart anomalies with 98% accuracy metrics.",
+    price: "₹13999",
     accent: "#EF5350",
     tags: ["Deep Learning", "Healthcare AI", "TensorFlow"],
   },
@@ -26,6 +28,7 @@ const MTECH_PROJECTS = [
     title: "Advanced Big Data Analytics Engine",
     tech: "Python + Spark + Hadoop + Dash",
     desc: "A pipeline designed to digest stream datasets, map cluster nodes, compute key-value pairs, and render dynamic predictive metrics on a custom dashboard.",
+    price: "₹11499",
     accent: "#FFCA28",
     tags: ["Big Data", "Spark/Hadoop", "Predictive"],
   },
@@ -33,6 +36,7 @@ const MTECH_PROJECTS = [
     title: "SVM Network Intrusion Detector",
     tech: "Python + Scikit-Learn + Pandas",
     desc: "Security gateway analyzing dynamic data flows. Employs Support Vector Machines (SVM) to detect network attacks and classify anomalies in real-time.",
+    price: "₹8999",
     accent: "#42A5F5",
     tags: ["ML", "Security", "SVM Classify"],
   },
@@ -40,6 +44,7 @@ const MTECH_PROJECTS = [
     title: "Content-Based Image Retrieval Hub",
     tech: "Python + OpenCV + PyTensor",
     desc: "A visual database query engine. Extracts texture, color histogram, and spatial values to fetch structurally identical images from high-volume catalogues.",
+    price: "₹8999",
     accent: "#AB47BC",
     tags: ["Computer Vision", "OpenCV", "Image Query"],
   },
@@ -47,6 +52,7 @@ const MTECH_PROJECTS = [
     title: "WSN Cluster Routing Optimizer",
     tech: "MATLAB / NS3 Simulator",
     desc: "Energy-efficient routing simulation. Utilizes LEACH protocols to optimize sensor node clusters, minimize battery drain, and maximize data pack delivery rates.",
+    price: "₹11499",
     accent: "#26A69A",
     tags: ["WSN", "LEACH Protocol", "Simulation"],
   },
@@ -54,6 +60,7 @@ const MTECH_PROJECTS = [
     title: "Medical Ledger Blockchain",
     tech: "React + Solidity + Ethereum Smart Contracts",
     desc: "Decentralized patient medical record system. Custom smart contracts control record accesses, store cryptographic hashes on IPFS, and log ledger entries.",
+    price: "₹13999",
     accent: "#EF5350",
     tags: ["Blockchain", "Ethereum", "Solidity"],
   },
@@ -61,6 +68,7 @@ const MTECH_PROJECTS = [
     title: "Text Summarizer NLP Model",
     tech: "Python + NLTK + BERT + Flask",
     desc: "A natural language system utilizing transformer models to parse high-volume articles, generate abstractive text summaries, and display key tag terms.",
+    price: "₹11499",
     accent: "#29B6F6",
     tags: ["NLP", "BERT Model", "Transformers"],
   },
@@ -221,7 +229,7 @@ export default function MTechPage() {
                 </p>
 
                 <div className="flex items-center justify-between mt-auto pt-3 border-t border-[#2C2C2C]/10">
-                  <span className="font-marker font-extrabold text-[#2C2C2C] text-base">₹8999</span>
+                  <span className="font-marker font-extrabold text-[#2C2C2C] text-base">{proj.price}</span>
                   <a
                     href={`https://wa.me/919028833275?text=${encodeURIComponent(`Hello! I'm an M.Tech student interested in the "${proj.title}" thesis project. Please share details.`)}`}
                     target="_blank"
