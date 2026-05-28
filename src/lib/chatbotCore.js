@@ -5,9 +5,10 @@ export const SUPPORT_CONTEXT = [
   {
     keywords: ["price", "pricing", "cost", "budget", "fees", "tier", "plan", "easy", "medium", "hard", "mtech", "diploma", "engineering", "bca", "mca", "ai", "ml", "android", "category", "categories"],
     content: (prices) => {
-      const getVal = (id, def) => (prices[id] !== undefined ? prices[id] : def);
       return `PROJECT CATEGORIES BASE PRICING:
-Diploma = ₹${getVal("diploma", 1999)}
+Diploma (Easy) = ₹${getVal("diploma", 1999)}
+Diploma (Medium) = ₹${getVal("diploma_medium", 3499)}
+Diploma (Hard) = ₹${getVal("diploma_hard", 4599)}
 Engineering (B.E/B.Tech) = ₹${getVal("engineering", 4999)}
 M.Tech / Research = ₹${getVal("mtech", 8999)}
 BCA / MCA = ₹${getVal("bca-mca", 3999)}
@@ -210,7 +211,7 @@ CHATBOT RULES:
    Do NOT output this tag until all fields are collected.
 
 CONTEXT DATABASE (RAG MATCHES):
-${context || `No matching context found. Rely on the factual details of Shubdeep Labs: Diploma starts from ₹${getVal("diploma", 1999)}, B.E./B.Tech from ₹${getVal("engineering", 4999)}, BCA/MCA from ₹${getVal("bca-mca", 3999)}, AI/ML from ₹${getVal("ai-ml", 6999)}, Android from ₹${getVal("android", 5499)}. Easy stack add-ons like HTML/CSS/JS are ₹${getVal("html", 0)}. PPT is ₹${getVal("ppt", 499)}, thesis report ₹${getVal("report", 999)}. Customization is always supported.`}`;
+${context || `No matching context found. Rely on the factual details of Shubdeep Labs: Diploma pricing has three tiers (Easy is ₹${getVal("diploma", 1999)}, Medium is ₹${getVal("diploma_medium", 3499)}, and Hard is ₹${getVal("diploma_hard", 4599)}). B.E./B.Tech from ₹${getVal("engineering", 4999)}, BCA/MCA from ₹${getVal("bca-mca", 3999)}, AI/ML from ₹${getVal("ai-ml", 6999)}, Android from ₹${getVal("android", 5499)}. Easy stack add-ons like HTML/CSS/JS are ₹${getVal("html", 0)}. PPT is ₹${getVal("ppt", 499)}, thesis report ₹${getVal("report", 999)}. Customization is always supported.`}`;
 
     const contents = [];
     history.slice(-8).forEach(h => {

@@ -200,7 +200,9 @@ export async function generateReply(message, history = [], context = "", intent 
     let reply = "";
     if (intent === "pricing" || msgLower.includes("price") || msgLower.includes("cost")) {
       reply = `Here is our pricing structure:
-Diploma = ₹${getVal("diploma", 1999)}
+Diploma (Easy) = ₹${getVal("diploma", 1999)}
+Diploma (Medium) = ₹${getVal("diploma_medium", 3499)}
+Diploma (Hard) = ₹${getVal("diploma_hard", 4599)}
 Engineering (B.Tech) = ₹${getVal("engineering", 4999)}
 M.Tech = ₹${getVal("mtech", 8999)}
 BCA/MCA = ₹${getVal("bca-mca", 3999)}
@@ -266,7 +268,9 @@ CHATBOT RULES:
    [LEAD: {"fullName":"<name>","whatsapp":"<whatsapp>","email":"<email>","budget":"<budget>","deadline":"<deadline>","projectTitle":"<projectTitle>","techRequired":"<techRequired>"}]
 
 FACTUAL PRICING:
-Diploma = ₹${getVal("diploma", 1999)}
+Diploma (Easy) = ₹${getVal("diploma", 1999)}
+Diploma (Medium) = ₹${getVal("diploma_medium", 3499)}
+Diploma (Hard) = ₹${getVal("diploma_hard", 4599)}
 Engineering (B.E/B.Tech) = ₹${getVal("engineering", 4999)}
 M.Tech = ₹${getVal("mtech", 8999)}
 BCA/MCA = ₹${getVal("bca-mca", 3999)}
