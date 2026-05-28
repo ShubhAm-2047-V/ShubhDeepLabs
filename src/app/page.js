@@ -181,9 +181,9 @@ export default function Home() {
     { title: "M.Tech Projects", icon: Cpu, desc: "High-grade algorithm modeling, data analysis, and advanced codebase executions for research thesis.", href: "/mtech", bg: "bg-[#E1F5FE]", border: "border-t-[#42A5F5]" },
     { title: "BCA / MCA Projects", icon: Database, desc: "Interactive management portals, dashboard consoles, cloud databases, and clean system layouts.", href: "/bca-mca", bg: "bg-[#F3E5F5]", border: "border-t-[#AB47BC]" },
     { title: "AI / ML Projects", icon: Brain, desc: "TensorFlow / PyTorch models, visual scans, NLP conversational bots, and predictive analytics pipelines.", href: "/ai-ml", bg: "bg-[#FFEBEE]", border: "border-t-[#EF5350]" },
-    { title: "Web Projects", icon: Sparkles, desc: "Stunning responsive portals, custom dashboards, single page interfaces, and rich administrative panels.", href: "/order?category=Web-Dev", bg: "bg-[#FFF3E0]", border: "border-t-[#FFA726]" },
+    { title: "Web Projects", icon: Sparkles, desc: "Stunning responsive portals, custom dashboards, single page interfaces, and rich administrative panels.", href: "/web-dev", bg: "bg-[#FFF3E0]", border: "border-t-[#FFA726]" },
     { title: "Android Projects", icon: Smartphone, desc: "Mobile applications, local SQLite databases, customizable API links, and fully functional Android packages.", href: "/android", bg: "bg-[#E8F5E9]", border: "border-t-[#66BB6A]" },
-    { title: "IoT Projects", icon: Network, desc: "Smart automation designs, hardware controller mapping (Arduino/ESP32), and interactive dashboards.", href: "/order?category=IoT", bg: "bg-[#E1F5FE]", border: "border-t-[#42A5F5]" }
+    { title: "IoT Projects", icon: Network, desc: "Smart automation designs, hardware controller mapping (Arduino/ESP32), and interactive dashboards.", href: "/iot", bg: "bg-[#E1F5FE]", border: "border-t-[#42A5F5]" }
   ];
 
   const features = [
