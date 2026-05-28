@@ -127,11 +127,6 @@ const difficultyColor = {
   Hard: "bg-[#FFEBEE] text-[#B71C1C] border-[#EF5350]",
 };
 
-export const metadata = {
-  title: "Diploma Projects | Shubdeep Labs",
-  description: "Browse diploma-level academic projects with source code, PPT, reports & viva guidance. Starts at ₹1999.",
-};
-
 export default function DiplomaPage() {
   const waUrl = `https://wa.me/919028833275?text=${encodeURIComponent("Hello! I'm a Diploma student and want to discuss a custom project with Shubdeep Labs.")}`;
 
