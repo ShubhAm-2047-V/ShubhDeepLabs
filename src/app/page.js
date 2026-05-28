@@ -176,7 +176,7 @@ export default function Home() {
   };
 
   const categories = [
-    { title: "Diploma Projects", icon: Laptop, desc: "Syllabus-compliant, core-logic driven applications scaled perfectly for diploma review parameters.", href: "/order?category=Diploma", bg: "bg-[#FFF9C4]", border: "border-t-[#FFCA28]" },
+    { title: "Diploma Projects", icon: Laptop, desc: "Syllabus-compliant, core-logic driven applications scaled perfectly for diploma review parameters.", href: "/diploma", bg: "bg-[#FFF9C4]", border: "border-t-[#FFCA28]" },
     { title: "Engineering Projects", icon: Code, desc: "Full-stack architectures, neat database structures, and comprehensive data flows built for B.E. / B.Tech.", href: "/order?category=Engineering", bg: "bg-[#E8F5E9]", border: "border-t-[#66BB6A]" },
     { title: "M.Tech Projects", icon: Cpu, desc: "High-grade algorithm modeling, data analysis, and advanced codebase executions for research thesis.", href: "/order?category=M.Tech", bg: "bg-[#E1F5FE]", border: "border-t-[#42A5F5]" },
     { title: "BCA / MCA Projects", icon: Database, desc: "Interactive management portals, dashboard consoles, cloud databases, and clean system layouts.", href: "/order?category=BCA-MCA", bg: "bg-[#F3E5F5]", border: "border-t-[#AB47BC]" },
