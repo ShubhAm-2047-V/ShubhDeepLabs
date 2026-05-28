@@ -102,19 +102,28 @@ create table chat_messages (
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
--- 6. Enable Row Level Security (RLS) on all tables
+-- 6. Create the website content settings table
+create table site_settings (
+  id text primary key,
+  value jsonb not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- 7. Enable Row Level Security (RLS) on all tables
 alter table orders enable row level security;
 alter table offers enable row level security;
 alter table customizer_prices enable row level security;
 alter table chat_sessions enable row level security;
 alter table chat_messages enable row level security;
+alter table site_settings enable row level security;
 
--- 7. Enable public read and write access rules (for instant client-side queries)
+-- 8. Enable public read and write access rules (for instant client-side queries)
 create policy "Allow public read/write on orders" on orders for all using (true) with check (true);
 create policy "Allow public read/write on offers" on offers for all using (true) with check (true);
 create policy "Allow public read/write on customizer_prices" on customizer_prices for all using (true) with check (true);
 create policy "Allow public read/write on chat_sessions" on chat_sessions for all using (true) with check (true);
 create policy "Allow public read/write on chat_messages" on chat_messages for all using (true) with check (true);
+create policy "Allow public read/write on site_settings" on site_settings for all using (true) with check (true);
 ```
 
 4. Click the **Run** (or `Ctrl + Enter` / `Cmd + Enter`) button in the bottom right corner of the SQL Editor.

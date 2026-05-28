@@ -38,6 +38,232 @@ export default function AdminDashboard() {
   const [inboxLoading, setInboxLoading] = useState(false);
   const [messagesLoading, setMessagesLoading] = useState(false);
 
+  // Custom Website Editor State
+  const [siteSettings, setSiteSettings] = useState(null);
+  const [settingsLoading, setSettingsLoading] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
+
+  const fetchSiteSettings = async () => {
+    setSettingsLoading(true);
+    try {
+      const data = await dbService.getSiteSettings();
+      setSiteSettings(data);
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to load site layout configuration.");
+    } finally {
+      setSettingsLoading(false);
+    }
+  };
+
+  const updateHeroField = (key, val) => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        hero: {
+          ...prev.hero,
+          [key]: val
+        }
+      };
+    });
+  };
+
+  const updateContactField = (key, val) => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        contact: {
+          ...prev.contact,
+          [key]: val
+        }
+      };
+    });
+  };
+
+  const updateFeature = (index, key, val) => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      const updated = [...prev.features];
+      updated[index] = { ...updated[index], [key]: val };
+      return { ...prev, features: updated };
+    });
+  };
+
+  const updateCategory = (index, key, val) => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      const updated = [...prev.categories];
+      updated[index] = { ...updated[index], [key]: val };
+      return { ...prev, categories: updated };
+    });
+  };
+
+  const addCategory = () => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        categories: [...prev.categories, { title: "New Study Area", desc: "Brief description of syllabus compliance.", icon: "Laptop", href: "/order", border: "border-t-[#FFCA28]" }]
+      };
+    });
+  };
+
+  const deleteCategory = (index) => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        categories: prev.categories.filter((_, idx) => idx !== index)
+      };
+    });
+  };
+
+  const updateBlueprint = (index, key, val) => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      const updated = [...prev.portfolio];
+      updated[index] = { ...updated[index], [key]: val };
+      return { ...prev, portfolio: updated };
+    });
+  };
+
+  const addBlueprint = () => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        portfolio: [...prev.portfolio, { title: "New Project Blueprint", tech: "React, Node.js, MongoDB", desc: "Detailed explanation of core logic systems.", markerColor: "marker-green" }]
+      };
+    });
+  };
+
+  const deleteBlueprint = (index) => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        portfolio: prev.portfolio.filter((_, idx) => idx !== index)
+      };
+    });
+  };
+
+  const updateTestimonial = (index, key, val) => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      const updated = [...prev.testimonials];
+      updated[index] = { ...updated[index], [key]: val };
+      return { ...prev, testimonials: updated };
+    });
+  };
+
+  const addTestimonial = () => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        testimonials: [...prev.testimonials, { name: "Student Name", role: "MCA/CS Student", review: "The solution was built perfectly compliance-ready...", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" }]
+      };
+    });
+  };
+
+  const deleteTestimonial = (index) => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        testimonials: prev.testimonials.filter((_, idx) => idx !== index)
+      };
+    });
+  };
+
+  const updateFAQ = (index, key, val) => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      const updated = [...prev.faqs];
+      updated[index] = { ...updated[index], [key]: val };
+      return { ...prev, faqs: updated };
+    });
+  };
+
+  const addFAQ = () => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        faqs: [...prev.faqs, { q: "New Question?", a: "Answer details go here." }]
+      };
+    });
+  };
+
+  const deleteFAQ = (index) => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        faqs: prev.faqs.filter((_, idx) => idx !== index)
+      };
+    });
+  };
+
+  const updateAssurance = (index, val) => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      const updated = [...prev.hero.assurances];
+      updated[index] = val;
+      return {
+        ...prev,
+        hero: {
+          ...prev.hero,
+          assurances: updated
+        }
+      };
+    });
+  };
+
+  const addAssurance = () => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        hero: {
+          ...prev.hero,
+          assurances: [...prev.hero.assurances, "✓ New Assurance Title"]
+        }
+      };
+    });
+  };
+
+  const deleteAssurance = (index) => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        hero: {
+          ...prev.hero,
+          assurances: prev.hero.assurances.filter((_, idx) => idx !== index)
+        }
+      };
+    });
+  };
+
+  const handleSaveSiteSettings = async () => {
+    if (!siteSettings) return;
+    setSaveLoading(true);
+    try {
+      await dbService.saveSiteSettings(siteSettings);
+      toast.success("Site layout settings published successfully!", {
+        className: "sketch-card border-2 border-[#2C2C2C] bg-[#FAF6EE] text-[#2C2C2C] font-marker"
+      });
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to publish layout settings.");
+    } finally {
+      setSaveLoading(false);
+    }
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!email || !password) {
@@ -171,6 +397,7 @@ export default function AdminDashboard() {
       if (userStatus) {
         fetchOrders();
         fetchChats();
+        fetchSiteSettings();
       }
     });
     return () => {
@@ -410,6 +637,19 @@ export default function AdminDashboard() {
           }`}
         >
           💬 Chat Inbox
+        </button>
+        <button
+          onClick={() => {
+            setActiveTab("customize");
+            fetchSiteSettings();
+          }}
+          className={`px-5 py-2.5 rounded-t-xl font-marker font-bold text-sm border-2 border-[#2C2C2C] border-b-0 -mb-[2px] transition-all cursor-pointer ${
+            activeTab === "customize"
+              ? "bg-white text-[#2C2C2C] shadow-[0_2px_0_white]"
+              : "bg-[#FAF6EE] text-[#6A6A6A] hover:bg-white/50"
+          }`}
+        >
+          🎨 Customize Website
         </button>
       </div>
 
@@ -855,6 +1095,552 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+
+      {activeTab === "customize" && (
+        <div className="space-y-8 animate-fade-in">
+          {/* Top action header */}
+          <div className="sketch-card p-6 bg-white flex flex-col sm:flex-row items-center justify-between gap-4 border-3 border-[#2C2C2C]">
+            <div>
+              <h3 className="text-xl font-hand font-extrabold text-[#2C2C2C]">
+                🎨 DRAFT & PUBLISH LIVE WEBSITE LAYOUTS
+              </h3>
+              <p className="text-xs text-[#6A6A6A] font-marker mt-1">
+                Modify title copy, catalog directories, student reviews, and FAQs dynamically. Click Publish to persist modifications.
+              </p>
+            </div>
+            
+            <button
+              onClick={handleSaveSiteSettings}
+              disabled={saveLoading || settingsLoading || !siteSettings}
+              className="inline-flex items-center px-6 py-3 font-marker font-bold tracking-widest text-[#2C2C2C] bg-[#FFF59D] border-2 border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-xl shadow-[3px_4px_0_#2C2C2C] active:translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer whitespace-nowrap shrink-0"
+            >
+              {saveLoading ? (
+                <span className="w-5 h-5 border-2 border-[#2C2C2C] border-t-transparent rounded-full animate-spin"></span>
+              ) : (
+                "PUBLISH DRAFT TO LIVE SITE"
+              )}
+            </button>
+          </div>
+
+          {settingsLoading ? (
+            <div className="sketch-card bg-white p-20 flex justify-center items-center border-3 border-[#2C2C2C]">
+              <span className="w-8 h-8 border-4 border-[#2C2C2C] border-t-transparent rounded-full animate-spin"></span>
+            </div>
+          ) : !siteSettings ? (
+            <div className="sketch-card bg-white p-20 text-center border-3 border-[#2C2C2C] text-[#6A6A6A]">
+              <p>Failed to sync website draft schema registry.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start font-sans">
+              
+              {/* Left Column: Core Sections (Hero, Contact, Assurances, Features) */}
+              <div className="lg:col-span-6 space-y-8">
+                
+                {/* 1. HERO SECTION EDIT */}
+                <div className="sketch-card p-6 bg-white border-3 border-[#2C2C2C] space-y-4">
+                  <h4 className="text-lg font-hand font-extrabold border-b-2 border-[#2C2C2C]/10 pb-2 text-[#3F51B5] uppercase">
+                    1. Hero Section Content
+                  </h4>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs uppercase tracking-wider text-[#6A6A6A] font-bold mb-1">Left Word 1</label>
+                      <input 
+                        type="text" 
+                        value={siteSettings.hero.titleYour || ""} 
+                        onChange={(e) => updateHeroField("titleYour", e.target.value)}
+                        className="w-full text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                        placeholder="e.g. Your"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs uppercase tracking-wider text-[#6A6A6A] font-bold mb-1">Left Word 2</label>
+                      <input 
+                        type="text" 
+                        value={siteSettings.hero.titleOur || ""} 
+                        onChange={(e) => updateHeroField("titleOur", e.target.value)}
+                        className="w-full text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                        placeholder="e.g. Our"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs uppercase tracking-wider text-[#6A6A6A] font-bold mb-1">Right Word 1 (roject)</label>
+                      <input 
+                        type="text" 
+                        value={siteSettings.hero.titleProject || ""} 
+                        onChange={(e) => updateHeroField("titleProject", e.target.value)}
+                        className="w-full text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                        placeholder="e.g. roject"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs uppercase tracking-wider text-[#6A6A6A] font-bold mb-1">Right Word 2 (assion)</label>
+                      <input 
+                        type="text" 
+                        value={siteSettings.hero.titlePassion || ""} 
+                        onChange={(e) => updateHeroField("titlePassion", e.target.value)}
+                        className="w-full text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                        placeholder="e.g. assion"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-[#6A6A6A] font-bold mb-1">Badge Tagline Subtext</label>
+                    <input 
+                      type="text" 
+                      value={siteSettings.hero.tagline || ""} 
+                      onChange={(e) => updateHeroField("tagline", e.target.value)}
+                      className="w-full text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                      placeholder="e.g. SIMPLE PROJECTS. SMART SOLUTIONS."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-[#6A6A6A] font-bold mb-1">Description Paragraph</label>
+                    <textarea 
+                      rows={4}
+                      value={siteSettings.hero.description || ""} 
+                      onChange={(e) => updateHeroField("description", e.target.value)}
+                      className="w-full text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-sans font-semibold focus:outline-none resize-none"
+                      placeholder="Describe what Shubdeep Labs does..."
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-[#6A6A6A] font-bold mb-1">WhatsApp Chat Discussion Seed Text</label>
+                    <input 
+                      type="text" 
+                      value={siteSettings.hero.whatsappText || ""} 
+                      onChange={(e) => updateHeroField("whatsappText", e.target.value)}
+                      className="w-full text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                      placeholder="Seed message students send when tapping WhatsApp Hero button..."
+                    />
+                  </div>
+                </div>
+
+                {/* 2. CORE CONTACT DETAILS */}
+                <div className="sketch-card p-6 bg-white border-3 border-[#2C2C2C] space-y-4">
+                  <h4 className="text-lg font-hand font-extrabold border-b-2 border-[#2C2C2C]/10 pb-2 text-[#CE93D8] uppercase">
+                    2. Primary Contact Details
+                  </h4>
+                  
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-[#6A6A6A] font-bold mb-1">Desk Mobile Number</label>
+                    <input 
+                      type="text" 
+                      value={siteSettings.contact.phone || ""} 
+                      onChange={(e) => updateContactField("phone", e.target.value)}
+                      className="w-full text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                      placeholder="e.g. +91 90288 33275"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-[#6A6A6A] font-bold mb-1">Desk Office Email</label>
+                    <input 
+                      type="email" 
+                      value={siteSettings.contact.email || ""} 
+                      onChange={(e) => updateContactField("email", e.target.value)}
+                      className="w-full text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                      placeholder="e.g. shubdeeplabs@gmail.com"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-[#6A6A6A] font-bold mb-1">Desk Office Address Location</label>
+                    <input 
+                      type="text" 
+                      value={siteSettings.contact.address || ""} 
+                      onChange={(e) => updateContactField("address", e.target.value)}
+                      className="w-full text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                      placeholder="e.g. Solapur, Maharashtra"
+                    />
+                  </div>
+                </div>
+
+                {/* 3. ASSURANCES CHECKLIST */}
+                <div className="sketch-card p-6 bg-white border-3 border-[#2C2C2C] space-y-4">
+                  <div className="flex justify-between items-center border-b-2 border-[#2C2C2C]/10 pb-2">
+                    <h4 className="text-lg font-hand font-extrabold text-[#66BB6A] uppercase">
+                      3. Student Assurances List
+                    </h4>
+                    <button 
+                      onClick={addAssurance}
+                      className="text-[10px] bg-[#C8E6C9] hover:bg-[#A5D6A7] border-2 border-[#2C2C2C] px-3 py-1 rounded-lg font-bold font-marker"
+                    >
+                      + Add Check
+                    </button>
+                  </div>
+
+                  <div className="space-y-3.5">
+                    {siteSettings.hero.assurances?.map((ass, index) => (
+                      <div key={index} className="flex gap-2 items-center">
+                        <input 
+                          type="text" 
+                          value={ass} 
+                          onChange={(e) => updateAssurance(index, e.target.value)}
+                          className="flex-1 text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                          placeholder="e.g. ✓ 100% Original Work"
+                        />
+                        <button 
+                          onClick={() => deleteAssurance(index)}
+                          className="p-2.5 text-xs font-bold border-2 border-[#2C2C2C] bg-[#FFCDD2] hover:bg-[#EF9A9A] text-[#B71C1C] rounded-lg transition-all"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 4. FEATURE CARDS */}
+                <div className="sketch-card p-6 bg-white border-3 border-[#2C2C2C] space-y-4">
+                  <h4 className="text-lg font-hand font-extrabold border-b-2 border-[#2C2C2C]/10 pb-2 text-[#FFA726] uppercase">
+                    4. Core Features Checklist
+                  </h4>
+                  
+                  <div className="space-y-6">
+                    {siteSettings.features?.map((feat, index) => (
+                      <div key={index} className="p-4 bg-[#FAF6EE]/30 border-2 border-dashed border-[#2C2C2C]/20 rounded-xl space-y-3">
+                        <div className="flex gap-2">
+                          <div className="flex-1">
+                            <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Feature Title</label>
+                            <input 
+                              type="text" 
+                              value={feat.title || ""} 
+                              onChange={(e) => updateFeature(index, "title", e.target.value)}
+                              className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                            />
+                          </div>
+                          <div className="w-24">
+                            <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Icon Name</label>
+                            <input 
+                              type="text" 
+                              value={feat.icon || ""} 
+                              onChange={(e) => updateFeature(index, "icon", e.target.value)}
+                              className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                              placeholder="e.g. Code"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Description Paragraph</label>
+                          <textarea 
+                            rows={2}
+                            value={feat.desc || ""} 
+                            onChange={(e) => updateFeature(index, "desc", e.target.value)}
+                            className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-sans font-semibold focus:outline-none resize-none"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Right Column: Advanced Sections (Categories, Blueprints, Testimonials, FAQs) */}
+              <div className="lg:col-span-6 space-y-8">
+                
+                {/* 5. ACADEMIC DIRECTORIES / CATEGORIES */}
+                <div className="sketch-card p-6 bg-white border-3 border-[#2C2C2C] space-y-4">
+                  <div className="flex justify-between items-center border-b-2 border-[#2C2C2C]/10 pb-2">
+                    <h4 className="text-lg font-hand font-extrabold text-[#42A5F5] uppercase">
+                      5. Syllabus Study Areas
+                    </h4>
+                    <button 
+                      onClick={addCategory}
+                      className="text-[10px] bg-[#E1F5FE] hover:bg-[#B3E5FC] border-2 border-[#2C2C2C] px-2 py-1 rounded-lg font-bold font-marker"
+                    >
+                      + Add Area
+                    </button>
+                  </div>
+
+                  <div className="space-y-6">
+                    {siteSettings.categories?.map((cat, index) => (
+                      <div key={index} className="p-4 bg-[#FCF9F2] border-2 border-[#2C2C2C] rounded-xl space-y-3 relative">
+                        <button
+                          onClick={() => deleteCategory(index)}
+                          className="absolute top-2 right-2 p-1.5 text-[10px] font-bold border-2 border-[#2C2C2C] bg-[#FFCDD2] hover:bg-[#EF9A9A] text-[#B71C1C] rounded-lg"
+                          title="Delete area"
+                        >
+                          ✕
+                        </button>
+                        
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Area Title</label>
+                            <input 
+                              type="text" 
+                              value={cat.title || ""} 
+                              onChange={(e) => updateCategory(index, "title", e.target.value)}
+                              className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Icon Name</label>
+                            <input 
+                              type="text" 
+                              value={cat.icon || ""} 
+                              onChange={(e) => updateCategory(index, "icon", e.target.value)}
+                              className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Route Href</label>
+                            <input 
+                              type="text" 
+                              value={cat.href || ""} 
+                              onChange={(e) => updateCategory(index, "href", e.target.value)}
+                              className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Card Border Class</label>
+                            <input 
+                              type="text" 
+                              value={cat.border || ""} 
+                              onChange={(e) => updateCategory(index, "border", e.target.value)}
+                              className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Description text</label>
+                          <textarea 
+                            rows={2}
+                            value={cat.desc || ""} 
+                            onChange={(e) => updateCategory(index, "desc", e.target.value)}
+                            className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-sans font-semibold focus:outline-none resize-none"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 6. PORTFOLIO BLUEPRINTS */}
+                <div className="sketch-card p-6 bg-white border-3 border-[#2C2C2C] space-y-4">
+                  <div className="flex justify-between items-center border-b-2 border-[#2C2C2C]/10 pb-2">
+                    <h4 className="text-lg font-hand font-extrabold text-[#AB47BC] uppercase">
+                      6. Showcase Blueprints
+                    </h4>
+                    <button 
+                      onClick={addBlueprint}
+                      className="text-[10px] bg-[#F3E5F5] hover:bg-[#E1BEE7] border-2 border-[#2C2C2C] px-2 py-1 rounded-lg font-bold font-marker"
+                    >
+                      + Add Project
+                    </button>
+                  </div>
+
+                  <div className="space-y-6">
+                    {siteSettings.portfolio?.map((proj, index) => (
+                      <div key={index} className="p-4 bg-[#FCF9F2] border-2 border-[#2C2C2C] rounded-xl space-y-3 relative">
+                        <button
+                          onClick={() => deleteBlueprint(index)}
+                          className="absolute top-2 right-2 p-1.5 text-[10px] font-bold border-2 border-[#2C2C2C] bg-[#FFCDD2] hover:bg-[#EF9A9A] text-[#B71C1C] rounded-lg"
+                          title="Delete blueprint"
+                        >
+                          ✕
+                        </button>
+                        
+                        <div>
+                          <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Project Name</label>
+                          <input 
+                            type="text" 
+                            value={proj.title || ""} 
+                            onChange={(e) => updateBlueprint(index, "title", e.target.value)}
+                            className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Technology Specifications</label>
+                            <input 
+                              type="text" 
+                              value={proj.tech || ""} 
+                              onChange={(e) => updateBlueprint(index, "tech", e.target.value)}
+                              className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Marker Ribbon Color</label>
+                            <input 
+                              type="text" 
+                              value={proj.markerColor || ""} 
+                              onChange={(e) => updateBlueprint(index, "markerColor", e.target.value)}
+                              className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                              placeholder="e.g. marker-green, marker-blue"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Brief description</label>
+                          <textarea 
+                            rows={3}
+                            value={proj.desc || ""} 
+                            onChange={(e) => updateBlueprint(index, "desc", e.target.value)}
+                            className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-sans font-semibold focus:outline-none resize-none"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 7. STUDENT REVIEWS / TESTIMONIALS */}
+                <div className="sketch-card p-6 bg-white border-3 border-[#2C2C2C] space-y-4">
+                  <div className="flex justify-between items-center border-b-2 border-[#2C2C2C]/10 pb-2">
+                    <h4 className="text-lg font-hand font-extrabold text-[#EF5350] uppercase">
+                      7. Student Testimonial Sheets
+                    </h4>
+                    <button 
+                      onClick={addTestimonial}
+                      className="text-[10px] bg-[#FFEBEE] hover:bg-[#FFCDD2] border-2 border-[#2C2C2C] px-2 py-1 rounded-lg font-bold font-marker"
+                    >
+                      + Add Review
+                    </button>
+                  </div>
+
+                  <div className="space-y-6">
+                    {siteSettings.testimonials?.map((test, index) => (
+                      <div key={index} className="p-4 bg-[#FCF9F2] border-2 border-[#2C2C2C] rounded-xl space-y-3 relative">
+                        <button
+                          onClick={() => deleteTestimonial(index)}
+                          className="absolute top-2 right-2 p-1.5 text-[10px] font-bold border-2 border-[#2C2C2C] bg-[#FFCDD2] hover:bg-[#EF9A9A] text-[#B71C1C] rounded-lg"
+                          title="Delete review"
+                        >
+                          ✕
+                        </button>
+                        
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Student Name</label>
+                            <input 
+                              type="text" 
+                              value={test.name || ""} 
+                              onChange={(e) => updateTestimonial(index, "name", e.target.value)}
+                              className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Academic Degree/Role</label>
+                            <input 
+                              type="text" 
+                              value={test.role || ""} 
+                              onChange={(e) => updateTestimonial(index, "role", e.target.value)}
+                              className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Avatar Image link (Unsplash or URL)</label>
+                          <input 
+                            type="text" 
+                            value={test.avatar || ""} 
+                            onChange={(e) => updateTestimonial(index, "avatar", e.target.value)}
+                            className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Feedback Review copy</label>
+                          <textarea 
+                            rows={3}
+                            value={test.review || ""} 
+                            onChange={(e) => updateTestimonial(index, "review", e.target.value)}
+                            className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-sans font-semibold focus:outline-none resize-none"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 8. FAQ ACCORDIONS */}
+                <div className="sketch-card p-6 bg-white border-3 border-[#2C2C2C] space-y-4">
+                  <div className="flex justify-between items-center border-b-2 border-[#2C2C2C]/10 pb-2">
+                    <h4 className="text-lg font-hand font-extrabold text-[#795548] uppercase">
+                      8. Common Doubts (FAQs)
+                    </h4>
+                    <button 
+                      onClick={addFAQ}
+                      className="text-[10px] bg-[#EFEBE9] hover:bg-[#D7CCC8] border-2 border-[#2C2C2C] px-2 py-1 rounded-lg font-bold font-marker"
+                    >
+                      + Add FAQ
+                    </button>
+                  </div>
+
+                  <div className="space-y-6">
+                    {siteSettings.faqs?.map((faq, index) => (
+                      <div key={index} className="p-4 bg-[#FCF9F2] border-2 border-[#2C2C2C] rounded-xl space-y-3 relative">
+                        <button
+                          onClick={() => deleteFAQ(index)}
+                          className="absolute top-2 right-2 p-1.5 text-[10px] font-bold border-2 border-[#2C2C2C] bg-[#FFCDD2] hover:bg-[#EF9A9A] text-[#B71C1C] rounded-lg"
+                          title="Delete FAQ"
+                        >
+                          ✕
+                        </button>
+                        
+                        <div>
+                          <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Question Title</label>
+                          <input 
+                            type="text" 
+                            value={faq.q || ""} 
+                            onChange={(e) => updateFAQ(index, "q", e.target.value)}
+                            className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Answer text explanation</label>
+                          <textarea 
+                            rows={3}
+                            value={faq.a || ""} 
+                            onChange={(e) => updateFAQ(index, "a", e.target.value)}
+                            className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-sans font-semibold focus:outline-none resize-none"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          )}
+
+          {/* Bottom actions header */}
+          <div className="sketch-card p-6 bg-white flex items-center justify-between border-3 border-[#2C2C2C] mt-8">
+            <span className="text-xs font-bold font-marker text-[#6A6A6A]">Verify all segments before publishing draft.</span>
+            <button
+              onClick={handleSaveSiteSettings}
+              disabled={saveLoading || settingsLoading || !siteSettings}
+              className="inline-flex items-center px-6 py-3 font-marker font-bold tracking-widest text-[#2C2C2C] bg-[#FFF59D] border-2 border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-xl shadow-[3px_4px_0_#2C2C2C] active:translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer whitespace-nowrap shrink-0"
+            >
+              {saveLoading ? (
+                <span className="w-5 h-5 border-2 border-[#2C2C2C] border-t-transparent rounded-full animate-spin"></span>
+              ) : (
+                "PUBLISH DRAFT TO LIVE SITE"
+              )}
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Custom Hand-Drawn Confirmation Modal */}
       {confirmModal.isOpen && (
         <div className="fixed inset-0 bg-[#2C2C2C]/50 backdrop-blur-xs flex items-center justify-center z-50 p-4 animate-fade-in">

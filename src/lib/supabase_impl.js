@@ -864,4 +864,107 @@ export const dbService = {
 
     return fallbackMessage;
   },
+
+  // WEBSITE CONTENT SETTINGS
+  async getSiteSettings() {
+    const defaultSiteSettings = {
+      hero: {
+        titleYour: "Your",
+        titleOur: "Our",
+        titleProject: "roject",
+        titlePassion: "assion",
+        tagline: "SIMPLE PROJECTS. SMART SOLUTIONS.",
+        description: "From Idea to Implementation, We Build Intelligent Academic Solutions. Next-generation web portals, machine learning algorithms, and IoT prototypes built with clean, premium codebases. Complete with PPT slides, comprehensive thesis reports, and mock viva tutoring.",
+        assurances: [
+          "✓ Simple Projects",
+          "✓ Smart Solutions",
+          "✓ Done with Focus & Care",
+          "✓ For Diploma & Degree Only"
+        ],
+        whatsappText: "Hello, ShubDeep I want to discuss my academic project."
+      },
+      contact: {
+        phone: "+91 90288 33275",
+        email: "shubdeeplabs@gmail.com",
+        address: "Solapur, Maharashtra"
+      },
+      features: [
+        { title: "100% Original Work", desc: "No copy-pasted templates. Every codebase is structured freshly according to your specific college needs.", icon: "CheckSquare", border: "border-t-[#66BB6A]" },
+        { title: "On-Time Delivery", desc: "We are extremely strict with dates. Get your complete setup, reports, and slides well before your final submit day.", icon: "Clock", border: "border-t-[#42A5F5]" },
+        { title: "PPT & Reports Ready", desc: "Syllabus-compliant, fully formatted presentation drafts and comprehensive project reports included.", icon: "FileText", border: "border-t-[#FFCA28]" },
+        { title: "Clean Documented Code", desc: "Neat model structures, clean controllers, and comprehensive code comments that make logic review easy.", icon: "Code", border: "border-t-[#EF5350]" }
+      ],
+      categories: [
+        { title: "Diploma Projects", icon: "Laptop", desc: "Syllabus-compliant, core-logic driven applications scaled perfectly for diploma review parameters.", href: "/diploma", border: "border-t-[#FFCA28]" },
+        { title: "Engineering Projects", icon: "Code", desc: "Full-stack architectures, neat database structures, and comprehensive data flows built for B.E. / B.Tech.", href: "/engineering", border: "border-t-[#66BB6A]" },
+        { title: "M.Tech Projects", icon: "Cpu", desc: "High-grade algorithm modeling, data analysis, and advanced codebase executions for research thesis.", href: "/mtech", border: "border-t-[#42A5F5]" },
+        { title: "BCA / MCA Projects", icon: "Database", desc: "Interactive management portals, dashboard consoles, cloud databases, and clean system layouts.", href: "/bca-mca", border: "border-t-[#AB47BC]" },
+        { title: "AI / ML Projects", icon: "Brain", desc: "TensorFlow / PyTorch models, visual scans, NLP conversational bots, and predictive analytics pipelines.", href: "/ai-ml", border: "border-t-[#EF5350]" },
+        { title: "Web Projects", icon: "Sparkles", desc: "Stunning responsive portals, custom dashboards, single page interfaces, and rich administrative panels.", href: "/web-dev", border: "border-t-[#FFA726]" },
+        { title: "Android Projects", icon: "Smartphone", desc: "Mobile applications, local SQLite databases, customizable API links, and fully functional Android packages.", href: "/android", border: "border-t-[#66BB6A]" },
+        { title: "IoT Projects", icon: "Network", desc: "Smart automation designs, hardware controller mapping (Arduino/ESP32), and interactive dashboards.", href: "/iot", border: "border-t-[#42A5F5]" }
+      ],
+      portfolio: [
+        { title: "AI Plant Disease Detector", tech: "Python, Next.js, TensorFlow, FastAPI", desc: "A neural-network visual scanning web application detecting agricultural leaf diseases with detailed metric analytics.", markerColor: "marker-green" },
+        { title: "Advanced AI Customer Care Chatbot", tech: "React, Node.js, Express, OpenAI API", desc: "Intelligent messaging center with customizable document indexing (RAG) and interactive dashboard console log views.", markerColor: "marker-purple" },
+        { title: "Face Recognition Attendance system", tech: "Python, OpenCV, Tkinter, SQLite", desc: "Real-time face detection tracker featuring automated CSV sheets generation and attendance log exports.", markerColor: "marker-blue" },
+        { title: "Hospital Management Core Desk", tech: "Next.js, MongoDB, Tailwind, Node.js", desc: "Full clinic portal with scheduling grids, active invoice trackers, and secure digital prescription vaults.", markerColor: "marker-orange" },
+        { title: "Expense Tracker with AI Insights", tech: "React, Node.js, MongoDB, Gemini API", desc: "Personal finance portal offering automated category tagging, monthly budget forecasting, and AI-driven spending recommendations.", markerColor: "marker-yellow" },
+        { title: "Smart Notes Summarizer", tech: "React, FastAPI, Python, Hugging Face", desc: "Collaborative document pad that auto-generates structured summaries, highlights action items, and generates flashcards using NLP.", markerColor: "marker-red" }
+      ],
+      testimonials: [
+        { name: "Saurabh Deshmukh", role: "B.Tech CS Student", review: "The Shubdeep Labs team is amazing! They delivered my IoT project well before my college presentation. The explanation guidelines sheet made my viva exams simple. Highly recommend their Medium package!", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" },
+        { name: "Priyanka Naik", role: "MCA Final Year Student", review: "I ordered the AI leaf scanner project. The beautiful dashboard layout completely wowed the external examiner! Having the structured report draft included saved me from college revision loops.", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" },
+        { name: "Aditya Verma", role: "Diploma Computer Engineering", review: "Fast execution and wonderful support. Setting up database configurations on Windows can be frustrating, but they configured it for me over Zoom. Got full grades in our semester reviews!", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80" }
+      ],
+      faqs: [
+        { q: "How long does delivery take?", a: "Simple/Easy projects are typically delivered within 3-5 days. Medium projects take 5-7 days, while Advanced/Hard projects requiring deep integrations take 8-12 days. Urgent timelines can be arranged on inquiry!" },
+        { q: "Do we receive the full source code?", a: "Yes, absolutely! You receive 100% full ownership of the source code, database structures, assets, installation guides, and presentation documents." },
+        { q: "Is viva guidance included?", a: "Yes, our Medium and Hard project plans include detailed viva prep sheets. Hard projects also feature a dedicated 1-on-1 code walkthrough session to explain exact controllers and database interactions." },
+        { q: "Can we request custom modifications?", a: "Definitely. We customize logic modules, database structures, interface styling, and third-party APIs to suit your specific syllabus requirements." },
+        { q: "Do you provide remote system setup support?", a: "Yes! The Hard package includes direct deployment support. We can connect via Zoom or AnyDesk to compile and set up backend runtimes on your machine." }
+      ]
+    };
+
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { data, error } = await supabase
+          .from("site_settings")
+          .select("*")
+          .eq("id", "default_settings")
+          .maybeSingle();
+
+        if (error) throw error;
+        if (data && data.value) {
+          return data.value;
+        }
+      } catch (e) {
+        console.error("Supabase getSiteSettings error, falling back to LocalStorage:", e);
+      }
+    }
+
+    if (typeof window === "undefined") return defaultSiteSettings;
+    const local = localStorage.getItem("projecthub_site_settings");
+    return local ? JSON.parse(local) : defaultSiteSettings;
+  },
+
+  async saveSiteSettings(settings) {
+    if (isSupabaseConfigured && supabase) {
+      try {
+        const { error } = await supabase
+          .from("site_settings")
+          .upsert({ id: "default_settings", value: settings, updated_at: new Date().toISOString() });
+        if (error) throw error;
+        return true;
+      } catch (e) {
+        console.error("Supabase saveSiteSettings error, falling back to LocalStorage:", e);
+      }
+    }
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem("projecthub_site_settings", JSON.stringify(settings));
+    }
+    return true;
+  },
 };
+

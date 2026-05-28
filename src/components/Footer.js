@@ -1,10 +1,31 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Mail, Phone, MapPin, ExternalLink, Heart } from "lucide-react";
+import { dbService } from "@/lib/supabase";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [contactData, setContactData] = useState({
+    phone: "+91 90288 33275",
+    email: "shubdeeplabs@gmail.com",
+    address: "Solapur, Maharashtra"
+  });
+
+  useEffect(() => {
+    const loadContactInfo = async () => {
+      try {
+        const settings = await dbService.getSiteSettings();
+        if (settings && settings.contact) {
+          setContactData(settings.contact);
+        }
+      } catch (e) {
+        console.error("Failed to load contact info in footer:", e);
+      }
+    };
+    loadContactInfo();
+  }, []);
 
   const quickLinks = [
     { name: "Home Dashboard", href: "/" },
@@ -127,8 +148,8 @@ export default function Footer() {
               <li className="flex items-start space-x-3">
                 <Phone className="w-5 h-5 text-[#2C2C2C] shrink-0 mt-0.5" />
                 <div className="text-sm text-[#2C2C2C]">
-                  <a href="tel:+919028833275" className="font-bold hover:underline">
-                    +91 90288 33275
+                  <a href={`tel:${contactData.phone.replace(/[^0-9]/g, "")}`} className="font-bold hover:underline">
+                    {contactData.phone}
                   </a>
                   <p className="text-xs text-[#6A6A6A] mt-0.5">Available Mon-Sat 9AM-8PM</p>
                 </div>
@@ -136,15 +157,15 @@ export default function Footer() {
               <li className="flex items-start space-x-3">
                 <Mail className="w-5 h-5 text-[#2C2C2C] shrink-0 mt-0.5" />
                 <span className="text-sm text-[#2C2C2C]">
-                  <a href="mailto:shubdeeplabs@gmail.com" className="font-bold hover:underline">
-                    shubdeeplabs@gmail.com
+                  <a href={`mailto:${contactData.email}`} className="font-bold hover:underline">
+                    {contactData.email}
                   </a>
                 </span>
               </li>
               <li className="flex items-start space-x-3">
                 <MapPin className="w-5 h-5 text-[#2C2C2C] shrink-0 mt-0.5" />
                 <span className="text-sm text-[#2C2C2C]">
-                  Solapur, Maharashtra
+                  {contactData.address}
                 </span>
               </li>
             </ul>

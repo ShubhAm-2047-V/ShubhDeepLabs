@@ -13,6 +13,18 @@ import { dbService } from "@/lib/supabase";
 import ThreeScene from "@/components/ThreeScene";
 import { STEPS, calculateTotal, formatINR } from "@/components/ProductCustomizer";
 
+const ICON_MAP = {
+  Laptop, Code, Cpu, Database, Brain, Sparkles, CheckSquare, 
+  Smartphone, Network, ShieldCheck, Clock, Award, FileText, 
+  HeartHandshake, ChevronDown, Phone, Mail, Send, ArrowRight, MessageSquare, BookOpen, Star, HelpCircle
+};
+
+const getIcon = (iconName) => {
+  if (!iconName) return HelpCircle;
+  if (typeof iconName !== "string") return iconName;
+  return ICON_MAP[iconName] || HelpCircle;
+};
+
 export default function Home() {
   // Contact Form States
   const [formData, setFormData] = useState({
@@ -62,6 +74,22 @@ export default function Home() {
     ribbon: "Special Offer!",
     emoji: "🎁",
   });
+
+  const [siteSettings, setSiteSettings] = useState(null);
+
+  useEffect(() => {
+    const loadSiteSettings = async () => {
+      try {
+        const settings = await dbService.getSiteSettings();
+        if (settings) {
+          setSiteSettings(settings);
+        }
+      } catch (e) {
+        console.error("Failed to load site settings:", e);
+      }
+    };
+    loadSiteSettings();
+  }, []);
 
   const [selections, setSelections] = useState({ category: null, tech: [], addons: [], timeline: null });
   const [customPrices, setCustomPrices] = useState({});
@@ -113,10 +141,33 @@ export default function Home() {
     fetchActiveOffer();
   }, []);
 
+  const heroData = siteSettings?.hero || {
+    titleYour: "Your",
+    titleOur: "Our",
+    titleProject: "roject",
+    titlePassion: "assion",
+    tagline: "SIMPLE PROJECTS. SMART SOLUTIONS.",
+    description: "From Idea to Implementation, We Build Intelligent Academic Solutions. Next-generation web portals, machine learning algorithms, and IoT prototypes built with clean, premium codebases. Complete with PPT slides, comprehensive thesis reports, and mock viva tutoring.",
+    assurances: [
+      "✓ Simple Projects",
+      "✓ Smart Solutions",
+      "✓ Done with Focus & Care",
+      "✓ For Diploma & Degree Only"
+    ],
+    whatsappText: "Hello, ShubDeep I want to discuss my academic project."
+  };
+
+  const contactData = siteSettings?.contact || {
+    phone: "+91 90288 33275",
+    email: "shubdeeplabs@gmail.com",
+    address: "Solapur, Maharashtra"
+  };
+
   const waOfferUrl = (() => {
     const hasCategory = selections && !!selections.category;
+    const phoneNo = contactData.phone.replace(/[^0-9]/g, "");
     if (!hasCategory) {
-      return `https://wa.me/919028833275?text=${encodeURIComponent(
+      return `https://wa.me/${phoneNo}?text=${encodeURIComponent(
         `Hello ShubDeep Labs! 👋\n\nI want to claim the Daily Special Deal: "${activeOffer.title}"!`
       )}`;
     }
@@ -127,10 +178,11 @@ export default function Home() {
     const time   = STEPS[3].options.find(o => o.id === selections.timeline)?.label || "—";
     const { total } = calculateTotal(selections, customPrices);
     
-    return `https://wa.me/919028833275?text=${encodeURIComponent(
+    return `https://wa.me/${phoneNo}?text=${encodeURIComponent(
       `Hello ShubDeep Labs! 👋\n\nI want to claim the Daily Special Deal: "${activeOffer.title}"!\n\nMy Project Requirement:\n🎓 Level: ${cat}\n⚙️ Tech Stack: ${techs}\n✨ Add-Ons: ${addons}\n⏱️ Timeline: ${time}\n💰 My Estimate: ${formatINR(total)}\n\nPlease confirm the final quote for my custom project!`
     )}`;
   })();
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -266,6 +318,12 @@ export default function Home() {
     { q: "Do you provide remote system setup support?", a: "Yes! The Hard package includes direct deployment support. We can connect via Zoom or AnyDesk to compile and set up backend runtimes on your machine." }
   ];
 
+  const currentFeatures = siteSettings?.features || features;
+  const currentCategories = siteSettings?.categories || categories;
+  const currentPortfolio = siteSettings?.portfolio || portfolio;
+  const currentTestimonials = siteSettings?.testimonials || testimonials;
+  const currentFaqs = siteSettings?.faqs || faqs;
+
   return (
     <div className="space-y-24 pb-20 relative overflow-hidden bg-[#FAF6EE]">
       
@@ -298,17 +356,17 @@ export default function Home() {
               </svg>
             </div>
 
-            {/* Playful Sketch Tag */}
+             {/* Playful Sketch Tag */}
             <div className="inline-flex items-center self-center lg:self-start px-4 py-1.5 rounded-xl text-sm font-marker bg-[#FFF59D] border-2.5 border-[#2C2C2C] shadow-[2.5px_3.0px_0px_#2C2C2C] rotate-[-1.5deg]">
               <Star className="w-4.5 h-4.5 mr-1.5 fill-[#FFCA28] stroke-[#2C2C2C] shrink-0 animate-spin-slow" />
-              SIMPLE PROJECTS. SMART SOLUTIONS.
+              {heroData.tagline}
             </div>
             
             <h1 className="text-3xl sm:text-5xl lg:text-6.5xl font-marker font-black text-[#2C2C2C] leading-none select-none my-6 flex items-center justify-center lg:justify-start">
               {/* Left Column: Your & Our */}
               <div className="flex flex-col items-end text-[#3F51B5] tracking-wide text-right leading-none mr-3 sm:mr-4">
-                <span className="h-10 sm:h-18 lg:h-24 flex items-center text-3xl sm:text-5xl lg:text-[4.2rem]">Your</span>
-                <span className="h-10 sm:h-18 lg:h-24 flex items-center text-3xl sm:text-5xl lg:text-[4.2rem]">Our</span>
+                <span className="h-10 sm:h-18 lg:h-24 flex items-center text-3xl sm:text-5xl lg:text-[4.2rem]">{heroData.titleYour}</span>
+                <span className="h-10 sm:h-18 lg:h-24 flex items-center text-3xl sm:text-5xl lg:text-[4.2rem]">{heroData.titleOur}</span>
               </div>
 
               {/* Middle: Common large P */}
@@ -321,16 +379,16 @@ export default function Home() {
               {/* Right Column: roject & assion */}
               <div className="flex flex-col items-start leading-none text-left ml-2 sm:ml-3">
                 <span className="h-10 sm:h-18 lg:h-24 flex items-center text-[#2C2C2C]">
-                  <span className="underline decoration-[#A5D6A7] decoration-4 text-2.5xl sm:text-4.5xl lg:text-[3.5rem]">roject</span>
+                  <span className="underline decoration-[#A5D6A7] decoration-4 text-2.5xl sm:text-4.5xl lg:text-[3.5rem]">{heroData.titleProject}</span>
                 </span>
                 <span className="h-10 sm:h-18 lg:h-24 flex items-center text-[#2C2C2C]">
-                  <span className="underline decoration-[#EF9A9A] decoration-4 text-2.5xl sm:text-4.5xl lg:text-[3.5rem]">assion</span>
+                  <span className="underline decoration-[#EF9A9A] decoration-4 text-2.5xl sm:text-4.5xl lg:text-[3.5rem]">{heroData.titlePassion}</span>
                 </span>
               </div>
             </h1>
             
             <p className="text-base sm:text-lg text-[#5A5A5A] max-w-xl mx-auto lg:mx-0 leading-relaxed font-sans font-semibold">
-              From Idea to Implementation, We Build Intelligent Academic Solutions. Next-generation web portals, machine learning algorithms, and IoT prototypes built with clean, premium codebases. Complete with PPT slides, comprehensive thesis reports, and mock viva tutoring.
+              {heroData.description}
             </p>
 
             {/* Dynamic Sketch Buttons & Arrow */}
@@ -344,7 +402,7 @@ export default function Home() {
               </Link>
               
               <a
-                href="https://wa.me/919028833275?text=Hello%2C%20ShubDeep%20I%20want%20to%20discuss%20my%20academic%20project."
+                href={`https://wa.me/${contactData.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(heroData.whatsappText)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto text-base font-marker bg-white text-[#2C2C2C] border-3 border-[#2C2C2C] rounded-xl px-8 py-4 flex items-center justify-center shadow-[4px_5px_0px_#2C2C2C] hover:bg-[#FAF6EE] hover:translate-y-0.5 hover:shadow-[3px_3px_0px_#2C2C2C] transition-all cursor-pointer"
@@ -367,10 +425,9 @@ export default function Home() {
 
             {/* Student assurances list */}
             <div className="pt-10 border-t-2 border-dashed border-[#2C2C2C]/10 flex flex-wrap justify-center lg:justify-start gap-x-6 gap-y-2 text-sm font-marker text-[#6A6A6A]">
-              <span>✓ Simple Projects</span>
-              <span>✓ Smart Solutions</span>
-              <span>✓ Done with Focus & Care</span>
-              <span>✓ For Diploma & Degree Only</span>
+              {heroData.assurances?.map((ass, i) => (
+                <span key={i}>{ass}</span>
+              ))}
             </div>
           </div>
 
@@ -398,12 +455,12 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature) => {
-              const Icon = feature.icon;
+            {currentFeatures.map((feature, i) => {
+              const Icon = getIcon(feature.icon);
               return (
                 <div
-                  key={feature.title}
-                  className={`sketch-card p-6 bg-white relative overflow-hidden group border-t-[6px] ${feature.border}`}
+                  key={feature.title || i}
+                  className={`sketch-card p-6 bg-white relative overflow-hidden group border-t-[6px] ${feature.border || "border-t-[#FAF6EE]"}`}
                 >
                   {/* Small binder hole on top card left corner */}
                   <div className="absolute top-2.5 left-2.5 w-3 h-3 bg-[#FAF6EE] border border-[#2C2C2C] rounded-full" />
@@ -413,7 +470,7 @@ export default function Home() {
                   </div>
                   
                   <h3 className="text-lg font-marker font-extrabold text-[#2C2C2C] mb-2 tracking-wide">
-                    <span className={`${feature.marker} px-1.5`}>{feature.title}</span>
+                    <span className={`${feature.marker || "marker-blue"} px-1.5`}>{feature.title}</span>
                   </h3>
                   <p className="text-sm font-sans font-semibold text-[#5A5A5A] leading-relaxed">
                     {feature.desc}
@@ -437,15 +494,15 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.map((cat) => {
-            const Icon = cat.icon;
+          {currentCategories.map((cat, i) => {
+            const Icon = getIcon(cat.icon);
             return (
               <div
-                key={cat.title}
-                className={`sketch-card p-5 flex flex-col justify-between h-[245px] bg-white hover:bg-[#FFFDF6] border-t-[5px] ${cat.border}`}
+                key={cat.title || i}
+                className={`sketch-card p-5 flex flex-col justify-between h-[245px] bg-white hover:bg-[#FFFDF6] border-t-[5px] ${cat.border || "border-t-[#FAF6EE]"}`}
               >
                 <div>
-                  <div className={`w-10 h-10 rounded-xl ${cat.bg} border-2 border-[#2C2C2C] text-[#2C2C2C] flex items-center justify-center mb-4 shadow-[2px_2px_0_#2C2C2C]`}>
+                  <div className={`w-10 h-10 rounded-xl ${cat.bg || "bg-[#FAF6EE]"} border-2 border-[#2C2C2C] text-[#2C2C2C] flex items-center justify-center mb-4 shadow-[2px_2px_0_#2C2C2C]`}>
                     <Icon className="w-5 h-5" />
                   </div>
                   <h3 className="text-lg font-marker font-extrabold text-[#2C2C2C] mb-2">
@@ -580,9 +637,9 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {portfolio.map((proj) => (
+          {currentPortfolio.map((proj, i) => (
             <div
-              key={proj.title}
+              key={proj.title || i}
               className="sketch-card bg-white overflow-hidden flex flex-col group"
             >
               {/* Sketch Header box with paper coloring */}
@@ -590,12 +647,12 @@ export default function Home() {
                 <div className="absolute top-1.5 right-1.5 p-1 text-[10px] font-marker text-[#6A6A6A] rotate-[6deg] border border-[#6A6A6A] rounded">blueprint</div>
                 <BookOpen className="w-16 h-16 opacity-10 absolute -bottom-2 -right-2 transform group-hover:scale-110 transition-transform duration-200 text-[#2C2C2C]" />
                 
-                <span className={`marker-${proj.markerColor.split('-')[1]} font-marker font-bold text-base border-2 border-[#2C2C2C] shadow-[2px_2px_0_#2C2C2C] px-3.5 py-1`}>
+                <span className={`marker-${(proj.markerColor || "marker-green").split('-')[1] || "green"} font-marker font-bold text-base border-2 border-[#2C2C2C] shadow-[2px_2px_0_#2C2C2C] px-3.5 py-1`}>
                   {proj.title}
                 </span>
                 
                 <p className="text-xs font-marker text-[#6A6A6A] mt-3">
-                  {proj.tech.split(",")[0]}
+                  {proj.tech ? proj.tech.split(",")[0] : ""}
                 </p>
               </div>
 
@@ -624,7 +681,7 @@ export default function Home() {
                     </button>
                   ) : (
                     <a
-                      href={`https://wa.me/919028833275?text=Hello%2C%20I%20want%20to%20see%20a%20demo%20for%20${encodeURIComponent(proj.title)}`}
+                      href={`https://wa.me/${contactData.phone.replace(/[^0-9]/g, "")}?text=Hello%2C%20I%20want%20to%20see%20a%20demo%20for%20${encodeURIComponent(proj.title)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full inline-flex items-center justify-center px-4 py-2.5 border-2 border-[#2C2C2C] text-sm font-marker font-bold text-[#2C2C2C] hover:bg-[#FAF6EE] rounded-xl transition-all shadow-[2.5px_3px_0_#2C2C2C] hover:translate-y-0.5 cursor-pointer"
@@ -654,9 +711,9 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((test, i) => (
+            {currentTestimonials.map((test, i) => (
               <div
-                key={test.name}
+                key={test.name || i}
                 className="polaroid-card bg-white flex flex-col justify-between relative"
                 style={{ transform: `rotate(${i % 2 === 0 ? '-2deg' : '2deg'})` }}
               >
@@ -667,8 +724,8 @@ export default function Home() {
 
                 <div className="pt-4">
                   <div className="flex items-center space-x-1 text-amber-500 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-[#FFCA28] stroke-[#2C2C2C] shrink-0" />
+                    {[...Array(5)].map((_, idx) => (
+                      <Star key={idx} className="w-4 h-4 fill-[#FFCA28] stroke-[#2C2C2C] shrink-0" />
                     ))}
                   </div>
                   <p className="text-sm font-sans font-semibold italic text-[#5A5A5A] leading-relaxed mb-6">
@@ -711,9 +768,9 @@ export default function Home() {
         </div>
 
         <div className="space-y-5">
-          {faqs.map((faq, i) => (
+          {currentFaqs.map((faq, i) => (
             <div
-              key={faq.q}
+              key={faq.q || i}
               className="sketch-card bg-white overflow-hidden"
             >
               <button
@@ -770,11 +827,11 @@ export default function Home() {
               <div className="space-y-4 font-marker text-lg text-[#2C2C2C] border-t-2 border-dashed border-[#2C2C2C]/20 pt-6">
                 <div className="flex items-center space-x-3">
                   <Phone className="w-5 h-5 text-[#2C2C2C] fill-[#A5D6A7]" />
-                  <span className="font-extrabold">+91 90288 33275</span>
+                  <span className="font-extrabold">{contactData.phone}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Mail className="w-5 h-5 text-[#2C2C2C] fill-[#BBDEFB]" />
-                  <span className="font-extrabold">shubdeeplabs@gmail.com</span>
+                  <span className="font-extrabold">{contactData.email}</span>
                 </div>
               </div>
             </div>
