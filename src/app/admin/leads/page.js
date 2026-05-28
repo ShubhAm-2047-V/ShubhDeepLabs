@@ -373,10 +373,20 @@ export default function LeadsDashboard() {
                           {lead.category || "General"}
                         </span>
                       </td>
-                      <td className="p-4 max-w-[250px]">
-                        <p className="text-xs text-[#2C2C2C] line-clamp-2" title={lead.features}>
-                          {lead.features || "N/A"}
-                        </p>
+                      <td className="p-4 max-w-[250px] space-y-1">
+                        <div className="font-bold text-[#2C2C2C] leading-tight">
+                          {lead.project || lead.features || "Custom Project"}
+                        </div>
+                        {lead.stack && (
+                          <div className="text-[10px] text-slate-600 font-sans">
+                            <span className="font-bold text-[#2C2C2C]">Stack:</span> {lead.stack}
+                          </div>
+                        )}
+                        {lead.addons && lead.addons !== "None" && (
+                          <div className="text-[9px] bg-slate-200/50 border border-[#2C2C2C]/20 px-1.5 py-0.5 rounded inline-block text-[#2C2C2C]">
+                            <span className="font-bold">Addons:</span> {lead.addons}
+                          </div>
+                        )}
                       </td>
                       <td className="p-4">
                         <span className={`px-2 py-0.5 rounded text-xs font-bold border ${

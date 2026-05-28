@@ -129,7 +129,7 @@ export async function generateReply(message, history = [], context = "", intent 
   // Rule: Polite refusal for unrelated topics
   if (intent === "unrelated") {
     return {
-      replyText: "I’m designed specifically to assist with projects, pricing, and development services.",
+      replyText: "I’m designed specifically for project recommendations, pricing, and development services.",
       selections: null,
       lead: null,
       escalated: false

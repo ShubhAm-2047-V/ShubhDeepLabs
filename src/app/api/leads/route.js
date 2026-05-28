@@ -5,32 +5,38 @@ import { notifyAdmin } from "@/lib/gemini";
 export async function POST(req) {
   try {
     const body = await req.json();
-    // Support both camelCase and snake_case or standard fields
-    const name = body.name || body.fullName;
-    const phone = body.phone || body.whatsapp;
+    
+    // Support both client profiles and structured order summaries
+    const name = body.name || body.fullName || "Website Visitor";
+    const phone = body.phone || body.whatsapp || "WhatsApp Redirect";
     const email = body.email || "";
+    
+    // Project specifications
+    const project = body.project || body.features || "Custom Project";
     const category = body.category || "";
-    const features = body.features || body.techRequired || "";
-    const budget = body.budget || "";
+    const stack = body.stack || body.techRequired || "";
+    const addons = body.addons || "";
     const deadline = body.deadline || "";
-
-    if (!name || !phone) {
-      return NextResponse.json({ error: "Name and phone number are required." }, { status: 400 });
-    }
+    const budget = body.budget || "";
+    const timestamp = body.timestamp || new Date().toISOString();
 
     const leadData = {
       name,
       phone,
       email,
+      project,
       category,
-      features,
+      stack,
+      addons,
+      deadline,
       budget,
-      deadline
+      timestamp,
+      createdAt: timestamp // Compatibility field
     };
 
     const lead = await dbService.addLead(leadData);
 
-    // Alert coordinates of new lead form entry
+    // Alert coordinator desk
     await notifyAdmin("web_lead_form", lead);
 
     return NextResponse.json({ success: true, lead });
