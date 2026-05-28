@@ -782,7 +782,7 @@ Estimated Price:
                               ? "bg-[#FFF9C4] text-[#2C2C2C] rounded-tr-none" 
                               : "bg-white text-[#2C2C2C] rounded-tl-none"
                           }`}>
-                            <p className="font-sans font-semibold leading-relaxed text-xs sm:text-sm">{msg.text}</p>
+                            <p className="font-sans font-semibold leading-relaxed text-xs sm:text-sm whitespace-pre-line">{msg.text}</p>
                           </div>
                         </div>
                       ))}
