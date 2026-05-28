@@ -82,15 +82,39 @@ create table customizer_prices (
   "updatedAt" timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
--- 4. Enable Row Level Security (RLS) on all tables
+-- 4. Create the chat sessions table
+create table chat_sessions (
+  id uuid default gen_random_uuid() primary key,
+  session_type text not null,
+  session_key text not null unique,
+  contact_name text,
+  status text default 'AI Bot',
+  customizer_state jsonb default '{}'::jsonb,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- 5. Create the chat messages table
+create table chat_messages (
+  id uuid default gen_random_uuid() primary key,
+  session_id uuid references chat_sessions(id) on delete cascade not null,
+  sender text not null,
+  message_text text not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- 6. Enable Row Level Security (RLS) on all tables
 alter table orders enable row level security;
 alter table offers enable row level security;
 alter table customizer_prices enable row level security;
+alter table chat_sessions enable row level security;
+alter table chat_messages enable row level security;
 
--- 5. Enable public read and write access rules (for instant client-side queries)
+-- 7. Enable public read and write access rules (for instant client-side queries)
 create policy "Allow public read/write on orders" on orders for all using (true) with check (true);
 create policy "Allow public read/write on offers" on offers for all using (true) with check (true);
 create policy "Allow public read/write on customizer_prices" on customizer_prices for all using (true) with check (true);
+create policy "Allow public read/write on chat_sessions" on chat_sessions for all using (true) with check (true);
+create policy "Allow public read/write on chat_messages" on chat_messages for all using (true) with check (true);
 ```
 
 4. Click the **Run** (or `Ctrl + Enter` / `Cmd + Enter`) button in the bottom right corner of the SQL Editor.

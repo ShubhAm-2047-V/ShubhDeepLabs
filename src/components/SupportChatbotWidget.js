@@ -153,6 +153,8 @@ function renderMessageText(text, userQuery) {
 export default function SupportChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
+  const [sessionId, setSessionId] = useState("");
+  const [isManualMode, setIsManualMode] = useState(false);
   const [messages, setMessages] = useState([
     { 
       id: "support-msg-1", 
@@ -164,6 +166,78 @@ export default function SupportChatbotWidget() {
   const [isTyping, setIsTyping] = useState(false);
   const [showNudge, setShowNudge] = useState(false);
   const chatEndRef = useRef(null);
+
+  // Initialize or fetch website session ID
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      let localId = localStorage.getItem("shubhdeeplabs_chat_session_id");
+      if (!localId) {
+        localId = `web-sess-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+        localStorage.setItem("shubhdeeplabs_chat_session_id", localId);
+      }
+      setSessionId(localId);
+    }
+  }, []);
+
+  // Fetch chat history from DB on open/load
+  useEffect(() => {
+    async function loadChatHistory() {
+      if (!sessionId) return;
+      try {
+        const res = await fetch(`/api/chat?sessionId=${sessionId}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.messages && data.messages.length > 0) {
+            const mapped = data.messages.map(m => ({
+              id: m.id,
+              sender: m.sender,
+              text: m.message_text,
+              selections: null
+            }));
+            setMessages(mapped);
+          }
+          if (data.session) {
+            setIsManualMode(data.session.status === "Manual Intervention");
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load chat history:", err);
+      }
+    }
+    if (isOpen) {
+      loadChatHistory();
+    }
+  }, [isOpen, sessionId]);
+
+  // Poll for admin replies if manual intervention is active
+  useEffect(() => {
+    if (!isOpen || !sessionId || !isManualMode) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/chat?sessionId=${sessionId}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.messages && data.messages.length > 0) {
+            const mapped = data.messages.map(m => ({
+              id: m.id,
+              sender: m.sender,
+              text: m.message_text,
+              selections: null
+            }));
+            setMessages(mapped);
+          }
+          if (data.session) {
+            setIsManualMode(data.session.status === "Manual Intervention");
+          }
+        }
+      } catch (err) {
+        console.error("Failed to poll chat updates:", err);
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [isOpen, sessionId, isManualMode]);
 
   // Broadcast chatbot open state
   useEffect(() => {
@@ -199,7 +273,7 @@ export default function SupportChatbotWidget() {
 - BCA / MCA: Starting from ₹${getVal("bca-mca", 3999)}
 - AI / ML: Starting from ₹${getVal("ai-ml", 6999)}
 - Android App: Starting from ₹${getVal("android", 5499)}
-
+ 
 TECH STACK PRICING (Optional Add-ons):
 - HTML / CSS / JavaScript: + ₹${getVal("html", 0)}
 - Python + Flask: + ₹${getVal("python-flask", 999)}
@@ -253,33 +327,13 @@ TECH STACK PRICING (Optional Add-ons):
     handleSendMessage(text);
   };
 
-  const localRAGLookup = (query) => {
-    const qLower = query.toLowerCase();
-    let bestMatch = "";
-    let highestScore = 0;
-
-    SUPPORT_CONTEXT.forEach((item) => {
-      let score = 0;
-      item.keywords.forEach((word) => {
-        if (qLower.includes(word)) score += 1;
-      });
-
-      if (score > highestScore) {
-        highestScore = score;
-        bestMatch = item.content;
-      }
-    });
-
-    return bestMatch;
-  };
-
   const handleSendMessage = async (textToSend) => {
     const query = textToSend || inputVal;
     if (!query.trim()) return;
 
     if (!textToSend) setInputVal("");
 
-    // Add user message
+    // Add user message locally first
     const userMsg = {
       id: `usr-${Date.now()}`,
       sender: "user",
@@ -288,18 +342,15 @@ TECH STACK PRICING (Optional Add-ons):
     setMessages((prev) => [...prev, userMsg]);
     setIsTyping(true);
 
-    // 1. Perform local RAG context extraction
-    const matchedContext = localRAGLookup(query);
-
     try {
-      // 2. Query Gemini Support Handler
+      // Query Gemini Support Handler with session payload
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: query,
-          context: matchedContext,
-          history: messages.map(m => ({ sender: m.sender, text: m.text })).slice(-4)
+          sessionId: sessionId,
+          contactName: "Website Visitor"
         })
       });
 
@@ -307,6 +358,17 @@ TECH STACK PRICING (Optional Add-ons):
 
       const data = await response.json();
       
+      if (data.isManualIntervention) {
+        setIsManualMode(true);
+        const adminWaitMsg = {
+          id: `bot-${Date.now()}`,
+          sender: "bot",
+          text: data.reply || "Admin has taken over the conversation."
+        };
+        setMessages((prev) => [...prev, adminWaitMsg]);
+        return;
+      }
+
       const rawText = data.reply || "";
       const customizerMatch = rawText.match(/\[CUSTOMIZER:\s*({[\s\S]*?})\s*\]/);
       let selections = null;
@@ -345,14 +407,12 @@ TECH STACK PRICING (Optional Add-ons):
         }, 600);
       }
     } catch (err) {
-      // Fallback: If network or Gemini is not configured, deliver matching static RAG content
+      // Fallback fallback:
       setTimeout(() => {
         const botMsg = {
           id: `bot-${Date.now()}`,
           sender: "bot",
-          text: matchedContext 
-            ? `Based on our guidelines, here is what I found:\n\n${matchedContext}\n\nCan I help you with anything else?`
-            : "I'm sorry, I'm having trouble connecting to my AI core right now. Feel free to ask about project pricing, deliverables, or call our coordinator directly at +91 90288 33275!"
+          text: "I'm sorry, I'm having trouble connecting to my AI core right now. Feel free to ask about project pricing, deliverables, or call our coordinator directly at +91 90288 33275!"
         };
         setMessages((prev) => [...prev, botMsg]);
       }, 800);

@@ -1,5 +1,8 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, deleteDoc, query, orderBy } from "firebase/firestore";
+import { 
+  getFirestore, collection, addDoc, getDocs, updateDoc, doc, 
+  deleteDoc, query, orderBy, where, setDoc, getDoc 
+} from "firebase/firestore";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
 
 const firebaseConfig = {
@@ -239,6 +242,52 @@ export const dbService = {
     return true;
   },
 
+  // LEAD MANAGEMENT
+  async addLead(leadData) {
+    const enrichedLead = {
+      ...leadData,
+      createdAt: leadData.createdAt || new Date().toISOString()
+    };
+    if (isFirebaseConfigured && firestore) {
+      try {
+        const docRef = await addDoc(collection(firestore, "leads"), enrichedLead);
+        return { id: docRef.id, ...enrichedLead };
+      } catch (e) {
+        console.error("Firestore addLead error:", e);
+      }
+    }
+    // Fallback logic
+    if (typeof window !== "undefined") {
+      const leads = JSON.parse(localStorage.getItem("projecthub_leads") || "[]");
+      const newLead = { id: `lead-${Date.now()}`, ...enrichedLead };
+      leads.unshift(newLead);
+      localStorage.setItem("projecthub_leads", JSON.stringify(leads));
+      return newLead;
+    }
+    return enrichedLead;
+  },
+
+  async getLeads() {
+    if (isFirebaseConfigured && firestore) {
+      try {
+        const q = query(collection(firestore, "leads"), orderBy("createdAt", "desc"));
+        const snapshot = await getDocs(q);
+        const fetchedLeads = [];
+        snapshot.forEach((doc) => {
+          fetchedLeads.push({ id: doc.id, ...doc.data() });
+        });
+        return fetchedLeads;
+      } catch (e) {
+        console.error("Firestore getLeads error:", e);
+      }
+    }
+    // Fallback logic
+    if (typeof window !== "undefined") {
+      return JSON.parse(localStorage.getItem("projecthub_leads") || "[]");
+    }
+    return [];
+  },
+
   // DYNAMIC DAILY OFFERS
   async getOffers() {
     if (isFirebaseConfigured && firestore) {
@@ -356,6 +405,395 @@ export const dbService = {
     };
   },
 
+  // SCRATCH CARD SETTINGS
+  async getScratchSettings() {
+    if (isFirebaseConfigured && firestore) {
+      try {
+        const docRef = doc(firestore, "scratch_settings", "default_settings");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          return { id: docSnap.id, ...docSnap.data() };
+        }
+      } catch (e) {
+        console.error("Firestore getScratchSettings error, falling back:", e);
+      }
+    }
+
+    // Fallback logic
+    if (typeof window === "undefined") return null;
+    const local = localStorage.getItem("projecthub_scratch_settings");
+    if (local) return JSON.parse(local);
+    return { discountPercent: 5, codes: ["STUDENT5EXTRA", "COUPON5HUB", "VIVABOOST5", "FINAL5PASS"] };
+  },
+
+  async saveScratchSettings(settings) {
+    if (isFirebaseConfigured && firestore) {
+      try {
+        const docRef = doc(firestore, "scratch_settings", "default_settings");
+        await setDoc(docRef, settings, { merge: true });
+        return true;
+      } catch (e) {
+        console.error("Firestore saveScratchSettings error, falling back:", e);
+      }
+    }
+
+    // Fallback logic
+    if (typeof window !== "undefined") {
+      localStorage.setItem("projecthub_scratch_settings", JSON.stringify(settings));
+    }
+    return true;
+  },
+
+  // CUSTOMIZER PRICING SETTINGS
+  async getCustomizerPrices() {
+    if (isFirebaseConfigured && firestore) {
+      try {
+        const querySnapshot = await getDocs(collection(firestore, "customizer_prices"));
+        const pricesMap = {};
+        querySnapshot.forEach((doc) => {
+          pricesMap[doc.id] = doc.data().price;
+        });
+        if (Object.keys(pricesMap).length > 0) {
+          return pricesMap;
+        }
+      } catch (e) {
+        console.error("Firestore getCustomizerPrices error, falling back:", e);
+      }
+    }
+
+    if (typeof window === "undefined") return {};
+    const local = localStorage.getItem("projecthub_customizer_prices");
+    return local ? JSON.parse(local) : {};
+  },
+
+  async saveCustomizerPrices(pricesMap) {
+    if (isFirebaseConfigured && firestore) {
+      try {
+        const promises = Object.entries(pricesMap).map(([id, price]) => {
+          const docRef = doc(firestore, "customizer_prices", id);
+          return setDoc(docRef, { price }, { merge: true });
+        });
+        await Promise.all(promises);
+        return true;
+      } catch (e) {
+        console.error("Firestore saveCustomizerPrices error, falling back:", e);
+      }
+    }
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem("projecthub_customizer_prices", JSON.stringify(pricesMap));
+    }
+    return true;
+  },
+
+  // CHAT SYSTEM METHODS
+  async getOrCreateChatSession(sessionType, sessionKey, contactName) {
+    if (isFirebaseConfigured && firestore) {
+      try {
+        const q = query(
+          collection(firestore, "chat_sessions"),
+          where("sessionKey", "==", sessionKey)
+        );
+        const querySnapshot = await getDocs(q);
+        let foundDoc = null;
+        querySnapshot.forEach((doc) => {
+          foundDoc = { id: doc.id, ...doc.data() };
+        });
+
+        if (foundDoc) {
+          return {
+            ...foundDoc,
+            session_type: foundDoc.sessionType,
+            session_key: foundDoc.sessionKey,
+            contact_name: foundDoc.contactName,
+            customizer_state: foundDoc.customizerState,
+            updated_at: foundDoc.updatedAt
+          };
+        }
+
+        const newSession = {
+          sessionType,
+          sessionKey,
+          contactName: contactName || "Visitor",
+          status: "AI Bot",
+          customizerState: {},
+          updatedAt: new Date().toISOString(),
+          // include snake_case fields for query compatibility
+          session_type: sessionType,
+          session_key: sessionKey,
+          contact_name: contactName || "Visitor",
+          customizer_state: {},
+          updated_at: new Date().toISOString()
+        };
+
+        const docRef = await addDoc(collection(firestore, "chat_sessions"), newSession);
+        return {
+          id: docRef.id,
+          ...newSession
+        };
+      } catch (e) {
+        console.error("Firestore getOrCreateChatSession error, falling back:", e);
+      }
+    }
+
+    const getLocalChatSessions = () => {
+      if (typeof window === "undefined") return [];
+      const local = localStorage.getItem("projecthub_chat_sessions");
+      if (!local) return [];
+      return JSON.parse(local);
+    };
+
+    const saveLocalChatSessions = (sessions) => {
+      if (typeof window === "undefined") return;
+      localStorage.setItem("projecthub_chat_sessions", JSON.stringify(sessions));
+    };
+
+    const sessions = getLocalChatSessions();
+    let session = sessions.find(s => s.sessionType === sessionType && s.sessionKey === sessionKey);
+    if (!session) {
+      session = {
+        id: `sess-${Date.now()}`,
+        sessionType,
+        sessionKey,
+        contactName: contactName || "Visitor",
+        status: "AI Bot",
+        customizerState: {},
+        updatedAt: new Date().toISOString(),
+        session_type: sessionType,
+        session_key: sessionKey,
+        contact_name: contactName || "Visitor",
+        customizer_state: {},
+        updated_at: new Date().toISOString()
+      };
+      sessions.unshift(session);
+      saveLocalChatSessions(sessions);
+    }
+    return session;
+  },
+
+  async getChatSessions() {
+    if (isFirebaseConfigured && firestore) {
+      try {
+        const q = query(collection(firestore, "chat_sessions"), orderBy("updatedAt", "desc"));
+        const snapshot = await getDocs(q);
+        const sessions = [];
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          sessions.push({
+            id: doc.id,
+            ...data,
+            session_type: data.sessionType || data.session_type,
+            session_key: data.sessionKey || data.session_key,
+            contact_name: data.contactName || data.contact_name,
+            customizer_state: data.customizerState || data.customizer_state,
+            updated_at: data.updatedAt || data.updated_at
+          });
+        });
+        return sessions;
+      } catch (e) {
+        console.error("Firestore getChatSessions error, falling back:", e);
+      }
+    }
+
+    const getLocalChatSessions = () => {
+      if (typeof window === "undefined") return [];
+      const local = localStorage.getItem("projecthub_chat_sessions");
+      if (!local) return [];
+      return JSON.parse(local);
+    };
+    return getLocalChatSessions();
+  },
+
+  async updateChatSessionStatus(sessionId, status) {
+    if (isFirebaseConfigured && firestore) {
+      try {
+        const docRef = doc(firestore, "chat_sessions", sessionId);
+        const timestamp = new Date().toISOString();
+        await updateDoc(docRef, {
+          status,
+          updatedAt: timestamp,
+          updated_at: timestamp
+        });
+        return true;
+      } catch (e) {
+        console.error("Firestore updateChatSessionStatus error, falling back:", e);
+      }
+    }
+
+    const getLocalChatSessions = () => {
+      if (typeof window === "undefined") return [];
+      const local = localStorage.getItem("projecthub_chat_sessions");
+      if (!local) return [];
+      return JSON.parse(local);
+    };
+
+    const saveLocalChatSessions = (sessions) => {
+      if (typeof window === "undefined") return;
+      localStorage.setItem("projecthub_chat_sessions", JSON.stringify(sessions));
+    };
+
+    const sessions = getLocalChatSessions();
+    const updated = sessions.map(s => s.id === sessionId ? {
+      ...s,
+      status,
+      updatedAt: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    } : s);
+    saveLocalChatSessions(updated);
+    return true;
+  },
+
+  async updateChatSessionCustomizer(sessionId, customizerState) {
+    if (isFirebaseConfigured && firestore) {
+      try {
+        const docRef = doc(firestore, "chat_sessions", sessionId);
+        const timestamp = new Date().toISOString();
+        await updateDoc(docRef, {
+          customizerState,
+          customizer_state: customizerState,
+          updatedAt: timestamp,
+          updated_at: timestamp
+        });
+        return true;
+      } catch (e) {
+        console.error("Firestore updateChatSessionCustomizer error, falling back:", e);
+      }
+    }
+
+    const getLocalChatSessions = () => {
+      if (typeof window === "undefined") return [];
+      const local = localStorage.getItem("projecthub_chat_sessions");
+      if (!local) return [];
+      return JSON.parse(local);
+    };
+
+    const saveLocalChatSessions = (sessions) => {
+      if (typeof window === "undefined") return;
+      localStorage.setItem("projecthub_chat_sessions", JSON.stringify(sessions));
+    };
+
+    const sessions = getLocalChatSessions();
+    const updated = sessions.map(s => s.id === sessionId ? {
+      ...s,
+      customizerState,
+      customizer_state: customizerState,
+      updatedAt: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    } : s);
+    saveLocalChatSessions(updated);
+    return true;
+  },
+
+  async getChatMessages(sessionId) {
+    if (isFirebaseConfigured && firestore) {
+      try {
+        const q = query(
+          collection(firestore, "chat_messages"),
+          where("sessionId", "==", sessionId),
+          orderBy("createdAt", "asc")
+        );
+        const snapshot = await getDocs(q);
+        const messages = [];
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          messages.push({
+            id: doc.id,
+            ...data,
+            session_id: data.sessionId,
+            message_text: data.messageText,
+            created_at: data.createdAt
+          });
+        });
+        return messages;
+      } catch (e) {
+        console.error("Firestore getChatMessages error, falling back:", e);
+      }
+    }
+
+    const getLocalChatMessages = () => {
+      if (typeof window === "undefined") return [];
+      const local = localStorage.getItem("projecthub_chat_messages");
+      if (!local) return [];
+      return JSON.parse(local);
+    };
+
+    const messages = getLocalChatMessages();
+    return messages.filter(m => m.sessionId === sessionId || m.session_id === sessionId);
+  },
+
+  async addChatMessage(sessionId, sender, messageText) {
+    const timestamp = new Date().toISOString();
+    const newMessage = {
+      sessionId,
+      sender,
+      messageText,
+      createdAt: timestamp,
+      // compatibility fields
+      session_id: sessionId,
+      message_text: messageText,
+      created_at: timestamp
+    };
+
+    if (isFirebaseConfigured && firestore) {
+      try {
+        const docRef = await addDoc(collection(firestore, "chat_messages"), newMessage);
+        
+        // update chat session timestamp
+        const sessionRef = doc(firestore, "chat_sessions", sessionId);
+        await updateDoc(sessionRef, {
+          updatedAt: timestamp,
+          updated_at: timestamp
+        });
+
+        return { id: docRef.id, ...newMessage };
+      } catch (e) {
+        console.error("Firestore addChatMessage error, falling back:", e);
+      }
+    }
+
+    const getLocalChatMessages = () => {
+      if (typeof window === "undefined") return [];
+      const local = localStorage.getItem("projecthub_chat_messages");
+      if (!local) return [];
+      return JSON.parse(local);
+    };
+
+    const saveLocalChatMessages = (messages) => {
+      if (typeof window === "undefined") return;
+      localStorage.setItem("projecthub_chat_messages", JSON.stringify(messages));
+    };
+
+    const getLocalChatSessions = () => {
+      if (typeof window === "undefined") return [];
+      const local = localStorage.getItem("projecthub_chat_sessions");
+      if (!local) return [];
+      return JSON.parse(local);
+    };
+
+    const saveLocalChatSessions = (sessions) => {
+      if (typeof window === "undefined") return;
+      localStorage.setItem("projecthub_chat_sessions", JSON.stringify(sessions));
+    };
+
+    const messages = getLocalChatMessages();
+    const fallbackMessage = {
+      id: `msg-${Date.now()}`,
+      ...newMessage
+    };
+    messages.push(fallbackMessage);
+    saveLocalChatMessages(messages);
+
+    const sessions = getLocalChatSessions();
+    const updatedSessions = sessions.map(s => s.id === sessionId ? {
+      ...s,
+      updatedAt: timestamp,
+      updated_at: timestamp
+    } : s);
+    saveLocalChatSessions(updatedSessions);
+
+    return fallbackMessage;
+  },
+
   // SECURITY & AUTH
   async loginAdmin(email, password) {
     if (isFirebaseConfigured && auth) {
@@ -367,10 +805,10 @@ export const dbService = {
       }
     }
 
-    // Fallback logic: Default credentials: admin@projecthub.com / admin123
-    if (email === "admin@projecthub.com" && password === "admin123") {
+    // Fallback logic: Default credentials matching user rules and admin dashboard
+    if (email === "admin@shubdeeplabs.com" && password === "admin123") {
       if (typeof window !== "undefined") {
-        localStorage.setItem("projecthub_admin_session", "active");
+        localStorage.setItem("shubdeep_labs_admin_logged", "true");
       }
       return { success: true, user: { email, uid: "mock-admin-uid" } };
     } else {
@@ -384,7 +822,7 @@ export const dbService = {
       return true;
     }
     if (typeof window !== "undefined") {
-      localStorage.removeItem("projecthub_admin_session");
+      localStorage.removeItem("shubdeep_labs_admin_logged");
     }
     return true;
   },
@@ -397,12 +835,15 @@ export const dbService = {
     }
 
     // Fallback check
-    if (typeof window !== "undefined") {
-      const session = localStorage.getItem("projecthub_admin_session");
-      callback(session === "active");
-      return () => {}; // return empty unsubscribe
-    }
-    callback(false);
-    return () => {};
+    const checkState = () => {
+      if (typeof window !== "undefined") {
+        const session = localStorage.getItem("shubdeep_labs_admin_logged") === "true";
+        callback(session);
+      }
+    };
+    checkState();
+
+    const interval = setInterval(checkState, 1000);
+    return () => clearInterval(interval);
   }
 };
