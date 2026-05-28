@@ -118,6 +118,14 @@ export default function SupportChatbotWidget() {
   }, [isOpen, messages, step]);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.__chatbotOpen = isOpen;
+      const ev = new CustomEvent("chatbot-state", { detail: { open: isOpen } });
+      window.dispatchEvent(ev);
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
     // Show a floating nudge bubble after 8 seconds
     const t = setTimeout(() => {
       if (!isOpen) setShowNudge(true);
@@ -268,6 +276,20 @@ Estimated Price:
         text: data.reply || "Failed to get reply."
       };
       setMessages(prev => [...prev, botMsg]);
+
+      // If selections are returned, automatically open the customizer side-by-side with these preselected choices!
+      if (data.selections) {
+        const ev = new CustomEvent("open-customizer", { 
+          detail: { 
+            category: data.selections.category,
+            tech: data.selections.tech || [],
+            addons: data.selections.addons || [],
+            timeline: data.selections.timeline || null,
+            showSummary: true 
+          } 
+        });
+        window.dispatchEvent(ev);
+      }
     } catch (e) {
       const errorMsg = {
         id: `bot-err-${Date.now()}`,
