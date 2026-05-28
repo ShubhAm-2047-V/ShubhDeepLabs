@@ -991,7 +991,7 @@ export default function ProductCustomizer() {
       </AnimatePresence>
 
       {/* ── FAB + NUDGE (fixed bottom-right) ── */}
-      <div className="fixed bottom-[10.5rem] right-4 sm:right-6 z-50 flex flex-col items-end gap-3">
+      <div className="flex flex-col items-end gap-3">
 
         {/* Nudge tooltip */}
         <AnimatePresence>

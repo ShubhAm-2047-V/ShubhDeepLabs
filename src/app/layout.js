@@ -47,14 +47,18 @@ export default function RootLayout({ children }) {
           {/* Sketchy cardboard footer */}
           <Footer />
           
-          {/* Project Customiser floating widget (above WhatsApp) */}
-          <ProductCustomizer />
+          {/* ── Unified FAB column (bottom-right) ── */}
+          {/* Order: Customizer (top) → Chatbot (middle) → WhatsApp (bottom) */}
+          <div className="fixed bottom-6 right-4 sm:right-6 z-[100] flex flex-col items-end gap-3">
+            {/* Customiser widget */}
+            <ProductCustomizer />
 
-          {/* Floating AI support chatbot widget */}
-          <SupportChatbotWidget />
+            {/* AI support chatbot widget */}
+            <SupportChatbotWidget />
 
-          {/* Bouncing sticker WhatsApp bubble */}
-          <WhatsAppButton />
+            {/* WhatsApp direct contact */}
+            <WhatsAppButton />
+          </div>
           
           {/* Custom handwritten toaster notification */}
           <Toaster 
