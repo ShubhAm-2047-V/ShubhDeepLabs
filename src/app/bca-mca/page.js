@@ -12,8 +12,6 @@ const BCA_MCA_PROJECTS = [
     title: "Student Database Portal",
     tech: "HTML + CSS + PHP + MySQL",
     desc: "A neat administration console handling student details, course registration, automated roll calls, grade entry, and transcript reports generation.",
-    difficulty: "Easy",
-    price: "₹3999",
     accent: "#66BB6A",
     tags: ["CRUD", "PHP", "MySQL"],
   },
@@ -21,8 +19,6 @@ const BCA_MCA_PROJECTS = [
     title: "Employee Payroll Desk",
     tech: "Java + Swing + MySQL",
     desc: "Desktop ERP system designed to calculate salary slips, record employee attendance logs, process leave applications, and print PDF salary sheets.",
-    difficulty: "Easy",
-    price: "₹3999",
     accent: "#42A5F5",
     tags: ["Desktop App", "Java", "PDF Slip"],
   },
@@ -30,8 +26,6 @@ const BCA_MCA_PROJECTS = [
     title: "Online Book Store Desk",
     tech: "React + Node.js + Express + MongoDB",
     desc: "Interactive catalog page allowing search and cart operations, safe mock credit card checkouts, and an admin page to add or remove books.",
-    difficulty: "Medium",
-    price: "₹5499",
     accent: "#FFA726",
     tags: ["MERN Stack", "Cart System", "Database"],
   },
@@ -39,8 +33,6 @@ const BCA_MCA_PROJECTS = [
     title: "Movie Ticket Reservation System",
     tech: "PHP + Bootstrap + MySQL",
     desc: "Visual seat picker desk. Logged-in members can pick available seats, check showtimes, make mock bookings, and download PDF tickets with QR codes.",
-    difficulty: "Medium",
-    price: "₹5499",
     accent: "#26A69A",
     tags: ["Seat Picker", "Bootstrap", "MySQL"],
   },
@@ -48,8 +40,6 @@ const BCA_MCA_PROJECTS = [
     title: "Gym Membership Console",
     tech: "Python + Flask + SQLite",
     desc: "Gym desk system managing customer plans, active trainer schedules, automated payment alerts, and dynamic attendance sheet logs.",
-    difficulty: "Easy",
-    price: "₹3999",
     accent: "#AB47BC",
     tags: ["Flask", "SQLite", "Alerts"],
   },
@@ -57,8 +47,6 @@ const BCA_MCA_PROJECTS = [
     title: "E-Commerce portal with Admin Panel",
     tech: "React + Firebase + Firestore",
     desc: "Full online store dashboard. Includes product categories, real-time cart counters, secure checkouts, and order-tracking charts.",
-    difficulty: "Hard",
-    price: "₹6999",
     accent: "#EF5350",
     tags: ["React", "Firebase Store", "Dashboard"],
   },
@@ -66,8 +54,6 @@ const BCA_MCA_PROJECTS = [
     title: "College Alumni Directory",
     tech: "Next.js + Node.js + MongoDB",
     desc: "Alumni network search desk. Features secure email invites, interactive user bio profiles, jobs board posts, and batch directories.",
-    difficulty: "Medium",
-    price: "₹5499",
     accent: "#29B6F6",
     tags: ["Next.js", "Alumni System", "MongoDB"],
   },
@@ -75,8 +61,6 @@ const BCA_MCA_PROJECTS = [
     title: "Patient Electronic Health Record",
     tech: "React + Node.js + MongoDB",
     desc: "Medical records platform. Doctors can enter diagnoses, patient members check active prescriptions, and download PDF clinical health cards.",
-    difficulty: "Hard",
-    price: "₹6999",
     accent: "#EF5350",
     tags: ["MERN Stack", "Healthcare", "Secure Auth"],
   },
@@ -112,12 +96,6 @@ const OFFERS = [
     badgeColor: "bg-[#42A5F5]",
   },
 ];
-
-const difficultyColor = {
-  Easy: "bg-[#E8F5E9] text-[#2E7D32] border-[#66BB6A]",
-  Medium: "bg-[#FFF9C4] text-[#F57F17] border-[#FFCA28]",
-  Hard: "bg-[#FFEBEE] text-[#B71C1C] border-[#EF5350]",
-};
 
 export default function BcaMcaPage() {
   const waUrl = `https://wa.me/919028833275?text=${encodeURIComponent("Hello! I'm a BCA/MCA student and want to discuss a final year database project with Shubdeep Labs.")}`;
@@ -243,12 +221,7 @@ export default function BcaMcaPage() {
                 </p>
 
                 <div className="flex items-center justify-between mt-auto pt-3 border-t border-[#2C2C2C]/10">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-[9px] font-black border px-2 py-0.5 rounded-full ${difficultyColor[proj.difficulty]}`}>
-                      {proj.difficulty}
-                    </span>
-                    <span className="font-marker font-extrabold text-[#2C2C2C] text-sm">{proj.price}</span>
-                  </div>
+                  <span className="font-marker font-extrabold text-[#2C2C2C] text-base">₹3999</span>
                   <a
                     href={`https://wa.me/919028833275?text=${encodeURIComponent(`Hello! I'm a BCA/MCA student interested in the "${proj.title}" database project. Please share details.`)}`}
                     target="_blank"
@@ -258,11 +231,7 @@ export default function BcaMcaPage() {
                     Get This <ArrowRight className="w-3 h-3" />
                   </a>
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+
 
       {/* ── CUSTOM ORDER SECTION ── */}
       <section className="max-w-3xl mx-auto px-4 sm:px-8 py-16">

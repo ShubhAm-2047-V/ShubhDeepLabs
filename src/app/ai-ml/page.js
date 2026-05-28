@@ -12,8 +12,6 @@ const AI_ML_PROJECTS = [
     title: "AI Resume Screening Desk",
     tech: "Python + NLP + Spacy + Flask",
     desc: "An intelligent resume reviewer that extracts skills, logs contact details, matches text against job descriptions, and calculates percentage fits.",
-    difficulty: "Easy",
-    price: "₹6999",
     accent: "#66BB6A",
     tags: ["NLP", "Resume Parse", "Spacy"],
   },
@@ -21,8 +19,6 @@ const AI_ML_PROJECTS = [
     title: "Smart Notes Summarizer",
     tech: "Python + Transformers + Flask + React",
     desc: "Document summarizer utilizing transformer models to parse high-volume articles, generate bullet summaries, and extract core keywords.",
-    difficulty: "Easy",
-    price: "₹6999",
     accent: "#42A5F5",
     tags: ["BERT Model", "Summarize", "React"],
   },
@@ -30,8 +26,6 @@ const AI_ML_PROJECTS = [
     title: "AI Plant Disease Detector",
     tech: "Python + TensorFlow + CNN + Flask",
     desc: "A neural-network visual scanning web application detecting agricultural leaf diseases with detailed metric analytics.",
-    difficulty: "Medium",
-    price: "₹8999",
     accent: "#FFA726",
     tags: ["CNN", "TensorFlow", "Computer Vision"],
   },
@@ -39,8 +33,6 @@ const AI_ML_PROJECTS = [
     title: "Real-time Face Attendance",
     tech: "Python + OpenCV + SQLite + Tkinter",
     desc: "Webcam face-detection attendance logger. Recognizes faces, auto-timestamps records into a SQLite database, and exports daily CSV sheets.",
-    difficulty: "Medium",
-    price: "₹8999",
     accent: "#26A69A",
     tags: ["OpenCV", "Face ID", "SQLite"],
   },
@@ -48,8 +40,6 @@ const AI_ML_PROJECTS = [
     title: "AI Background Remover",
     tech: "Python + Flask + U2Net Model",
     desc: "Upload a portrait and the U2Net neural model isolates foreground subjects, wipes background segments, and downloads a clean PNG.",
-    difficulty: "Easy",
-    price: "₹6999",
     accent: "#AB47BC",
     tags: ["Image Segmentation", "Flask", "AI Tool"],
   },
@@ -57,8 +47,6 @@ const AI_ML_PROJECTS = [
     title: "Advanced RAG Support Chatbot",
     tech: "React + Node.js + Pinecone DB + Gemini API",
     desc: "Intelligent messaging center with customizable document indexing (RAG) and interactive dashboard console log views.",
-    difficulty: "Hard",
-    price: "₹10999",
     accent: "#EF5350",
     tags: ["RAG Chatbot", "Vector DB", "Gemini API"],
   },
@@ -66,8 +54,6 @@ const AI_ML_PROJECTS = [
     title: "Stock Market LSTM Predictor",
     tech: "Python + LSTM + Pandas + Streamlit",
     desc: "Deep learning model utilizing Long Short-Term Memory (LSTM) layers to parse historical stock charts and forecast next-day values.",
-    difficulty: "Hard",
-    price: "₹10999",
     accent: "#EF5350",
     tags: ["LSTM Network", "Deep Learning", "Streamlit"],
   },
@@ -75,8 +61,6 @@ const AI_ML_PROJECTS = [
     title: "Credit Card Fraud Detector",
     tech: "Python + Scikit-Learn + Random Forest",
     desc: "A machine learning pipeline that scales transaction records, handles unbalanced datasets, and flags fraudulent transactions.",
-    difficulty: "Medium",
-    price: "₹8999",
     accent: "#29B6F6",
     tags: ["Machine Learning", "Fraud Check", "Pandas"],
   },
@@ -112,12 +96,6 @@ const OFFERS = [
     badgeColor: "bg-[#42A5F5]",
   },
 ];
-
-const difficultyColor = {
-  Easy: "bg-[#E8F5E9] text-[#2E7D32] border-[#66BB6A]",
-  Medium: "bg-[#FFF9C4] text-[#F57F17] border-[#FFCA28]",
-  Hard: "bg-[#FFEBEE] text-[#B71C1C] border-[#EF5350]",
-};
 
 export default function AiMlPage() {
   const waUrl = `https://wa.me/919028833275?text=${encodeURIComponent("Hello! I'm an AI/ML student and want to discuss a custom intelligence project with Shubdeep Labs.")}`;
@@ -243,12 +221,7 @@ export default function AiMlPage() {
                 </p>
 
                 <div className="flex items-center justify-between mt-auto pt-3 border-t border-[#2C2C2C]/10">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-[9px] font-black border px-2 py-0.5 rounded-full ${difficultyColor[proj.difficulty]}`}>
-                      {proj.difficulty}
-                    </span>
-                    <span className="font-marker font-extrabold text-[#2C2C2C] text-sm">{proj.price}</span>
-                  </div>
+                  <span className="font-marker font-extrabold text-[#2C2C2C] text-base">₹6999</span>
                   <a
                     href={`https://wa.me/919028833275?text=${encodeURIComponent(`Hello! I'm an AI/ML student interested in the "${proj.title}" project. Please share details.`)}`}
                     target="_blank"
@@ -258,11 +231,7 @@ export default function AiMlPage() {
                     Get This <ArrowRight className="w-3 h-3" />
                   </a>
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+
 
       {/* ── CUSTOM ORDER SECTION ── */}
       <section className="max-w-3xl mx-auto px-4 sm:px-8 py-16">

@@ -12,8 +12,6 @@ const ENGINEERING_PROJECTS = [
     title: "Hospital Management Core Desk",
     tech: "React + Node.js + Express + MongoDB",
     desc: "A complete multi-role clinic desk. Patient appointment scheduler, doctor consultation records, medical history, dynamic billing module, and custom report export.",
-    difficulty: "Medium",
-    price: "₹6499",
     accent: "#66BB6A",
     tags: ["MERN Stack", "Role Auth", "Database Design"],
   },
@@ -21,8 +19,6 @@ const ENGINEERING_PROJECTS = [
     title: "College ERP Portal",
     tech: "Next.js + Node.js + PostgreSQL",
     desc: "Comprehensive academic platform. Separate dashboards for Student, Faculty, and Admin. Handles attendance grids, fee tracking, assignment submission, and result generation.",
-    difficulty: "Hard",
-    price: "₹7999",
     accent: "#EF5350",
     tags: ["Next.js", "PostgreSQL", "Full Dashboard"],
   },
@@ -30,8 +26,6 @@ const ENGINEERING_PROJECTS = [
     title: "Real-time Chat Portal",
     tech: "React + Firebase Auth + Firestore",
     desc: "Live messaging application with custom chatrooms, active status trackers, picture attachments, and secure Google/Email authentication.",
-    difficulty: "Easy",
-    price: "₹4999",
     accent: "#42A5F5",
     tags: ["Real-time", "Firebase", "Auth"],
   },
@@ -39,8 +33,6 @@ const ENGINEERING_PROJECTS = [
     title: "E-Library Hub with Reader",
     tech: "Python + Django + SQLite",
     desc: "A robust digital library featuring book searches, automated return tracking, reservation notifications, and an integrated PDF reader module.",
-    difficulty: "Easy",
-    price: "₹4999",
     accent: "#AB47BC",
     tags: ["Django", "CRUD", "SQLite"],
   },
@@ -48,8 +40,6 @@ const ENGINEERING_PROJECTS = [
     title: "Smart Parking Reservation System",
     tech: "HTML + CSS + PHP + MySQL",
     desc: "Web portal allowing users to view real-time parking slot availability, reserve a slot via automated token codes, and calculate billing based on usage hours.",
-    difficulty: "Medium",
-    price: "₹6499",
     accent: "#FFA726",
     tags: ["PHP", "Booking Logic", "MySQL"],
   },
@@ -57,8 +47,6 @@ const ENGINEERING_PROJECTS = [
     title: "Automated Billing & Inventory Desk",
     tech: "Java + Swing + MySQL",
     desc: "Desktop ERP built for small-medium businesses. Includes low-stock alerts, supplier tracking, cash/card payment logs, and dynamic PDF receipt printing.",
-    difficulty: "Medium",
-    price: "₹6499",
     accent: "#26A69A",
     tags: ["Java Swing", "MySQL", "PDF Export"],
   },
@@ -66,8 +54,6 @@ const ENGINEERING_PROJECTS = [
     title: "Secure Cloud File Vault",
     tech: "Python + Flask + Cryptography + MySQL",
     desc: "File storage system featuring secure user sign-ups, dual AES-256 encryption keys, automatic file-splitting, and safe share-link generations.",
-    difficulty: "Hard",
-    price: "₹7999",
     accent: "#EF5350",
     tags: ["Security", "Encryption", "Flask"],
   },
@@ -75,8 +61,6 @@ const ENGINEERING_PROJECTS = [
     title: "Smart Travel Planner with Routes",
     tech: "React + Node.js + Mapbox API",
     desc: "Travel planner that dynamically maps multi-stop routes, calculates distance matrices, lets users plan itinerary lists, and estimates cost budgets.",
-    difficulty: "Hard",
-    price: "₹7999",
     accent: "#29B6F6",
     tags: ["Maps API", "React", "Node.js"],
   },
@@ -112,12 +96,6 @@ const OFFERS = [
     badgeColor: "bg-[#AB47BC]",
   },
 ];
-
-const difficultyColor = {
-  Easy: "bg-[#E8F5E9] text-[#2E7D32] border-[#66BB6A]",
-  Medium: "bg-[#FFF9C4] text-[#F57F17] border-[#FFCA28]",
-  Hard: "bg-[#FFEBEE] text-[#B71C1C] border-[#EF5350]",
-};
 
 export default function EngineeringPage() {
   const waUrl = `https://wa.me/919028833275?text=${encodeURIComponent("Hello! I'm an Engineering student and want to discuss a custom project with Shubdeep Labs.")}`;
@@ -251,12 +229,7 @@ export default function EngineeringPage() {
                 </p>
 
                 <div className="flex items-center justify-between mt-auto pt-3 border-t border-[#2C2C2C]/10">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-[9px] font-black border px-2 py-0.5 rounded-full ${difficultyColor[proj.difficulty]}`}>
-                      {proj.difficulty}
-                    </span>
-                    <span className="font-marker font-extrabold text-[#2C2C2C] text-sm">{proj.price}</span>
-                  </div>
+                  <span className="font-marker font-extrabold text-[#2C2C2C] text-base">₹4999</span>
                   <a
                     href={`https://wa.me/919028833275?text=${encodeURIComponent(`Hello! I'm a B.Tech student interested in the "${proj.title}" project. Please share details.`)}`}
                     target="_blank"
@@ -271,6 +244,7 @@ export default function EngineeringPage() {
           ))}
         </div>
       </section>
+
 
       {/* ── CUSTOM ORDER SECTION ── */}
       <section className="max-w-3xl mx-auto px-4 sm:px-8 py-16">
