@@ -861,7 +861,7 @@ Estimated Price:
       </AnimatePresence>
 
       {/* Floating Trigger button (matching whiteboard aesthetics) */}
-      <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end gap-3">
+      <div className="fixed bottom-[5.5rem] right-4 sm:right-6 z-[100] flex flex-col items-end gap-3">
         {/* Nudge */}
         <AnimatePresence>
           {showNudge && !isOpen && (
