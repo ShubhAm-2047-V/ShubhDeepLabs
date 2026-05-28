@@ -229,7 +229,7 @@ export default function BcaMcaPage() {
                 </p>
 
                 <div className="flex items-center justify-between mt-auto pt-3 border-t border-[#2C2C2C]/10">
-                  <span className="font-marker font-extrabold text-[#2C2C2C] text-base">{proj.price}</span>
+                  <span className="font-marker font-extrabold text-[#2C2C2C] text-base">Approx. {proj.price}</span>
                   <a
                     href={`https://wa.me/919028833275?text=${encodeURIComponent(`Hello! I'm a BCA/MCA student interested in the "${proj.title}" database project. Please share details.`)}`}
                     target="_blank"

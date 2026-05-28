@@ -280,7 +280,7 @@ export default function DiplomaPage() {
                     <span className={`text-[9px] font-black border px-2 py-0.5 rounded-full ${difficultyColor[proj.difficulty]}`}>
                       {proj.difficulty}
                     </span>
-                    <span className="font-marker font-extrabold text-[#2C2C2C] text-sm">{proj.price}</span>
+                    <span className="font-marker font-extrabold text-[#2C2C2C] text-sm">Approx. {proj.price}</span>
                   </div>
                   <a
                     href={`https://wa.me/919028833275?text=${encodeURIComponent(`Hello! I'm a Diploma student interested in the "${proj.title}" project. Please share details.`)}`}

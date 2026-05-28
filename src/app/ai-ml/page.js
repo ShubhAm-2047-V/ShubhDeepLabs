@@ -229,7 +229,7 @@ export default function AiMlPage() {
                 </p>
 
                 <div className="flex items-center justify-between mt-auto pt-3 border-t border-[#2C2C2C]/10">
-                  <span className="font-marker font-extrabold text-[#2C2C2C] text-base">{proj.price}</span>
+                  <span className="font-marker font-extrabold text-[#2C2C2C] text-base">Approx. {proj.price}</span>
                   <a
                     href={`https://wa.me/919028833275?text=${encodeURIComponent(`Hello! I'm an AI/ML student interested in the "${proj.title}" project. Please share details.`)}`}
                     target="_blank"
