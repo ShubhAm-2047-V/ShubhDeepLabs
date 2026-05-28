@@ -215,7 +215,7 @@ ${context || `No matching context found. Rely on the factual details of Shubdeep
         body: JSON.stringify({
           contents,
           systemInstruction: { parts: [{ text: systemInstruction }] },
-          generationConfig: { temperature: 0.2, maxOutputTokens: 800 }
+          generationConfig: { temperature: 0.2, maxOutputTokens: 4096 }
         })
       });
 

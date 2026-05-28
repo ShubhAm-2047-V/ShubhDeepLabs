@@ -288,7 +288,7 @@ ${context || "No specific database match found. Rely on factual pricing."}`;
       body: JSON.stringify({
         contents,
         systemInstruction: { parts: [{ text: systemInstruction }] },
-        generationConfig: { temperature: 0.2, maxOutputTokens: 800 }
+        generationConfig: { temperature: 0.2, maxOutputTokens: 4096 }
       })
     });
 
