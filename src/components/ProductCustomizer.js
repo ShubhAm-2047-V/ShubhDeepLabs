@@ -702,31 +702,32 @@ export default function ProductCustomizer() {
   useEffect(() => {
     const handleOpenCustomizer = (e) => {
       const { category, tech, addons, timeline, showSummary: forceSummary } = e.detail || {};
-      
-      setSelections({
+
+      const newSelections = {
         category: category || null,
-        tech: tech || [],
-        addons: addons || [],
+        tech: Array.isArray(tech) ? tech : [],
+        addons: Array.isArray(addons) ? addons : [],
         timeline: timeline || null
-      });
-      
+      };
+
+      // Apply selections first
+      setSelections(newSelections);
       setHasInteracted(true);
       setShowOffers(false);
-      
-      if (forceSummary) {
-        setShowSummary(true);
-      } else {
-        setShowSummary(false);
-        // If a category is selected, let's fast forward to the stack step (step 1)
-        if (category) {
-          setCurrentStep(1);
-        } else {
-          setCurrentStep(0);
-        }
-      }
-      
       setOpen(true);
       setShowNudge(false);
+
+      // Defer summary/step navigation so selections are committed to state first
+      setTimeout(() => {
+        if (forceSummary && newSelections.category) {
+          // Only jump to summary if we have at least a category selected
+          setShowSummary(true);
+        } else {
+          setShowSummary(false);
+          // Fast-forward to tech step if category is known
+          setCurrentStep(category ? 1 : 0);
+        }
+      }, 50);
     };
 
     window.addEventListener("open-customizer", handleOpenCustomizer);
