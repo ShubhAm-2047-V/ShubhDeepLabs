@@ -231,7 +231,11 @@ export default function BcaMcaPage() {
                     Get This <ArrowRight className="w-3 h-3" />
                   </a>
                 </div>
-
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
 
       {/* ── CUSTOM ORDER SECTION ── */}
       <section className="max-w-3xl mx-auto px-4 sm:px-8 py-16">
