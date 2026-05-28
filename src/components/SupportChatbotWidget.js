@@ -366,31 +366,43 @@ Estimated Price:
                   </div>
                 </div>
 
-                {/* Tab Selector */}
-                <div className="flex bg-[#FAF6EE] border-2 border-[#2C2C2C] rounded-xl p-0.5 shadow-[1px_1.5px_0_#2C2C2C] mr-2">
-                  <button
-                    onClick={() => setMode("guided")}
-                    className={`text-[9px] px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
-                      mode === "guided" ? "bg-[#FFF59D] text-[#2C2C2C] border border-[#2C2C2C] shadow-[1px_1px_0_#2C2C2C]" : "text-[#6A6A6A] hover:text-[#2C2C2C]"
-                    }`}
-                  >
-                    Guided
-                  </button>
-                  <button
-                    onClick={() => setMode("chat")}
-                    className={`text-[9px] px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
-                      mode === "chat" ? "bg-[#FFF59D] text-[#2C2C2C] border border-[#2C2C2C] shadow-[1px_1px_0_#2C2C2C]" : "text-[#6A6A6A] hover:text-[#2C2C2C]"
-                    }`}
-                  >
-                    Ask AI
-                  </button>
-                </div>
-
                 <button
                   onClick={() => setIsOpen(false)}
                   className="p-1 rounded-lg border border-[#2C2C2C]/20 hover:border-[#2C2C2C] hover:bg-white/80 transition-all text-[#2C2C2C] cursor-pointer"
                 >
                   <X size={14} />
+                </button>
+              </div>
+
+              {/* Mode Tab Bar — clearly visible below header */}
+              <div className="flex border-b-3 border-[#2C2C2C] shrink-0">
+                <button
+                  onClick={() => setMode("guided")}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-extrabold transition-all cursor-pointer border-r-2 border-[#2C2C2C] ${
+                    mode === "guided"
+                      ? "bg-[#2C2C2C] text-[#FFF59D]"
+                      : "bg-white text-[#6A6A6A] hover:bg-[#FFF9C4] hover:text-[#2C2C2C]"
+                  }`}
+                >
+                  <span className="text-sm">🧭</span>
+                  Guided
+                  {mode === "guided" && (
+                    <span className="text-[8px] bg-[#FFF59D] text-[#2C2C2C] px-1.5 py-0.5 rounded-full font-black leading-none">ACTIVE</span>
+                  )}
+                </button>
+                <button
+                  onClick={() => setMode("chat")}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-extrabold transition-all cursor-pointer ${
+                    mode === "chat"
+                      ? "bg-[#FFF59D] text-[#2C2C2C]"
+                      : "bg-white text-[#6A6A6A] hover:bg-[#FFF9C4] hover:text-[#2C2C2C]"
+                  }`}
+                >
+                  <span className="text-sm">🤖</span>
+                  Ask AI
+                  {mode === "chat" && (
+                    <span className="text-[8px] bg-[#2C2C2C] text-[#FFF59D] px-1.5 py-0.5 rounded-full font-black leading-none">ACTIVE</span>
+                  )}
                 </button>
               </div>
 
