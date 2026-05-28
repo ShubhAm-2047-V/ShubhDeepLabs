@@ -200,7 +200,7 @@ export async function generateReply(message, history = [], context = "", intent 
     let reply = "";
     if (intent === "pricing" || msgLower.includes("price") || msgLower.includes("cost")) {
       reply = `Here is our project base pricing for Shubh Deep Labs:
-- Diploma: ₹${getVal("diploma", 2499)}
+- Diploma: ₹${getVal("diploma", 1999)}
 - Engineering (B.Tech): ₹${getVal("engineering", 4999)}
 - M.Tech: ₹${getVal("mtech", 8999)}
 - BCA/MCA: ₹${getVal("bca-mca", 3999)}
@@ -256,7 +256,7 @@ CHATBOT RULES:
    [LEAD: {"fullName":"<name>","whatsapp":"<whatsapp>","email":"<email>","budget":"<budget>","deadline":"<deadline>","projectTitle":"<projectTitle>","techRequired":"<techRequired>"}]
 
 FACTUAL PRICING:
-- Diploma starts from ₹${getVal("diploma", 2499)}
+- Diploma starts from ₹${getVal("diploma", 1999)}
 - Engineering (B.E/B.Tech) from ₹${getVal("engineering", 4999)}
 - M.Tech from ₹${getVal("mtech", 8999)}
 - BCA/MCA from ₹${getVal("bca-mca", 3999)}

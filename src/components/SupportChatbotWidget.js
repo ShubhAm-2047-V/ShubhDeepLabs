@@ -3,9 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import { MessageSquare, X, Send, Sparkles, Brain, ArrowRight, Check, MessageCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { dbService } from "@/lib/db";
 
 const CATEGORIES = [
-  { id: "diploma", label: "Diploma", price: 2499 },
+  { id: "diploma", label: "Diploma", price: 1999 },
   { id: "engineering", label: "Engineering (B.Tech)", price: 4999 },
   { id: "mtech", label: "M.Tech / Research", price: 8999 },
   { id: "bca-mca", label: "BCA/MCA", price: 3999 },
@@ -61,6 +62,22 @@ export default function SupportChatbotWidget() {
   const [selectedAddons, setSelectedAddons] = useState([]);
   const [customTitle, setCustomTitle] = useState("");
   const [leadSaved, setLeadSaved] = useState(false);
+  const [dbPrices, setDbPrices] = useState({});
+
+  // Fetch prices dynamically on open / mount
+  useEffect(() => {
+    async function loadPrices() {
+      try {
+        const prices = await dbService.getCustomizerPrices();
+        if (prices && Object.keys(prices).length > 0) {
+          setDbPrices(prices);
+        }
+      } catch (e) {
+        console.error("Failed to load dynamic prices in chatbot:", e);
+      }
+    }
+    loadPrices();
+  }, [isOpen]);
 
   // Chat state
   const [sessionId, setSessionId] = useState("");
@@ -111,20 +128,37 @@ export default function SupportChatbotWidget() {
   // Pricing math calculator
   const calculateTotal = () => {
     let total = 0;
+    const isDiploma = selectedCategory === "diploma";
+
     const cat = CATEGORIES.find(c => c.id === selectedCategory);
-    if (cat) total += cat.price;
+    if (cat) {
+      const price = dbPrices[cat.id] !== undefined ? dbPrices[cat.id] : cat.price;
+      total += price;
+    }
 
     selectedTech.forEach(tId => {
-      const t = TECH_STACKS.find(tech => tech.id === tId);
-      if (t) total += t.price;
+      const tech = TECH_STACKS.find(t => t.id === tId);
+      if (tech) {
+        const basePrice = dbPrices[tech.id] !== undefined ? dbPrices[tech.id] : tech.price;
+        const price = isDiploma ? Math.floor(basePrice / 2) : basePrice;
+        total += price;
+      }
     });
 
     const dl = DEADLINES.find(d => d.id === selectedDeadline);
-    if (dl) total += dl.price;
+    if (dl) {
+      const basePrice = dbPrices[dl.id] !== undefined ? dbPrices[dl.id] : dl.price;
+      const price = isDiploma ? Math.floor(basePrice / 2) : basePrice;
+      total += price;
+    }
 
     selectedAddons.forEach(aId => {
-      const a = ADDONS.find(add => add.id === aId);
-      if (a) total += a.price;
+      const addon = ADDONS.find(a => a.id === aId);
+      if (addon) {
+        const basePrice = dbPrices[addon.id] !== undefined ? dbPrices[addon.id] : addon.price;
+        const price = isDiploma ? Math.floor(basePrice / 2) : basePrice;
+        total += price;
+      }
     });
 
     return total;
@@ -407,23 +441,26 @@ Estimated Price:
                             <p className="text-xs text-[#2C2C2C] font-semibold">Choose the category of project required:</p>
                             
                             <div className="grid grid-cols-2 gap-2.5">
-                              {CATEGORIES.map(cat => (
-                                <button
-                                  key={cat.id}
-                                  onClick={() => {
-                                    setSelectedCategory(cat.id);
-                                    setStep(3);
-                                  }}
-                                  className={`p-3 text-left rounded-xl border-2 transition-all cursor-pointer shadow-[2px_2.5px_0_#2C2C2C] ${
-                                    selectedCategory === cat.id 
-                                      ? "bg-[#FFF9C4] border-[#2C2C2C] font-bold text-[#2C2C2C]" 
-                                      : "bg-white border-[#2C2C2C]/25 hover:border-[#2C2C2C] text-[#6A6A6A]"
-                                  }`}
-                                >
-                                  <div className="text-xs font-bold truncate">{cat.label}</div>
-                                  <div className="text-[10px] text-[#2C2C2C] font-extrabold mt-1">₹{cat.price.toLocaleString()}</div>
-                                </button>
-                              ))}
+                              {CATEGORIES.map(cat => {
+                                const price = dbPrices[cat.id] !== undefined ? dbPrices[cat.id] : cat.price;
+                                return (
+                                  <button
+                                    key={cat.id}
+                                    onClick={() => {
+                                      setSelectedCategory(cat.id);
+                                      setStep(3);
+                                    }}
+                                    className={`p-3 text-left rounded-xl border-2 transition-all cursor-pointer shadow-[2px_2.5px_0_#2C2C2C] ${
+                                      selectedCategory === cat.id 
+                                        ? "bg-[#FFF9C4] border-[#2C2C2C] font-bold text-[#2C2C2C]" 
+                                        : "bg-white border-[#2C2C2C]/25 hover:border-[#2C2C2C] text-[#6A6A6A]"
+                                    }`}
+                                  >
+                                    <div className="text-xs font-bold truncate">{cat.label}</div>
+                                    <div className="text-[10px] text-[#2C2C2C] font-extrabold mt-1">₹{price.toLocaleString()}</div>
+                                  </button>
+                                );
+                              })}
                             </div>
                           </motion.div>
                         )}
@@ -442,6 +479,9 @@ Estimated Price:
                             <div className="grid grid-cols-2 gap-2 max-h-[220px] overflow-y-auto pr-1">
                               {TECH_STACKS.map(tech => {
                                 const selected = selectedTech.includes(tech.id);
+                                const basePrice = dbPrices[tech.id] !== undefined ? dbPrices[tech.id] : tech.price;
+                                const isDiploma = selectedCategory === "diploma";
+                                const price = isDiploma ? Math.floor(basePrice / 2) : basePrice;
                                 return (
                                   <button
                                     key={tech.id}
@@ -455,7 +495,7 @@ Estimated Price:
                                     <div className="min-w-0">
                                       <div className="text-[10px] font-bold truncate leading-none">{tech.label}</div>
                                       <div className="text-[9px] text-[#2C2C2C] mt-1 font-bold leading-none">
-                                        {tech.price === 0 ? "Free" : `+ ₹${tech.price}`}
+                                        {price === 0 ? "Free" : `+ ₹${price}`}
                                       </div>
                                     </div>
                                     {selected && <Check size={12} className="text-[#2C2C2C] shrink-0 ml-1" />}
@@ -485,28 +525,33 @@ Estimated Price:
                             <p className="text-xs text-[#2C2C2C] font-semibold">Select your required delivery deadline:</p>
 
                             <div className="grid grid-cols-1 gap-2.5">
-                              {DEADLINES.map(dl => (
-                                <button
-                                  key={dl.id}
-                                  onClick={() => {
-                                    setSelectedDeadline(dl.id);
-                                    setStep(5);
-                                  }}
-                                  className={`p-3 text-left rounded-xl border-2 transition-all flex items-center justify-between cursor-pointer shadow-[2px_2.5px_0_#2C2C2C] ${
-                                    selectedDeadline === dl.id 
-                                      ? "bg-[#FFF9C4] border-[#2C2C2C] font-bold text-[#2C2C2C]" 
-                                      : "bg-white border-[#2C2C2C]/25 hover:border-[#2C2C2C] text-[#6A6A6A]"
-                                  }`}
-                                >
-                                  <div>
-                                    <div className="text-xs font-bold">{dl.label}</div>
-                                    <div className="text-[10px] text-slate-500 mt-1 font-sans font-semibold">Standard setup review</div>
-                                  </div>
-                                  <span className="text-xs font-extrabold text-[#2C2C2C]">
-                                    {dl.price === 0 ? "No charges" : `+ ₹${dl.price}`}
-                                  </span>
-                                </button>
-                              ))}
+                              {DEADLINES.map(dl => {
+                                const basePrice = dbPrices[dl.id] !== undefined ? dbPrices[dl.id] : dl.price;
+                                const isDiploma = selectedCategory === "diploma";
+                                const price = isDiploma ? Math.floor(basePrice / 2) : basePrice;
+                                return (
+                                  <button
+                                    key={dl.id}
+                                    onClick={() => {
+                                      setSelectedDeadline(dl.id);
+                                      setStep(5);
+                                    }}
+                                    className={`p-3 text-left rounded-xl border-2 transition-all flex items-center justify-between cursor-pointer shadow-[2px_2.5px_0_#2C2C2C] ${
+                                      selectedDeadline === dl.id 
+                                        ? "bg-[#FFF9C4] border-[#2C2C2C] font-bold text-[#2C2C2C]" 
+                                        : "bg-white border-[#2C2C2C]/25 hover:border-[#2C2C2C] text-[#6A6A6A]"
+                                    }`}
+                                  >
+                                    <div>
+                                      <div className="text-xs font-bold">{dl.label}</div>
+                                      <div className="text-[10px] text-slate-500 mt-1 font-sans font-semibold">Standard setup review</div>
+                                    </div>
+                                    <span className="text-xs font-extrabold text-[#2C2C2C]">
+                                      {price === 0 ? "No charges" : `+ ₹${price}`}
+                                    </span>
+                                  </button>
+                                );
+                              })}
                             </div>
                           </motion.div>
                         )}
@@ -525,6 +570,9 @@ Estimated Price:
                             <div className="grid grid-cols-1 gap-2 max-h-[220px] overflow-y-auto pr-1">
                               {ADDONS.map(addon => {
                                 const selected = selectedAddons.includes(addon.id);
+                                const basePrice = dbPrices[addon.id] !== undefined ? dbPrices[addon.id] : addon.price;
+                                const isDiploma = selectedCategory === "diploma";
+                                const price = isDiploma ? Math.floor(basePrice / 2) : basePrice;
                                 return (
                                   <button
                                     key={addon.id}
@@ -540,7 +588,7 @@ Estimated Price:
                                       <div className="text-[9px] text-[#6A6A6A] mt-1.5 leading-none">Complete documentation ready</div>
                                     </div>
                                     <span className="text-xs font-extrabold text-[#2C2C2C] shrink-0 ml-2">
-                                      + ₹{addon.price}
+                                      + ₹{price}
                                     </span>
                                   </button>
                                 );

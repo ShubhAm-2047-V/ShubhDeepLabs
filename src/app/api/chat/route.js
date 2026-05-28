@@ -36,8 +36,16 @@ export async function POST(req) {
       });
     }
 
-    // 3. Perform local RAG context matching
-    const matchedContext = localRAGLookup(message);
+    // 3. Retrieve active pricing config for dynamic RAG lookup
+    let prices = {};
+    try {
+      prices = await dbService.getCustomizerPrices();
+    } catch (e) {
+      addLog(`Failed to fetch customizer prices for RAG lookup: ${e.message}`, "error");
+    }
+
+    // Perform local RAG context matching with dynamic prices
+    const matchedContext = localRAGLookup(message, prices);
 
     // 4. Retrieve historical messages for context
     const history = await dbService.getChatMessages(session.id);
