@@ -199,15 +199,24 @@ export async function generateReply(message, history = [], context = "", intent 
     // Rule-based simulation if API key is not configured
     let reply = "";
     if (intent === "pricing" || msgLower.includes("price") || msgLower.includes("cost")) {
-      reply = `Here is our project base pricing for Shubh Deep Labs:
-- Diploma: ₹${getVal("diploma", 1999)}
-- Engineering (B.Tech): ₹${getVal("engineering", 4999)}
-- M.Tech: ₹${getVal("mtech", 8999)}
-- BCA/MCA: ₹${getVal("bca-mca", 3999)}
-- AI/ML Specialized: ₹${getVal("ai-ml", 6999)}
-- Android App: ₹${getVal("android", 5499)}
+      reply = `Here is our pricing structure:
+Diploma = ₹${getVal("diploma", 1999)}
+Engineering (B.Tech) = ₹${getVal("engineering", 4999)}
+M.Tech = ₹${getVal("mtech", 8999)}
+BCA/MCA = ₹${getVal("bca-mca", 3999)}
+AI/ML Specialized = ₹${getVal("ai-ml", 6999)}
+Android App = ₹${getVal("android", 5499)}
 
-Optional stacks include Python/Flask (+₹${getVal("python-flask", 999)}), React (+₹${getVal("react", 1499)}), Next.js (+₹${getVal("nextjs", 1999)}), and MERN (+₹${getVal("mern", 2999)}). Let me know which plan suits your needs!`;
+Optional Stack Add-ons:
+Python + Flask = +₹${getVal("python-flask", 999)}
+React.js = +₹${getVal("react", 1499)}
+Next.js = +₹${getVal("nextjs", 1999)}
+MERN Stack = +₹${getVal("mern", 2999)}
+Firebase = +₹${getVal("firebase", 999)}
+Database = +₹${getVal("db", 799)}
+AI Integration = +₹${getVal("ai-integration", 2499)}
+ML Model = +₹${getVal("ml-model", 3499)}
+OpenCV = +₹${getVal("opencv", 2999)}`;
     } else if (intent === "project_recommendation" || msgLower.includes("recommend") || msgLower.includes("ideas")) {
       reply = `We recommend the following:
 Easy: AI Resume Analyzer, Smart Notes Summarizer, AI Background Remover.
@@ -241,7 +250,7 @@ CHATBOT RULES:
 1. ONLY answer academic project-related or Shubh Deep Labs-related questions. Strictly avoid answering unrelated general knowledge questions.
 2. Suggest suitable projects based on user academic level.
 3. Recommend add-ons (PPT presentation, Thesis report, Viva guidance sheet, remote Setup on Zoom, Cloud deployment, Code walkthrough) when useful.
-4. Keep your answers crisp, short, friendly, and extremely clear. Avoid long paragraphs. ALWAYS use clean markdown formatting (bold headers, bullet points, and neat list structures) so your replies are structured in a proper, professional layout.
+4. Keep your answers crisp, short, friendly, and extremely clear. Avoid long paragraphs. ALWAYS format pricing lists line-by-line using the EXACT structure: Name = ₹Price (e.g. Diploma = ₹1999, React.js = +₹1499, Thesis Report = +₹999). Do not use bullet points or extra text descriptions inside pricing blocks.
 5. Conversational Lead Collection: Ask lead collection questions NATURALLY in a conversational flow, one at a time when appropriate:
    - What type of project do you need?
    - What is your course?
@@ -257,14 +266,26 @@ CHATBOT RULES:
    [LEAD: {"fullName":"<name>","whatsapp":"<whatsapp>","email":"<email>","budget":"<budget>","deadline":"<deadline>","projectTitle":"<projectTitle>","techRequired":"<techRequired>"}]
 
 FACTUAL PRICING:
-- Diploma starts from ₹${getVal("diploma", 1999)}
-- Engineering (B.E/B.Tech) from ₹${getVal("engineering", 4999)}
-- M.Tech from ₹${getVal("mtech", 8999)}
-- BCA/MCA from ₹${getVal("bca-mca", 3999)}
-- AI/ML from ₹${getVal("ai-ml", 6999)}
-- Android App from ₹${getVal("android", 5499)}
-Optional Stacks: React (+₹${getVal("react", 1499)}), Next.js (+₹${getVal("nextjs", 1999)}), MERN (+₹${getVal("mern", 2999)}), Firebase (+₹${getVal("firebase", 999)}), DB (+₹${getVal("db", 799)}), AI Integration (+₹${getVal("ai-integration", 2499)}).
-Add-ons: PPT (+₹${getVal("ppt", 499)}), Thesis (+₹${getVal("report", 999)}), Viva guidance (+₹${getVal("viva", 399)}), Remote setup (+₹${getVal("remote", 699)}).
+Diploma = ₹${getVal("diploma", 1999)}
+Engineering (B.E/B.Tech) = ₹${getVal("engineering", 4999)}
+M.Tech = ₹${getVal("mtech", 8999)}
+BCA/MCA = ₹${getVal("bca-mca", 3999)}
+AI/ML = ₹${getVal("ai-ml", 6999)}
+Android App = ₹${getVal("android", 5499)}
+Tech Stacks:
+React.js = +₹${getVal("react", 1499)}
+Next.js = +₹${getVal("nextjs", 1999)}
+MERN Stack = +₹${getVal("mern", 2999)}
+Firebase = +₹${getVal("firebase", 999)}
+Database = +₹${getVal("db", 799)}
+AI Integration = +₹${getVal("ai-integration", 2499)}
+ML Model = +₹${getVal("ml-model", 3499)}
+OpenCV = +₹${getVal("opencv", 2999)}
+Add-ons:
+PPT Presentation = +₹${getVal("ppt", 499)}
+Thesis Report = +₹${getVal("report", 999)}
+Viva Guidance = +₹${getVal("viva", 399)}
+Remote Setup = +₹${getVal("remote", 699)}
 
 CONTEXT DATABASE:
 ${context || "No specific database match found. Rely on factual pricing."}`;

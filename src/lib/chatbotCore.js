@@ -7,27 +7,27 @@ export const SUPPORT_CONTEXT = [
     content: (prices) => {
       const getVal = (id, def) => (prices[id] !== undefined ? prices[id] : def);
       return `PROJECT CATEGORIES BASE PRICING:
-- Diploma: Starting from ₹${getVal("diploma", 1999)}
-- Engineering (B.E/B.Tech): Starting from ₹${getVal("engineering", 4999)}
-- M.Tech / Research: Starting from ₹${getVal("mtech", 8999)}
-- BCA / MCA: Starting from ₹${getVal("bca-mca", 3999)}
-- AI / ML: Starting from ₹${getVal("ai-ml", 6999)}
-- Android App: Starting from ₹${getVal("android", 5499)}
+Diploma = ₹${getVal("diploma", 1999)}
+Engineering (B.E/B.Tech) = ₹${getVal("engineering", 4999)}
+M.Tech / Research = ₹${getVal("mtech", 8999)}
+BCA / MCA = ₹${getVal("bca-mca", 3999)}
+AI / ML = ₹${getVal("ai-ml", 6999)}
+Android App = ₹${getVal("android", 5499)}
 
-TECH STACK PRICING (Optional Add-ons):
-- HTML / CSS / JavaScript: + ₹${getVal("html", 0)}
-- Python + Flask: + ₹${getVal("python-flask", 999)}
-- React.js: + ₹${getVal("react", 1499)}
-- Next.js: + ₹${getVal("nextjs", 1999)}
-- MERN Stack: + ₹${getVal("mern", 2999)}
-- Android (Java/Kotlin): + ₹${getVal("android-dev", 3499)}
-- Firebase Integration: + ₹${getVal("firebase", 999)}
-- MySQL / MongoDB: + ₹${getVal("db", 799)}
-- AI Integration (Gemini/OpenAI): + ₹${getVal("ai-integration", 2499)}
-- Machine Learning Model: + ₹${getVal("ml-model", 3499)}
-- OpenCV / Face Detection: + ₹${getVal("opencv", 2999)}
-- Full Stack + Deployment: + ₹${getVal("fullstack", 4499)}
-- Blockchain / Web3: + ₹${getVal("blockchain", 5999)}`;
+TECH STACK PRICING:
+HTML / CSS / JavaScript = ₹${getVal("html", 0)}
+Python + Flask = +₹${getVal("python-flask", 999)}
+React.js = +₹${getVal("react", 1499)}
+Next.js = +₹${getVal("nextjs", 1999)}
+MERN Stack = +₹${getVal("mern", 2999)}
+Android (Java/Kotlin) = +₹${getVal("android-dev", 3499)}
+Firebase Integration = +₹${getVal("firebase", 999)}
+MySQL / MongoDB = +₹${getVal("db", 799)}
+AI Integration = +₹${getVal("ai-integration", 2499)}
+Machine Learning Model = +₹${getVal("ml-model", 3499)}
+OpenCV = +₹${getVal("opencv", 2999)}
+Full Stack + Deployment = +₹${getVal("fullstack", 4499)}
+Blockchain / Web3 = +₹${getVal("blockchain", 5999)}`;
     }
   },
   {
@@ -40,13 +40,13 @@ TECH STACK PRICING (Optional Add-ons):
 - Detailed Documentation & Setup Guidance
 - Support & Basic Customization Support
 
-ADD-ONS PRICING SHEET:
-- PPT Presentation: + ₹${getVal("ppt", 499)}
-- Thesis Report: + ₹${getVal("report", 999)}
-- Viva Guidance Sheet: + ₹${getVal("viva", 399)}
-- Remote Setup (Zoom): + ₹${getVal("remote", 699)}
-- Cloud Deployment: + ₹${getVal("deployment", 1499)}
-- Code Walkthrough Doc: + ₹${getVal("docs", 599)}`;
+ADD-ONS PRICING:
+PPT Presentation = +₹${getVal("ppt", 499)}
+Thesis Report = +₹${getVal("report", 999)}
+Viva Guidance Sheet = +₹${getVal("viva", 399)}
+Remote Setup (Zoom) = +₹${getVal("remote", 699)}
+Cloud Deployment = +₹${getVal("deployment", 1499)}
+Code Walkthrough Doc = +₹${getVal("docs", 599)}`;
     }
   },
   {
@@ -54,10 +54,10 @@ ADD-ONS PRICING SHEET:
     content: (prices) => {
       const getVal = (id, def) => (prices[id] !== undefined ? prices[id] : def);
       return `DEADLINE CHARGES:
-- 1–3 Days (Urgent): + ₹${getVal("urgent", 2499)}
-- 4–7 Days (Standard): + ₹${getVal("normal", 999)}
-- 8–14 Days (Relaxed): + ₹0
-- Flexible / No Rush: + ₹0`;
+1–3 Days (Urgent) = +₹${getVal("urgent", 2499)}
+4–7 Days (Standard) = +₹${getVal("normal", 999)}
+8–14 Days (Relaxed) = +₹0
+Flexible / No Rush = +₹0`;
     }
   },
   {
