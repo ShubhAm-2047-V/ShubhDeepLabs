@@ -6,9 +6,62 @@ import { dbService } from "@/lib/supabase";
 import { 
   Lock, Mail, Key, Shield, Search, Filter, RefreshCw, 
   Trash2, CheckCircle, TrendingUp, AlertCircle, Clock, 
-  LogOut, ClipboardList, MapPin, User, Tag, Terminal, Cpu, FileText
+  LogOut, ClipboardList, MapPin, User, Tag, Terminal, Cpu, FileText,
+  Coins, Landmark, Zap, ShieldCheck, Plus, HelpCircle, Star, Percent, Settings, X
 } from "lucide-react";
 import toast from "react-hot-toast";
+
+const PRICE_ITEMS = [
+  {
+    group: "🎓 Pick Your Field (Base Prices)",
+    items: [
+      { id: "diploma", label: "Diploma", defaultPrice: 1999 },
+      { id: "engineering", label: "Engineering (B.E./B.Tech)", defaultPrice: 4999 },
+      { id: "mtech", label: "M.Tech / Research", defaultPrice: 8999 },
+      { id: "bca-mca", label: "BCA / MCA", defaultPrice: 3999 },
+      { id: "ai-ml", label: "AI / ML", defaultPrice: 6999 },
+      { id: "android", label: "Android App", defaultPrice: 5499 },
+    ]
+  },
+  {
+    group: "⚙️ Choose Stack (Add-on Prices)",
+    items: [
+      { id: "html", label: "HTML / CSS / JS", defaultPrice: 0 },
+      { id: "python-flask", label: "Python + Flask", defaultPrice: 999 },
+      { id: "react", label: "React.js", defaultPrice: 1499 },
+      { id: "nextjs", label: "Next.js", defaultPrice: 1999 },
+      { id: "mern", label: "MERN Stack", defaultPrice: 2999 },
+      { id: "android-dev", label: "Android (Java/Kotlin)", defaultPrice: 3499 },
+      { id: "firebase", label: "Firebase Integration", defaultPrice: 999 },
+      { id: "db", label: "MySQL / MongoDB", defaultPrice: 799 },
+      { id: "ai-integration", label: "AI Integration", defaultPrice: 2499 },
+      { id: "ml-model", label: "ML Model", defaultPrice: 3499 },
+      { id: "opencv", label: "OpenCV / Face Detection", defaultPrice: 2999 },
+      { id: "fullstack", label: "Full Stack + Deploy", defaultPrice: 4499 },
+      { id: "blockchain", label: "Blockchain / Web3", defaultPrice: 5999 },
+    ]
+  },
+  {
+    group: "✨ Add-Ons (Delivery Deliverables)",
+    items: [
+      { id: "ppt", label: "PPT Presentation", defaultPrice: 499 },
+      { id: "report", label: "Thesis Report", defaultPrice: 999 },
+      { id: "viva", label: "Viva Guidance Sheet", defaultPrice: 399 },
+      { id: "remote", label: "Remote Setup (Zoom)", defaultPrice: 699 },
+      { id: "deployment", label: "Cloud Deployment", defaultPrice: 1499 },
+      { id: "docs", label: "Code Walkthrough Doc", defaultPrice: 599 },
+    ]
+  },
+  {
+    group: "⏱️ Deadline (Schedule Charges)",
+    items: [
+      { id: "urgent", label: "1–3 Days (Urgent)", defaultPrice: 2499 },
+      { id: "normal", label: "4–7 Days (Standard)", defaultPrice: 999 },
+      { id: "relaxed", label: "8–14 Days (Relaxed)", defaultPrice: 0 },
+      { id: "flexible", label: "Flexible / No Rush", defaultPrice: 0 },
+    ]
+  }
+];
 
 export default function AdminDashboard() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -42,6 +95,27 @@ export default function AdminDashboard() {
   const [siteSettings, setSiteSettings] = useState(null);
   const [settingsLoading, setSettingsLoading] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
+
+  // Customizer Pricing State
+  const [prices, setPrices] = useState({});
+  const [pricesLoading, setPricesLoading] = useState(false);
+  const [pricesSaving, setPricesSaving] = useState(false);
+
+  // Daily Offers & Scratch Booster State
+  const [offers, setOffers] = useState([]);
+  const [offersLoading, setOffersLoading] = useState(false);
+  const [offersFormData, setOffersFormData] = useState({
+    title: "",
+    subtext: "",
+    ribbon: "Special Offer!",
+    emoji: "🎁",
+  });
+  const [addOfferLoading, setAddOfferLoading] = useState(false);
+
+  const [scratchDiscount, setScratchDiscount] = useState(5);
+  const [scratchCodes, setScratchCodes] = useState(["STUDENT5EXTRA", "COUPON5HUB", "VIVABOOST5", "FINAL5PASS"]);
+  const [newScratchCode, setNewScratchCode] = useState("");
+  const [scratchSaving, setScratchSaving] = useState(false);
 
   const fetchSiteSettings = async () => {
     setSettingsLoading(true);
@@ -264,6 +338,197 @@ export default function AdminDashboard() {
     }
   };
 
+  // -------------------------------------------------------------
+  // CONSOLIDATED PRICING HANDLERS
+  // -------------------------------------------------------------
+  const fetchPrices = async () => {
+    setPricesLoading(true);
+    try {
+      const data = await dbService.getCustomizerPrices();
+      const initialPrices = {};
+      PRICE_ITEMS.forEach(group => {
+        group.items.forEach(item => {
+          initialPrices[item.id] = data[item.id] !== undefined ? data[item.id] : item.defaultPrice;
+        });
+      });
+      setPrices(initialPrices);
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to read custom prices from database.");
+    } finally {
+      setPricesLoading(false);
+    }
+  };
+
+  const handlePriceChange = (id, value) => {
+    const numericVal = parseInt(value);
+    setPrices(prev => ({
+      ...prev,
+      [id]: isNaN(numericVal) ? 0 : Math.max(0, numericVal)
+    }));
+  };
+
+  const handleSavePrices = async (e) => {
+    e.preventDefault();
+    setPricesSaving(true);
+    try {
+      await dbService.saveCustomizerPrices(prices);
+      toast.success("Pricing configurations saved successfully!", {
+        className: "sketch-card border-2 border-[#2C2C2C] bg-[#FAF6EE] text-[#2C2C2C] font-marker"
+      });
+      fetchPrices();
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to register prices in DB.");
+    } finally {
+      setPricesSaving(false);
+    }
+  };
+
+  const handleResetDefaults = () => {
+    const defaults = {};
+    PRICE_ITEMS.forEach(group => {
+      group.items.forEach(item => {
+        defaults[item.id] = item.defaultPrice;
+      });
+    });
+    setPrices(defaults);
+    toast.success("Reset inputs to initial default guidelines.");
+  };
+
+  // -------------------------------------------------------------
+  // CONSOLIDATED OFFERS & SCRATCH CODES HANDLERS
+  // -------------------------------------------------------------
+  const fetchOffers = async () => {
+    setOffersLoading(true);
+    try {
+      const data = await dbService.getOffers();
+      setOffers(data);
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to read offers database registry.");
+    } finally {
+      setOffersLoading(false);
+    }
+  };
+
+  const fetchScratchSettings = async () => {
+    try {
+      const settings = await dbService.getScratchSettings();
+      if (settings) {
+        setScratchDiscount(settings.discountPercent || 5);
+        setScratchCodes(settings.codes || ["STUDENT5EXTRA", "COUPON5HUB", "VIVABOOST5", "FINAL5PASS"]);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleSaveScratchSettings = async () => {
+    setScratchSaving(true);
+    try {
+      await dbService.saveScratchSettings({
+        discountPercent: scratchDiscount,
+        codes: scratchCodes,
+      });
+      toast.success("Scratch card settings saved!", {
+        className: "sketch-card border-2 border-[#2C2C2C] bg-[#FAF6EE] text-[#2C2C2C] font-marker"
+      });
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to save scratch settings.");
+    } finally {
+      setScratchSaving(false);
+    }
+  };
+
+  const handleDiscountChange = (val) => {
+    setScratchDiscount(val);
+    setScratchCodes((prev) =>
+      prev.map((code) => code.replace(/\d+/g, String(val)))
+    );
+  };
+
+  const handleAddScratchCode = () => {
+    let code = newScratchCode.trim().toUpperCase();
+    if (!code) return;
+    
+    code = code.replace(/\d+/g, String(scratchDiscount));
+    
+    if (scratchCodes.includes(code)) {
+      toast.error("Code already exists!");
+      return;
+    }
+    setScratchCodes([...scratchCodes, code]);
+    setNewScratchCode("");
+  };
+
+  const handleRemoveScratchCode = (codeToRemove) => {
+    if (scratchCodes.length <= 1) {
+      toast.error("At least 1 code is required!");
+      return;
+    }
+    setScratchCodes(scratchCodes.filter((c) => c !== codeToRemove));
+  };
+
+  const handleOffersFormChange = (e) => {
+    const { name, value } = e.target;
+    setOffersFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddOffer = async (e) => {
+    e.preventDefault();
+    if (!offersFormData.title || !offersFormData.subtext) {
+      toast.error("Please specify offer details.");
+      return;
+    }
+
+    setAddOfferLoading(true);
+    try {
+      await dbService.addOffer(offersFormData);
+      toast.success("New deal logged in agenda list!", {
+        className: "sketch-card border-2 border-[#2C2C2C] bg-[#FAF6EE] text-[#2C2C2C] font-marker"
+      });
+      setOffersFormData({ title: "", subtext: "", ribbon: "Special Offer!", emoji: "🎁" });
+      fetchOffers();
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to register offer.");
+    } finally {
+      setAddOfferLoading(false);
+    }
+  };
+
+  const handleActivateOffer = async (offerId) => {
+    try {
+      await dbService.setActiveOffer(offerId);
+      toast.success("Offer set as ACTIVE deal!", {
+        className: "sketch-card border-2 border-[#2C2C2C] bg-[#FAF6EE] text-[#2C2C2C] font-marker"
+      });
+      fetchOffers();
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to activate deal.");
+    }
+  };
+
+  const handleDeleteOffer = (offerId) => {
+    setConfirmModal({
+      isOpen: true,
+      message: "Lodging permanent record deletion. Proceed?",
+      onConfirm: async () => {
+        try {
+          await dbService.deleteOffer(offerId);
+          toast.success("Offer record expunged.");
+          fetchOffers();
+        } catch (e) {
+          console.error(e);
+          toast.error("Deletion failed.");
+        }
+      }
+    });
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!email || !password) {
@@ -281,6 +546,11 @@ export default function AdminDashboard() {
         className: "sketch-card border-2 border-[#2C2C2C] bg-[#FAF6EE] text-[#2C2C2C] font-marker"
       });
       fetchOrders();
+      fetchChats();
+      fetchSiteSettings();
+      fetchPrices();
+      fetchOffers();
+      fetchScratchSettings();
     } else {
       toast.error(result.error || "Verification failed. Check credentials.");
     }
@@ -398,6 +668,9 @@ export default function AdminDashboard() {
         fetchOrders();
         fetchChats();
         fetchSiteSettings();
+        fetchPrices();
+        fetchOffers();
+        fetchScratchSettings();
       }
     });
     return () => {
@@ -568,39 +841,25 @@ export default function AdminDashboard() {
 
         <div className="flex flex-wrap items-center gap-2.5">
           <Link
-            href="/admin/offers"
-            className="inline-flex items-center px-4 py-2.5 text-sm font-bold tracking-wider text-[#2C2C2C] bg-[#FFF59D] border-2 border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-xl shadow-[2px_2.5px_0_#2C2C2C] active:translate-y-0.5"
-          >
-            Manage Offers
-          </Link>
-
-          <Link
-            href="/admin/prices"
-            className="inline-flex items-center px-4 py-2.5 text-sm font-bold tracking-wider text-[#2C2C2C] bg-[#E1F5FE] border-2 border-[#2C2C2C] hover:bg-[#B3E5FC] rounded-xl shadow-[2px_2.5px_0_#2C2C2C] active:translate-y-0.5"
-          >
-            Manage Prices
-          </Link>
-
-          <Link
             href="/admin/leads"
             className="inline-flex items-center px-4 py-2.5 text-sm font-bold tracking-wider text-[#2C2C2C] bg-[#C8E6C9] border-2 border-[#2C2C2C] hover:bg-[#A5D6A7] rounded-xl shadow-[2px_2.5px_0_#2C2C2C] active:translate-y-0.5"
           >
             Leads Board
           </Link>
-
-          <Link
-            href="/admin/messages"
-            className="inline-flex items-center px-4 py-2.5 text-sm font-bold tracking-wider text-[#2C2C2C] bg-[#E3F2FD] border-2 border-[#2C2C2C] hover:bg-[#BBDEFB] rounded-xl shadow-[2px_2.5px_0_#2C2C2C] active:translate-y-0.5"
-          >
-            Chats Inbox
-          </Link>
           
           <button
-            onClick={fetchOrders}
+            onClick={() => {
+              fetchOrders();
+              fetchChats();
+              fetchSiteSettings();
+              fetchPrices();
+              fetchOffers();
+              fetchScratchSettings();
+            }}
             className="p-2.5 rounded-xl border-2 border-[#2C2C2C] bg-white hover:bg-[#FAF6EE] text-[#2C2C2C] transition-all cursor-pointer shadow-[2px_2px_0_#2C2C2C]"
-            title="Reload Ledger"
+            title="Reload Dashboard"
           >
-            <RefreshCw className={`w-4 h-4 ${ordersLoading ? "animate-spin" : ""}`} />
+            <RefreshCw className={`w-4 h-4 ${ordersLoading || inboxLoading || settingsLoading || pricesLoading || offersLoading ? "animate-spin" : ""}`} />
           </button>
           
           <button
@@ -614,7 +873,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Tab Control */}
-      <div className="flex gap-2 border-b-2 border-[#2C2C2C]/20 pb-0 shrink-0">
+      <div className="flex flex-wrap gap-2 border-b-2 border-[#2C2C2C]/20 pb-0 shrink-0">
         <button
           onClick={() => setActiveTab("ledger")}
           className={`px-5 py-2.5 rounded-t-xl font-marker font-bold text-sm border-2 border-[#2C2C2C] border-b-0 -mb-[2px] transition-all cursor-pointer ${
@@ -649,7 +908,34 @@ export default function AdminDashboard() {
               : "bg-[#FAF6EE] text-[#6A6A6A] hover:bg-white/50"
           }`}
         >
-          🎨 Customize Website
+          ✍️ Website Copy
+        </button>
+        <button
+          onClick={() => {
+            setActiveTab("pricing");
+            fetchPrices();
+          }}
+          className={`px-5 py-2.5 rounded-t-xl font-marker font-bold text-sm border-2 border-[#2C2C2C] border-b-0 -mb-[2px] transition-all cursor-pointer ${
+            activeTab === "pricing"
+              ? "bg-white text-[#2C2C2C] shadow-[0_2px_0_white]"
+              : "bg-[#FAF6EE] text-[#6A6A6A] hover:bg-white/50"
+          }`}
+        >
+          💰 Course Pricing
+        </button>
+        <button
+          onClick={() => {
+            setActiveTab("offers");
+            fetchOffers();
+            fetchScratchSettings();
+          }}
+          className={`px-5 py-2.5 rounded-t-xl font-marker font-bold text-sm border-2 border-[#2C2C2C] border-b-0 -mb-[2px] transition-all cursor-pointer ${
+            activeTab === "offers"
+              ? "bg-white text-[#2C2C2C] shadow-[0_2px_0_white]"
+              : "bg-[#FAF6EE] text-[#6A6A6A] hover:bg-white/50"
+          }`}
+        >
+          🎁 Daily Offers
         </button>
       </div>
 
@@ -1393,25 +1679,14 @@ export default function AdminDashboard() {
                           </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Route Href</label>
-                            <input 
-                              type="text" 
-                              value={cat.href || ""} 
-                              onChange={(e) => updateCategory(index, "href", e.target.value)}
-                              className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Card Border Class</label>
-                            <input 
-                              type="text" 
-                              value={cat.border || ""} 
-                              onChange={(e) => updateCategory(index, "border", e.target.value)}
-                              className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
-                            />
-                          </div>
+                        <div>
+                          <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Route Href</label>
+                          <input 
+                            type="text" 
+                            value={cat.href || ""} 
+                            onChange={(e) => updateCategory(index, "href", e.target.value)}
+                            className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                          />
                         </div>
 
                         <div>
@@ -1463,26 +1738,14 @@ export default function AdminDashboard() {
                           />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3">
-                          <div>
-                            <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Technology Specifications</label>
-                            <input 
-                              type="text" 
-                              value={proj.tech || ""} 
-                              onChange={(e) => updateBlueprint(index, "tech", e.target.value)}
-                              className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Marker Ribbon Color</label>
-                            <input 
-                              type="text" 
-                              value={proj.markerColor || ""} 
-                              onChange={(e) => updateBlueprint(index, "markerColor", e.target.value)}
-                              className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
-                              placeholder="e.g. marker-green, marker-blue"
-                            />
-                          </div>
+                        <div>
+                          <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] mb-0.5">Technology Specifications</label>
+                          <input 
+                            type="text" 
+                            value={proj.tech || ""} 
+                            onChange={(e) => updateBlueprint(index, "tech", e.target.value)}
+                            className="w-full text-xs p-2 bg-white border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                          />
                         </div>
 
                         <div>
@@ -1637,6 +1900,396 @@ export default function AdminDashboard() {
                 "PUBLISH DRAFT TO LIVE SITE"
               )}
             </button>
+          </div>
+        </div>
+      )}
+
+      {activeTab === "pricing" && (
+        <div className="space-y-8 animate-fade-in">
+          <div className="sketch-card p-6 bg-white flex flex-col sm:flex-row items-center justify-between gap-4 border-3 border-[#2C2C2C]">
+            <div>
+              <h3 className="text-xl font-hand font-extrabold text-[#2C2C2C] flex items-center">
+                <Coins className="w-6 h-6 mr-2 text-[#2C2C2C]" />
+                💰 CUSTOMIZER PRICING RATE SHEET
+              </h3>
+              <p className="text-xs text-[#6A6A6A] font-marker mt-1">
+                Modify base prices, add-on stack prices, deliverables, and schedule deadlines dynamically.
+              </p>
+            </div>
+            
+            <button
+              onClick={handleSavePrices}
+              disabled={pricesSaving || pricesLoading}
+              className="inline-flex items-center px-6 py-3 font-marker font-bold tracking-widest text-[#2C2C2C] bg-[#FFF59D] border-2 border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-xl shadow-[3px_4px_0_#2C2C2C] active:translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer whitespace-nowrap shrink-0 animate-sketch-float"
+            >
+              {pricesSaving ? (
+                <span className="w-5 h-5 border-2 border-[#2C2C2C] border-t-transparent rounded-full animate-spin"></span>
+              ) : (
+                <>
+                  PUBLISH PRICE RATES
+                  <CheckCircle className="w-4 h-4 ml-1.5" />
+                </>
+              )}
+            </button>
+          </div>
+
+          {pricesLoading ? (
+            <div className="sketch-card bg-white p-20 flex justify-center items-center border-3 border-[#2C2C2C]">
+              <span className="w-8 h-8 border-4 border-[#2C2C2C] border-t-transparent rounded-full animate-spin"></span>
+            </div>
+          ) : (
+            <form onSubmit={handleSavePrices} className="space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {PRICE_ITEMS.map((group) => (
+                  <div key={group.group} className="sketch-border bg-[#FCF9F2] p-6 shadow-[4px_5px_0_#2C2C2C] notebook-ruled">
+                    <h3 className="text-lg font-marker font-extrabold text-[#2C2C2C] mb-4 pb-2 border-b-2 border-dashed border-[#2C2C2C]/25 flex items-center pl-10">
+                      {group.group}
+                    </h3>
+                    
+                    <div className="space-y-3.5 pl-10 relative z-10">
+                      {group.items.map((item) => (
+                        <div key={item.id} className="flex items-center justify-between gap-4">
+                          <span className="text-xs font-bold font-marker text-[#5A5A5A]">{item.label}</span>
+                          <div className="flex items-center space-x-2">
+                            <span className="text-xs text-[#6A6A6A]">₹</span>
+                            <input
+                              type="number"
+                              min="0"
+                              value={prices[item.id] !== undefined ? prices[item.id] : item.defaultPrice}
+                              onChange={(e) => handlePriceChange(item.id, e.target.value)}
+                              className="w-28 text-sm px-3 py-1.5 bg-white border-2 border-[#2C2C2C] rounded-lg focus:outline-none text-[#2C2C2C] font-mono font-bold text-right shadow-[1px_1.5px_0_#2C2C2C]"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Action Panel */}
+              <div className="sketch-card bg-white border-3 border-[#2C2C2C] p-6 flex flex-col sm:flex-row items-center justify-between gap-4 mt-8">
+                <div className="flex items-center text-xs text-[#6A6A6A] font-sans font-semibold">
+                  <AlertCircle className="w-5 h-5 mr-2 text-[#2C2C2C] shrink-0" />
+                  <span>Changing prices will update customizer options, RAG chat files, and AI instructions.</span>
+                </div>
+
+                <div className="flex items-center space-x-3 w-full sm:w-auto">
+                  <button
+                    type="button"
+                    onClick={handleResetDefaults}
+                    className="flex-1 sm:flex-none px-4 py-2.5 text-xs font-bold font-marker border-2 border-[#2C2C2C] bg-white hover:bg-[#FAF6EE] text-[#5A5A5A] rounded-xl shadow-[1.5px_2px_0_#2C2C2C] active:translate-y-0.5 cursor-pointer"
+                  >
+                    Reset to Defaults
+                  </button>
+                  
+                  <button
+                    type="submit"
+                    disabled={pricesSaving}
+                    className="flex-1 sm:flex-none inline-flex items-center justify-center px-6 py-2.5 text-xs font-bold font-marker border-2 border-[#2C2C2C] bg-[#FFF59D] hover:bg-[#FFF9C4] text-[#2C2C2C] rounded-xl shadow-[1.5px_2px_0_#2C2C2C] active:translate-y-0.5 cursor-pointer"
+                  >
+                    {pricesSaving ? (
+                      <span className="w-4 h-4 border-2 border-[#2C2C2C] border-t-transparent rounded-full animate-spin"></span>
+                    ) : (
+                      <>
+                        Save All Prices
+                        <CheckCircle className="w-4 h-4 ml-1.5" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </form>
+          )}
+        </div>
+      )}
+
+      {activeTab === "offers" && (
+        <div className="space-y-8 animate-fade-in">
+          {/* Daily Specials Header */}
+          <div className="sketch-card p-6 bg-white flex flex-col sm:flex-row items-center justify-between gap-4 border-3 border-[#2C2C2C]">
+            <div>
+              <h3 className="text-xl font-hand font-extrabold text-[#2C2C2C] flex items-center">
+                <Tag className="w-6 h-6 mr-2 text-[#2C2C2C]" />
+                🎁 PROMOTIONS & DEALS DESK
+              </h3>
+              <p className="text-xs text-[#6A6A6A] font-marker mt-1">
+                Establish active promotions, manage student coupons, and customize interactive scratch cards.
+              </p>
+            </div>
+            
+            <button
+              onClick={fetchOffers}
+              disabled={offersLoading}
+              className="inline-flex items-center px-5 py-2.5 font-marker font-bold text-xs text-[#2C2C2C] bg-white border-2 border-[#2C2C2C] hover:bg-[#FAF6EE] rounded-xl shadow-[2px_2.5px_0_#2C2C2C] active:translate-y-0.5 transition-all cursor-pointer shrink-0"
+            >
+              <RefreshCw className={`w-4 h-4 mr-1.5 ${offersLoading ? "animate-spin" : ""}`} />
+              Reload Promotions
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Form: Add Daily Special */}
+            <div className="lg:col-span-5 space-y-6">
+              <div className="sketch-border bg-[#FCF9F2] p-6 shadow-[4px_5px_0_#2C2C2C] notebook-ruled">
+                <h3 className="text-lg font-marker font-extrabold text-[#2C2C2C] mb-6 underline decoration-2 decoration-[#A5D6A7] flex items-center pl-10">
+                  <Plus className="w-5 h-5 mr-1 text-[#2C2C2C]" />
+                  Add Daily Deal Special
+                </h3>
+
+                <form onSubmit={handleAddOffer} className="space-y-4 pl-10 relative z-10">
+                  <div>
+                    <label className="block text-xs font-marker font-extrabold text-[#2C2C2C] uppercase mb-1 tracking-wider">Ribbon Tag Accent *</label>
+                    <input
+                      type="text"
+                      name="ribbon"
+                      value={offersFormData.ribbon}
+                      onChange={handleOffersFormChange}
+                      required
+                      className="w-full text-sm px-4 py-2.5 bg-white border-2 border-[#2C2C2C] rounded-xl focus:outline-none text-[#2C2C2C] font-marker shadow-[1px_1.5px_0_#2C2C2C]"
+                      placeholder="e.g. Special Offer!, Monday Deal!"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-4 gap-3">
+                    <div className="col-span-3">
+                      <label className="block text-xs font-marker font-extrabold text-[#2C2C2C] uppercase mb-1 tracking-wider">Offer Badge Emoji</label>
+                      <select
+                        name="emoji"
+                        value={offersFormData.emoji}
+                        onChange={handleOffersFormChange}
+                        className="w-full text-sm px-3 py-2.5 bg-white border-2 border-[#2C2C2C] rounded-xl focus:outline-none text-[#2C2C2C] font-marker shadow-[1px_1.5px_0_#2C2C2C]"
+                      >
+                        <option value="🎁">🎁 Gift Box</option>
+                        <option value="🔥">🔥 Hot Fire</option>
+                        <option value="🎉">🎉 Party Popper</option>
+                        <option value="⭐">⭐ Spark Star</option>
+                        <option value="📢">📢 Loud Speaker</option>
+                        <option value="⚡">⚡ Lightning Deal</option>
+                      </select>
+                    </div>
+                    <div className="col-span-1 flex items-end justify-center">
+                      <div className="w-12 h-11 bg-white border-2 border-[#2C2C2C] rounded-xl flex items-center justify-center text-2xl shadow-[1px_2px_0_#2C2C2C]">
+                        {offersFormData.emoji}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-marker font-extrabold text-[#2C2C2C] uppercase mb-1 tracking-wider">Offer Deal Headline Title *</label>
+                    <input
+                      type="text"
+                      name="title"
+                      value={offersFormData.title}
+                      onChange={handleOffersFormChange}
+                      required
+                      className="w-full text-sm px-4 py-2.5 bg-white border-2 border-[#2C2C2C] rounded-xl focus:outline-none text-[#2C2C2C] font-marker shadow-[1px_1.5px_0_#2C2C2C]"
+                      placeholder="e.g. First 8 students get 30% OFF!"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-marker font-extrabold text-[#2C2C2C] uppercase mb-1 tracking-wider">Subtext / Terms *</label>
+                    <textarea
+                      name="subtext"
+                      value={offersFormData.subtext}
+                      onChange={handleOffersFormChange}
+                      required
+                      rows="3"
+                      className="w-full text-sm px-4 py-2.5 bg-white border-2 border-[#2C2C2C] rounded-xl focus:outline-none text-[#2C2C2C] font-marker shadow-[1px_1.5px_0_#2C2C2C]"
+                      placeholder="e.g. * Terms apply. Valid till midnight today."
+                    ></textarea>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={addOfferLoading}
+                    className="w-full inline-flex items-center justify-center px-6 py-3 font-marker font-bold tracking-widest text-[#2C2C2C] bg-[#FFF59D] border-2 border-[#2C2C2C] hover:bg-[#FFF9C4] rounded-xl shadow-[2px_3px_0_#2C2C2C] active:translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer whitespace-nowrap"
+                  >
+                    {addOfferLoading ? (
+                      <span className="w-5 h-5 border-2.5 border-[#2C2C2C] border-t-transparent rounded-full animate-spin"></span>
+                    ) : (
+                      <>
+                        Log in Agenda list
+                        <Plus className="w-4 h-4 ml-1.5" />
+                      </>
+                    )}
+                  </button>
+                </form>
+              </div>
+
+              {/* Scratch Card Booster Settings */}
+              <div className="sketch-border bg-[#FCF9F2] p-6 shadow-[4px_5px_0_#2C2C2C] notebook-ruled">
+                <h3 className="text-lg font-marker font-extrabold text-[#2C2C2C] mb-6 underline decoration-2 decoration-[#E1BEE7] flex items-center pl-10">
+                  <Settings className="w-5 h-5 mr-1 text-[#2C2C2C]" />
+                  Scratch Card Booster Settings
+                </h3>
+
+                <div className="space-y-5 pl-10 relative z-10">
+                  <div>
+                    <label className="block text-xs font-marker font-extrabold text-[#2C2C2C] uppercase mb-1 tracking-wider">
+                      Booster Discount %
+                    </label>
+                    <div className="flex items-center space-x-3">
+                      <div className="relative flex-1">
+                        <Percent className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6A6A6A]" />
+                        <input
+                          type="number"
+                          min="1"
+                          max="100"
+                          value={scratchDiscount}
+                          onChange={(e) => handleDiscountChange(parseInt(e.target.value) || 0)}
+                          className="w-full text-sm px-4 py-2.5 bg-white border-2 border-[#2C2C2C] rounded-xl focus:outline-none text-[#2C2C2C] font-marker pr-10 shadow-[1px_1.5px_0_#2C2C2C]"
+                          placeholder="5"
+                        />
+                      </div>
+                      <div className="w-14 h-11 bg-[#E1BEE7] border-2 border-[#2C2C2C] rounded-xl flex items-center justify-center text-base font-bold text-[#2C2C2C] shadow-[1px_2px_0_#2C2C2C] shrink-0">
+                        {scratchDiscount}%
+                      </div>
+                    </div>
+                    <p className="text-[10px] font-sans font-semibold text-[#6A6A6A] mt-1">
+                      This % is shown to students after they scratch the card.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-marker font-extrabold text-[#2C2C2C] uppercase mb-1 tracking-wider">
+                      Booster Coupon Codes
+                    </label>
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {scratchCodes.map((code) => (
+                        <div
+                          key={code}
+                          className="inline-flex items-center bg-white border-2 border-[#2C2C2C] px-3 py-1.5 rounded-xl text-xs font-bold font-marker text-[#2C2C2C] shadow-[1px_1.5px_0_#2C2C2C]"
+                        >
+                          {code}
+                          <button
+                            onClick={() => handleRemoveScratchCode(code)}
+                            className="ml-2 text-[#B71C1C] hover:text-[#D32F2F] cursor-pointer"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="text"
+                        value={newScratchCode}
+                        onChange={(e) => setNewScratchCode(e.target.value.toUpperCase())}
+                        onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddScratchCode(); } }}
+                        className="flex-1 text-sm px-4 py-2.5 bg-white border-2 border-[#2C2C2C] rounded-xl focus:outline-none text-[#2C2C2C] font-marker shadow-[1px_1.5px_0_#2C2C2C]"
+                        placeholder="e.g. NEWCODE10"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleAddScratchCode}
+                        className="p-2.5 border-2 border-[#2C2C2C] bg-[#C8E6C9] hover:bg-[#A5D6A7] text-[#2C2C2C] rounded-xl shadow-[1.5px_2px_0_#2C2C2C] active:translate-y-0.5 cursor-pointer"
+                      >
+                        <Plus className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <p className="text-[10px] font-sans font-semibold text-[#6A6A6A] mt-1">
+                      One random code from this list is shown after scratching.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleSaveScratchSettings}
+                    disabled={scratchSaving}
+                    className="w-full inline-flex items-center justify-center px-6 py-3 font-marker font-bold tracking-widest text-[#2C2C2C] bg-white border-2 border-[#2C2C2C] hover:bg-[#FAF6EE] rounded-xl shadow-[2px_3px_0_#2C2C2C] active:translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer whitespace-nowrap"
+                  >
+                    {scratchSaving ? (
+                      <span className="w-5 h-5 border-2.5 border-[#2C2C2C] border-t-transparent rounded-full animate-spin"></span>
+                    ) : (
+                      <>
+                        Save Scratch Settings
+                        <CheckCircle className="w-5 h-5 ml-1.5" />
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* List of registered deals */}
+            <div className="lg:col-span-7">
+              <div className="sketch-border bg-[#FFF] p-6 shadow-[5px_6px_0px_#2C2C2C] min-h-[500px]">
+                <h3 className="text-xl font-marker font-extrabold text-[#2C2C2C] mb-6 underline decoration-2 decoration-[#90CAF9] flex items-center">
+                  <Tag className="w-5 h-5 mr-1.5 text-[#2C2C2C]" />
+                  Daily Agenda Deals Registry
+                </h3>
+
+                {offersLoading ? (
+                  <div className="p-20 flex justify-center items-center">
+                    <span className="w-8 h-8 border-4 border-[#2C2C2C] border-t-transparent rounded-full animate-spin"></span>
+                  </div>
+                ) : offers.length === 0 ? (
+                  <div className="p-16 text-center text-[#6A6A6A] flex flex-col items-center">
+                    <AlertCircle className="w-12 h-12 mb-3 text-[#B71C1C]" />
+                    <p className="text-base font-extrabold">NO OFFERS IN OFFICE REGISTRY</p>
+                    <p className="text-xs text-[#6A6A6A] mt-1">Specify new deals on the chalkboard ledger on the left.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {offers.map((item) => (
+                      <div
+                        key={item.id}
+                        className={`sketch-border-thin p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-all ${
+                          item.isActive 
+                            ? "bg-[#FFE082]/65 shadow-[2px_3px_0_#2C2C2C]" 
+                            : "bg-[#FAF6EE]/35"
+                        }`}
+                      >
+                        <div className="flex items-start space-x-3.5">
+                          <div className="w-12 h-12 rounded-full border-2 border-[#2C2C2C] bg-white flex items-center justify-center text-2xl shadow-[1px_2.5px_0_#2C2C2C] shrink-0 mt-0.5">
+                            {item.emoji}
+                          </div>
+                          <div>
+                            <div className="flex items-center space-x-2">
+                              <span className="bg-white border border-[#2C2C2C] font-marker font-bold text-xs px-2 py-0.5 rounded shadow-[1px_1px_0_#2C2C2C]">
+                                {item.ribbon}
+                              </span>
+                              {item.isActive && (
+                                <span className="bg-[#81C784] border border-[#2C2C2C] font-marker font-bold text-xs px-2 py-0.5 rounded text-white shadow-[1px_1px_0_#2C2C2C] animate-pulse">
+                                  ★ LIVE NOW
+                                </span>
+                              )}
+                            </div>
+                            <h4 className="text-lg font-hand font-extrabold text-[#2C2C2C] mt-2.5 leading-tight">
+                              {item.title}
+                            </h4>
+                            <p className="text-xs text-[#6A6A6A] font-sans font-semibold mt-1">
+                              {item.subtext}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-2 self-end sm:self-center shrink-0">
+                          {!item.isActive && (
+                            <button
+                              onClick={() => handleActivateOffer(item.id)}
+                              className="px-3.5 py-2 text-xs font-bold font-marker border-2 border-[#2C2C2C] bg-[#C8E6C9] hover:bg-[#A5D6A7] text-[#2C2C2C] rounded-xl shadow-[1.5px_2px_0_#2C2C2C] active:translate-y-0.5 cursor-pointer"
+                            >
+                              Activate
+                            </button>
+                          )}
+                          
+                          <button
+                            onClick={() => handleDeleteOffer(item.id)}
+                            className="p-2 border-2 border-[#2C2C2C] bg-[#FFCDD2] hover:bg-[#EF9A9A] text-[#B71C1C] rounded-xl shadow-[1.5px_2px_0_#2C2C2C] active:translate-y-0.5 cursor-pointer"
+                            title="Delete Deal"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}
