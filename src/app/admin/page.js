@@ -902,6 +902,12 @@ export default function AdminDashboard() {
         >
           📜 Ledger Registry
         </button>
+        <Link
+          href="/admin/messages"
+          className="px-5 py-2.5 rounded-t-xl font-marker font-bold text-sm border-2 border-[#2C2C2C] border-b-0 -mb-[2px] transition-all cursor-pointer bg-[#FAF6EE] text-[#6A6A6A] hover:bg-white/50 flex items-center gap-1.5"
+        >
+          💬 Chat Inbox
+        </Link>
         <button
           onClick={() => {
             setActiveTab("customize");
