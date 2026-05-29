@@ -74,7 +74,7 @@ export default function VisitorPromoWidget() {
     }
   };
 
-  // Helper: Check clipboard for any valid email addresses
+  // Helper: Check clipboard for any valid email addresses (only triggered by explicit user gesture)
   const readAndVerifyClipboard = async () => {
     try {
       if (typeof window === "undefined" || !navigator.clipboard) return false;
@@ -90,7 +90,7 @@ export default function VisitorPromoWidget() {
         }
       }
     } catch (e) {
-      // Permission denied or browser block
+      // Clipboard blocked or permission denied
     }
     return false;
   };
@@ -103,7 +103,7 @@ export default function VisitorPromoWidget() {
         return;
       }
 
-      // 1. URL Query Parameter Auto-Capture
+      // 1. URL Query Parameter Auto-Capture (Requires zero permission, 100% silent)
       const params = new URLSearchParams(window.location.search);
       const urlEmail = params.get("email");
       if (urlEmail) {
@@ -114,7 +114,7 @@ export default function VisitorPromoWidget() {
         }
       }
 
-      // 2. LocalStorage Auto-Capture (If they previously filled any other form on our website)
+      // 2. LocalStorage Auto-Capture (Requires zero permission, 100% silent)
       const savedEmail = localStorage.getItem("shubhdeeplabs_user_email");
       if (savedEmail) {
         const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
@@ -124,7 +124,7 @@ export default function VisitorPromoWidget() {
         }
       }
 
-      // 3. Global Copy/Paste Listeners to intercept email copies on-the-fly
+      // 3. Global Paste Event Listener (Requires zero permission, triggered by user pasting)
       const handleGlobalPaste = (e) => {
         const text = e.clipboardData?.getData("text");
         if (text) {
@@ -136,39 +136,21 @@ export default function VisitorPromoWidget() {
         }
       };
 
-      const handleGlobalCopy = () => {
-        setTimeout(async () => {
-          await readAndVerifyClipboard();
-        }, 150);
-      };
-
-      // 4. Silent Clipboard scan on page interaction/click
-      const handleSilentClipboardCheck = async () => {
-        await readAndVerifyClipboard();
-      };
-
       window.addEventListener("paste", handleGlobalPaste);
-      window.addEventListener("copy", handleGlobalCopy);
-      window.addEventListener("click", handleSilentClipboardCheck);
 
-      // 5. Open the elegant non-intrusive floating sticky after a brief delay
+      // 4. Open the elegant non-intrusive floating sticky after a brief delay
+      // Since silent background reads are blocked by modern browsers, we show the widget
+      // to let them trigger autofill or type.
       const timer = setTimeout(() => {
         const stillNotClaimed = localStorage.getItem("shubhdeeplabs_promo_claimed") !== "true";
         if (stillNotClaimed) {
-          // Attempt silent read one last time before opening UI
-          readAndVerifyClipboard().then((success) => {
-            if (!success) {
-              setIsOpen(true);
-            }
-          });
+          setIsOpen(true);
         }
       }, 3000);
 
       return () => {
         clearTimeout(timer);
         window.removeEventListener("paste", handleGlobalPaste);
-        window.removeEventListener("copy", handleGlobalCopy);
-        window.removeEventListener("click", handleSilentClipboardCheck);
       };
     }
   }, []);
