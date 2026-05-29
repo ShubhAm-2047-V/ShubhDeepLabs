@@ -870,6 +870,12 @@ export const dbService = {
         email: "shubdeeplabs@gmail.com",
         address: "Solapur, Maharashtra"
       },
+      welcomeOffer: {
+        title: "Welcome Promo",
+        discountAmount: 1000,
+        couponCode: "SDL1000WELCOME",
+        description: "Copy your email address to your clipboard and tap Autofill, or use native autofill below to automatically claim your ₹1,000 Welcome Code."
+      },
       features: [
         { title: "100% Original Work", desc: "No copy-pasted templates. Every codebase is structured freshly according to your specific college needs.", icon: "CheckSquare", border: "border-t-[#66BB6A]" },
         { title: "On-Time Delivery", desc: "We are extremely strict with dates. Get your complete setup, reports, and slides well before your final submit day.", icon: "Clock", border: "border-t-[#42A5F5]" },

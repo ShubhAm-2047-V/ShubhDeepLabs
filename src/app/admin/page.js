@@ -156,6 +156,24 @@ export default function AdminDashboard() {
     });
   };
 
+  const updateWelcomeOfferField = (key, val) => {
+    setSiteSettings(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        welcomeOffer: {
+          ...((prev.welcomeOffer || {
+            title: "Welcome Promo",
+            discountAmount: 1000,
+            couponCode: "SDL1000WELCOME",
+            description: "Copy your email address to your clipboard and tap Autofill, or use native autofill below to automatically claim your ₹1,000 Welcome Code."
+          })),
+          [key]: val
+        }
+      };
+    });
+  };
+
   const updateFeature = (index, key, val) => {
     setSiteSettings(prev => {
       if (!prev) return prev;
@@ -1544,6 +1562,58 @@ export default function AdminDashboard() {
                       onChange={(e) => updateContactField("address", e.target.value)}
                       className="w-full text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
                       placeholder="e.g. Solapur, Maharashtra"
+                    />
+                  </div>
+                </div>
+
+                {/* 2.5. WELCOME PROMO OFFER DETAILS */}
+                <div className="sketch-card p-6 bg-white border-3 border-[#2C2C2C] space-y-4">
+                  <h4 className="text-lg font-hand font-extrabold border-b-2 border-[#2C2C2C]/10 pb-2 text-[#EF5350] uppercase">
+                    2.5. Welcome Promo Offer Configuration
+                  </h4>
+                  
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-[#6A6A6A] font-bold mb-1">Promo Offer Title</label>
+                    <input 
+                      type="text" 
+                      value={siteSettings.welcomeOffer?.title || "Welcome Promo"} 
+                      onChange={(e) => updateWelcomeOfferField("title", e.target.value)}
+                      className="w-full text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                      placeholder="e.g. Welcome Promo"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs uppercase tracking-wider text-[#6A6A6A] font-bold mb-1">Discount Coupon Code</label>
+                      <input 
+                        type="text" 
+                        value={siteSettings.welcomeOffer?.couponCode || "SDL1000WELCOME"} 
+                        onChange={(e) => updateWelcomeOfferField("couponCode", e.target.value)}
+                        className="w-full text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                        placeholder="e.g. SDL1000WELCOME"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs uppercase tracking-wider text-[#6A6A6A] font-bold mb-1">Discount Amount (₹ INR)</label>
+                      <input 
+                        type="number" 
+                        value={siteSettings.welcomeOffer?.discountAmount || 1000} 
+                        onChange={(e) => updateWelcomeOfferField("discountAmount", parseInt(e.target.value) || 0)}
+                        className="w-full text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-mono focus:outline-none"
+                        placeholder="e.g. 1000"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs uppercase tracking-wider text-[#6A6A6A] font-bold mb-1">Offer Brief Description</label>
+                    <textarea 
+                      rows={3}
+                      value={siteSettings.welcomeOffer?.description || ""} 
+                      onChange={(e) => updateWelcomeOfferField("description", e.target.value)}
+                      className="w-full text-xs p-2.5 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-lg text-[#2C2C2C] font-sans font-semibold focus:outline-none resize-none"
+                      placeholder="Enter promo guidelines..."
                     />
                   </div>
                 </div>

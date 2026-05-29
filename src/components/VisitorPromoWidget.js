@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { X, Mail, Gift, Check, ArrowRight, Clipboard } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
+import { dbService } from "@/lib/supabase";
 
 export default function VisitorPromoWidget() {
   const pathname = usePathname();
@@ -14,6 +15,19 @@ export default function VisitorPromoWidget() {
   const [isClaimed, setIsClaimed] = useState(false);
   const [detectedEmail, setDetectedEmail] = useState("");
   const [isCollapsed, setIsCollapsed] = useState(true);
+
+  // Dynamic Customisable Promotion States
+  const [offerDetails, setOfferDetails] = useState({
+    title: "Welcome Promo",
+    discountAmount: 1000,
+    couponCode: "SDL1000WELCOME",
+    description: "Copy your email address to your clipboard and tap Autofill, or use native autofill below to automatically claim your ₹1,000 Welcome Code."
+  });
+
+  // If path starts with /admin, do not render or do anything (prevents admin dashboard clutter)
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   // Helper: Register the lead in database & copy coupon code to clipboard
   const registerAutomatedLead = async (capturedEmail, sourceMethod) => {
@@ -36,14 +50,14 @@ export default function VisitorPromoWidget() {
           stack: "Mailing List",
           addons: "None",
           deadline: "Immediate",
-          budget: "₹1000 Discount",
+          budget: `₹${offerDetails.discountAmount} Discount`,
           timestamp: new Date().toISOString()
         })
       });
 
       if (res.ok) {
         // Automatically copy coupon code to clipboard
-        const couponCode = "SDL1000WELCOME";
+        const couponCode = offerDetails.couponCode || "SDL1000WELCOME";
         if (navigator.clipboard) {
           await navigator.clipboard.writeText(couponCode);
         }
@@ -97,6 +111,13 @@ export default function VisitorPromoWidget() {
         setIsClaimed(true);
         return;
       }
+
+      // Fetch custom welcome offer settings from database
+      dbService.getSiteSettings().then((settings) => {
+        if (settings?.welcomeOffer) {
+          setOfferDetails(settings.welcomeOffer);
+        }
+      }).catch(e => console.error("Failed to load welcome offer configs:", e));
 
       // 1. URL Query Parameter Auto-Capture (Requires zero permission, 100% silent)
       const params = new URLSearchParams(window.location.search);
@@ -187,7 +208,7 @@ export default function VisitorPromoWidget() {
             className="flex items-center gap-2 px-4 py-3 bg-[#FFF59D] border-2.5 border-[#2C2C2C] rounded-2xl shadow-[4px_4px_0px_#2C2C2C] text-[#2C2C2C] font-bold text-xs uppercase cursor-pointer hover:bg-white transition-all select-none rotate-[-1deg]"
           >
             <Gift className="w-5 h-5 text-[#EF5350] animate-bounce" />
-            <span>🎁 Claim ₹1,000 Offer</span>
+            <span>🎁 Claim ₹{offerDetails.discountAmount?.toLocaleString() || "1,000"} Offer</span>
           </motion.button>
         ) : (
           // Expanded State: Elegant whiteboard sketchy note/memo taped to screen
@@ -220,12 +241,12 @@ export default function VisitorPromoWidget() {
                   <Gift className="w-4 h-4" />
                 </div>
                 <h3 className="text-sm font-hand font-extrabold text-[#2C2C2C] tracking-wide uppercase underline decoration-2 decoration-[#FFF59D]">
-                  Welcome Promo
+                  {offerDetails.title || "Welcome Promo"}
                 </h3>
               </div>
 
               <p className="text-[10.5px] text-[#5A5A5A] leading-relaxed font-sans font-semibold">
-                Copy your email address to your clipboard and tap Autofill, or use native autofill below to automatically claim your <span className="font-extrabold text-[#2C2C2C]">₹1,000 Welcome Code</span>.
+                {offerDetails.description || `Copy your email address to your clipboard and tap Autofill, or use native autofill below to automatically claim your ₹${offerDetails.discountAmount?.toLocaleString() || "1,000"} Welcome Code.`}
               </p>
 
               {/* Quick Clipboard Autofill Action */}
