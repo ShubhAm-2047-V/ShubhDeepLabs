@@ -24,6 +24,9 @@ export const metadata = {
   title: "Shubdeep Labs | Building Intelligent Solutions",
   description: "Get high-quality hand-drawn custom academic projects with 100% original code, PPT presentation slides, comprehensive thesis reports, and mock viva tutoring. Specially made for Diploma and Engineering final year submissions.",
   keywords: ["academic projects", "diploma final year projects", "engineering projects", "final year projects", "MCA projects", "AI projects", "web development projects", "coding guidance"],
+  verification: {
+    google: "fZFmrDrF1HxRz2XF_EMLx_i1AmUSVbxFYD328XLjhck",
+  },
 };
 
 export default function RootLayout({ children }) {
