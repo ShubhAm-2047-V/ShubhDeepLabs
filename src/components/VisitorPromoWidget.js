@@ -15,11 +15,6 @@ export default function VisitorPromoWidget() {
   const [detectedEmail, setDetectedEmail] = useState("");
   const [isCollapsed, setIsCollapsed] = useState(true);
 
-  // If path starts with /admin, do not render or do anything (prevents admin dashboard clutter)
-  if (pathname?.startsWith("/admin")) {
-    return null;
-  }
-
   // Helper: Register the lead in database & copy coupon code to clipboard
   const registerAutomatedLead = async (capturedEmail, sourceMethod) => {
     if (localStorage.getItem("shubhdeeplabs_promo_claimed") === "true") return;
@@ -169,6 +164,11 @@ export default function VisitorPromoWidget() {
       });
     }
   };
+
+  // React Hook Rule Compliance: Render checks must occur after all Hook declarations (useState, useEffect, etc.)
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   if (!isOpen || isClaimed) return null;
 
