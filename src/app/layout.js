@@ -4,7 +4,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import SupportChatbotWidget from "@/components/SupportChatbotWidget";
+import VisitorPromoWidget from "@/components/VisitorPromoWidget";
 import ProductCustomizer from "@/components/ProductCustomizer";
 import CursorGlow from "@/components/CursorGlow";
 import { Toaster } from "react-hot-toast";
@@ -48,17 +48,17 @@ export default function RootLayout({ children }) {
           <Footer />
           
           {/* ── Unified FAB column (bottom-right) ── */}
-          {/* Order: Customizer (top) → Chatbot (middle) → WhatsApp (bottom) */}
+          {/* Order: Customizer (top) → WhatsApp (bottom) */}
           <div className="fixed bottom-6 right-4 sm:right-6 z-[100] flex flex-col items-end gap-3">
             {/* Customiser widget */}
             <ProductCustomizer />
 
-            {/* AI support chatbot widget */}
-            <SupportChatbotWidget />
-
             {/* WhatsApp direct contact */}
             <WhatsAppButton />
           </div>
+
+          {/* Welcome Offer Promo Modal Pop-up */}
+          <VisitorPromoWidget />
           
           {/* Custom handwritten toaster notification */}
           <Toaster 
