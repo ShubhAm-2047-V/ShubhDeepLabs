@@ -27,6 +27,31 @@ export const metadata = {
   verification: {
     google: "fZFmrDrF1HxRz2XF_EMLx_i1AmUSVbxFYD328XLjhck",
   },
+  alternates: {
+    canonical: "https://shubh-deep-labs.vercel.app",
+  },
+  openGraph: {
+    title: "Shubdeep Labs | Building Intelligent Solutions",
+    description: "Get high-quality hand-drawn custom academic projects with 100% original code, PPT presentation slides, comprehensive thesis reports, and mock viva tutoring. Specially made for Diploma and Engineering final year submissions.",
+    url: "https://shubh-deep-labs.vercel.app",
+    siteName: "Shubdeep Labs",
+    images: [
+      {
+        url: "https://shubh-deep-labs.vercel.app/logo.jpg",
+        width: 800,
+        height: 800,
+        alt: "Shubdeep Labs Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Shubdeep Labs | Building Intelligent Solutions",
+    description: "Get high-quality hand-drawn custom academic projects with 100% original code, PPT presentation slides, comprehensive thesis reports, and mock viva tutoring. Specially made for Diploma and Engineering final year submissions.",
+    images: ["https://shubh-deep-labs.vercel.app/logo.jpg"],
+  },
 };
 
 export default function RootLayout({ children }) {
