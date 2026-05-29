@@ -24,11 +24,6 @@ export default function VisitorPromoWidget() {
     description: "Copy your email address to your clipboard and tap Autofill, or use native autofill below to automatically claim your ₹1,000 Welcome Code."
   });
 
-  // If path starts with /admin, do not render or do anything (prevents admin dashboard clutter)
-  if (pathname?.startsWith("/admin")) {
-    return null;
-  }
-
   // Helper: Register the lead in database & copy coupon code to clipboard
   const registerAutomatedLead = async (capturedEmail, sourceMethod) => {
     if (localStorage.getItem("shubhdeeplabs_promo_claimed") === "true") return;
