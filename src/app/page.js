@@ -215,6 +215,9 @@ export default function Home() {
         paymentStatus: "Unpaid"
       });
 
+      localStorage.setItem("shubhdeeplabs_user_email", formData.email);
+      localStorage.setItem("shubhdeeplabs_user_name", formData.name);
+
       toast.success("Inquiry filed! We will call you soon.", {
         className: "sketch-card border-3 border-[#2C2C2C] bg-[#FAF6EE] text-[#2C2C2C] font-marker text-lg"
       });

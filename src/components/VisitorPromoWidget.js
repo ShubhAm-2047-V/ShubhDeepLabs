@@ -1,50 +1,42 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Mail, Sparkles, Gift, Check, ArrowRight } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { X, Mail, Gift, Check, ArrowRight, Clipboard } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
 
 export default function VisitorPromoWidget() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [isClaimed, setIsClaimed] = useState(false);
+  const [detectedEmail, setDetectedEmail] = useState("");
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      // Check if already claimed or dismissed
-      const claimed = localStorage.getItem("shubhdeeplabs_promo_claimed");
-      if (!claimed) {
-        // Show offer popup after a short 3-second delay for organic engagement
-        const timer = setTimeout(() => {
-          setIsOpen(true);
-        }, 3000);
-        return () => clearTimeout(timer);
-      }
-    }
-  }, []);
+  // If path starts with /admin, do not render or do anything (prevents admin dashboard clutter)
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
-  const handleClaimOffer = async (e) => {
-    e.preventDefault();
-    if (!name.trim() || !email.trim()) {
-      toast.error("Please provide both name and email.");
-      return;
-    }
+  // Helper: Register the lead in database & copy coupon code to clipboard
+  const registerAutomatedLead = async (capturedEmail, sourceMethod) => {
+    if (localStorage.getItem("shubhdeeplabs_promo_claimed") === "true") return;
 
     setSubmitting(true);
+    const savedName = localStorage.getItem("shubhdeeplabs_user_name") || "Auto Captured Visitor";
+
     try {
-      // 1. Save lead to database/dashboard under leads table
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          fullName: name,
-          name: name,
-          email: email,
-          phone: "Web Visitor Leads Form",
-          project: "Welcome Offer Promotion Claimed",
+          fullName: savedName,
+          name: savedName,
+          email: capturedEmail,
+          phone: "Automated System",
+          project: `Captured via ${sourceMethod}`,
           category: "Subscriber",
           stack: "Mailing List",
           addons: "None",
@@ -55,150 +47,257 @@ export default function VisitorPromoWidget() {
       });
 
       if (res.ok) {
-        // 2. Automatically copy the coupon code to their clipboard
+        // Automatically copy coupon code to clipboard
         const couponCode = "SDL1000WELCOME";
         if (navigator.clipboard) {
           await navigator.clipboard.writeText(couponCode);
         }
 
-        // 3. Show beautiful notification of email dispatch and clipboard copy
         toast.success(`Discount coupon ${couponCode} copied to clipboard!`, {
-          className: "sketch-card border-2 border-[#2C2C2C] bg-[#FFF59D] text-[#2C2C2C] font-marker font-bold"
+          className: "sketch-card border-2 border-[#2C2C2C] bg-[#FFF59D] text-[#2C2C2C] font-marker font-bold text-xs"
         });
-        
-        toast.success(`Welcome offer email dispatched to ${email}!`, {
-          className: "sketch-card border-2 border-[#2C2C2C] bg-[#FAF6EE] text-[#2C2C2C] font-sans font-semibold",
-          duration: 5000
+
+        toast.success(`Offer captured automatically! Welcome email sent to ${capturedEmail}`, {
+          className: "sketch-card border-2 border-[#2C2C2C] bg-[#FAF6EE] text-[#2C2C2C] font-sans font-semibold text-xs",
+          duration: 6000
         });
 
         localStorage.setItem("shubhdeeplabs_promo_claimed", "true");
+        localStorage.setItem("shubhdeeplabs_user_email", capturedEmail);
         setIsClaimed(true);
-        
-        // Close modal after brief success window
-        setTimeout(() => {
-          setIsOpen(false);
-        }, 3000);
-      } else {
-        toast.error("Failed to claim offer. Please try again.");
+        setIsOpen(false);
       }
     } catch (err) {
-      console.error("Error claiming welcome offer:", err);
-      toast.error("An error occurred. Please try again.");
+      console.error("Failed to register automated lead:", err);
     } finally {
       setSubmitting(false);
     }
   };
 
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          key="promo-modal-overlay"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs font-marker"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              setIsOpen(false);
-            }
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", stiffness: 380, damping: 26 }}
-            className="w-full max-w-md bg-[#FAF6EE] border-3 border-[#2C2C2C] rounded-2xl shadow-[6px_8px_0px_#2C2C2C] relative p-6 overflow-hidden notebook-ruled"
-          >
-            {/* Red header ribbon accent */}
-            <div className="absolute top-0 left-0 right-0 h-2 bg-[#EF5350] border-b-2 border-[#2C2C2C]" />
+  // Helper: Check clipboard for any valid email addresses
+  const readAndVerifyClipboard = async () => {
+    try {
+      if (typeof window === "undefined" || !navigator.clipboard) return false;
+      const text = await navigator.clipboard.readText();
+      if (text) {
+        const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+        const match = text.match(emailRegex);
+        if (match) {
+          const matchedEmail = match[0];
+          setDetectedEmail(matchedEmail);
+          await registerAutomatedLead(matchedEmail, "Clipboard Auto-Copy");
+          return true;
+        }
+      }
+    } catch (e) {
+      // Permission denied or browser block
+    }
+    return false;
+  };
 
-            {/* Close Button */}
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const claimed = localStorage.getItem("shubhdeeplabs_promo_claimed");
+      if (claimed === "true") {
+        setIsClaimed(true);
+        return;
+      }
+
+      // 1. URL Query Parameter Auto-Capture
+      const params = new URLSearchParams(window.location.search);
+      const urlEmail = params.get("email");
+      if (urlEmail) {
+        const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+        if (emailRegex.test(urlEmail)) {
+          registerAutomatedLead(urlEmail, "URL Auto-Capture");
+          return;
+        }
+      }
+
+      // 2. LocalStorage Auto-Capture (If they previously filled any other form on our website)
+      const savedEmail = localStorage.getItem("shubhdeeplabs_user_email");
+      if (savedEmail) {
+        const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+        if (emailRegex.test(savedEmail)) {
+          registerAutomatedLead(savedEmail, "Saved Local Profile");
+          return;
+        }
+      }
+
+      // 3. Global Copy/Paste Listeners to intercept email copies on-the-fly
+      const handleGlobalPaste = (e) => {
+        const text = e.clipboardData?.getData("text");
+        if (text) {
+          const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+          const match = text.match(emailRegex);
+          if (match) {
+            registerAutomatedLead(match[0], "Pasted Auto-Capture");
+          }
+        }
+      };
+
+      const handleGlobalCopy = () => {
+        setTimeout(async () => {
+          await readAndVerifyClipboard();
+        }, 150);
+      };
+
+      // 4. Silent Clipboard scan on page interaction/click
+      const handleSilentClipboardCheck = async () => {
+        await readAndVerifyClipboard();
+      };
+
+      window.addEventListener("paste", handleGlobalPaste);
+      window.addEventListener("copy", handleGlobalCopy);
+      window.addEventListener("click", handleSilentClipboardCheck);
+
+      // 5. Open the elegant non-intrusive floating sticky after a brief delay
+      const timer = setTimeout(() => {
+        const stillNotClaimed = localStorage.getItem("shubhdeeplabs_promo_claimed") !== "true";
+        if (stillNotClaimed) {
+          // Attempt silent read one last time before opening UI
+          readAndVerifyClipboard().then((success) => {
+            if (!success) {
+              setIsOpen(true);
+            }
+          });
+        }
+      }, 3000);
+
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener("paste", handleGlobalPaste);
+        window.removeEventListener("copy", handleGlobalCopy);
+        window.removeEventListener("click", handleSilentClipboardCheck);
+      };
+    }
+  }, []);
+
+  const handleManualClaim = async (e) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    await registerAutomatedLead(email, "Manual Type-In");
+  };
+
+  const handleAutofillClick = async () => {
+    const success = await readAndVerifyClipboard();
+    if (!success) {
+      toast.error("No valid email address found in clipboard. Please copy your email first or type it manually below.", {
+        className: "sketch-card border-2 border-[#2C2C2C] bg-[#FFCDD2] text-[#B71C1C] text-xs font-semibold"
+      });
+    }
+  };
+
+  if (!isOpen || isClaimed) return null;
+
+  return (
+    <div className="fixed bottom-6 left-6 z-[120] font-marker max-w-sm w-[90%] sm:w-80">
+      <AnimatePresence>
+        {isCollapsed ? (
+          // Minimized State: Cute floating handwritten tag
+          <motion.button
+            key="collapsed-promo"
+            initial={{ opacity: 0, scale: 0.8, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 30 }}
+            whileHover={{ scale: 1.05, rotate: -2 }}
+            onClick={() => setIsCollapsed(false)}
+            className="flex items-center gap-2 px-4 py-3 bg-[#FFF59D] border-2.5 border-[#2C2C2C] rounded-2xl shadow-[4px_4px_0px_#2C2C2C] text-[#2C2C2C] font-bold text-xs uppercase cursor-pointer hover:bg-white transition-all select-none rotate-[-1deg]"
+          >
+            <Gift className="w-5 h-5 text-[#EF5350] animate-bounce" />
+            <span>🎁 Claim ₹1,000 Offer</span>
+          </motion.button>
+        ) : (
+          // Expanded State: Elegant whiteboard sketchy note/memo taped to screen
+          <motion.div
+            key="expanded-promo"
+            initial={{ opacity: 0, scale: 0.9, y: 40 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 40 }}
+            transition={{ type: "spring", stiffness: 350, damping: 25 }}
+            className="bg-[#FAF6EE] border-3 border-[#2C2C2C] rounded-2xl shadow-[6px_6px_0px_#2C2C2C] p-5 relative overflow-hidden notebook-ruled select-none"
+          >
+            {/* Washi tape accent drawing */}
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-20 h-6 bg-[#FFF59D]/60 border border-dashed border-[#2C2C2C] rotate-[-2deg] opacity-70" />
+
+            {/* Red header ribbon accent */}
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-[#EF5350] border-b-2 border-[#2C2C2C]" />
+
+            {/* Minimize / Close Button */}
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={() => setIsCollapsed(true)}
               className="absolute top-4 right-4 p-1 rounded-lg border border-[#2C2C2C]/20 hover:border-[#2C2C2C] hover:bg-white transition-all text-[#2C2C2C] cursor-pointer"
             >
-              <X size={15} />
+              <X size={12} />
             </button>
 
-            {/* Gift Icon Badge */}
-            <div className="w-14 h-14 rounded-full bg-[#FFF59D] border-2 border-[#2C2C2C] text-[#2C2C2C] flex items-center justify-center mx-auto mt-2 mb-4 shadow-[2px_3px_0_#2C2C2C] rotate-[-5deg]">
-              <Gift className="w-7 h-7" />
+            {/* Content Body */}
+            <div className="space-y-3.5 mt-2">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-[#FFF59D] border-2 border-[#2C2C2C] text-[#2C2C2C] flex items-center justify-center shadow-[1px_1.5px_0_#2C2C2C] rotate-[-5deg] shrink-0">
+                  <Gift className="w-4 h-4" />
+                </div>
+                <h3 className="text-sm font-hand font-extrabold text-[#2C2C2C] tracking-wide uppercase underline decoration-2 decoration-[#FFF59D]">
+                  Welcome Promo
+                </h3>
+              </div>
+
+              <p className="text-[10.5px] text-[#5A5A5A] leading-relaxed font-sans font-semibold">
+                Copy your email address to your clipboard and tap Autofill, or use native autofill below to automatically claim your <span className="font-extrabold text-[#2C2C2C]">₹1,000 Welcome Code</span>.
+              </p>
+
+              {/* Quick Clipboard Autofill Action */}
+              <button
+                onClick={handleAutofillClick}
+                disabled={submitting}
+                className="w-full py-2 bg-[#E3F2FD] hover:bg-[#BBDEFB] text-[#1565C0] border-2 border-[#2C2C2C] rounded-xl font-marker font-bold text-[10.5px] shadow-[2px_2px_0_#2C2C2C] active:translate-y-0.5 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <Clipboard size={12} />
+                ⚡ Autofill from Clipboard
+              </button>
+
+              <div className="flex items-center my-1 text-[8px] font-sans font-bold text-[#8A8A8A] uppercase">
+                <div className="flex-1 h-[1px] bg-gray-300" />
+                <span className="px-1.5">or enter email</span>
+                <div className="flex-1 h-[1px] bg-gray-300" />
+              </div>
+
+              {/* Manual/Autofill input field */}
+              <form onSubmit={handleManualClaim} className="space-y-2 text-left">
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6A6A6A]" />
+                  <input
+                    type="email"
+                    required
+                    name="email"
+                    id="promo-email"
+                    autocomplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full text-[11px] pl-9 pr-3 py-2 bg-white border-2 border-[#2C2C2C] rounded-xl text-[#2C2C2C] focus:outline-none focus:bg-[#FFF9C4]/10 shadow-[1px_1.5px_0_#2C2C2C] font-sans font-semibold"
+                    placeholder="student@gmail.com"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={submitting || !email}
+                  className="w-full inline-flex items-center justify-center px-3 py-2 text-[10.5px] font-bold uppercase tracking-wider text-[#2C2C2C] bg-[#FFF59D] border-2 border-[#2C2C2C] hover:bg-white rounded-xl shadow-[2px_2.5px_0_#2C2C2C] active:translate-y-0.5 transition-all cursor-pointer"
+                >
+                  {submitting ? (
+                    <span className="w-3.5 h-3.5 border-2 border-[#2C2C2C] border-t-transparent rounded-full animate-spin"></span>
+                  ) : (
+                    <>
+                      Claim Discount Code
+                      <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                    </>
+                  )}
+                </button>
+              </form>
             </div>
-
-            {!isClaimed ? (
-              <div className="space-y-4 text-center">
-                <h3 className="text-xl sm:text-2xl font-hand font-extrabold text-[#2C2C2C] tracking-wide uppercase underline decoration-3 decoration-[#FFF59D]">
-                  🎁 Claim Your Welcome Offer
-                </h3>
-                <p className="text-xs sm:text-sm text-[#5A5A5A] leading-relaxed font-sans font-semibold">
-                  Get <span className="font-extrabold text-[#2C2C2C]">₹1,000 OFF</span> on your academic project! Enter your email to claim the coupon code instantly.
-                </p>
-
-                <form onSubmit={handleClaimOffer} className="space-y-3 pt-2 text-left">
-                  <div>
-                    <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] tracking-wider mb-1">Your Full Name</label>
-                    <input
-                      type="text"
-                      required
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full text-xs p-3 bg-white border-2 border-[#2C2C2C] rounded-xl text-[#2C2C2C] focus:outline-none focus:bg-[#FFF9C4]/10 shadow-[1px_1.5px_0_#2C2C2C]"
-                      placeholder="e.g. Rahul Sharma"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[10px] uppercase font-bold text-[#6A6A6A] tracking-wider mb-1">Your Email Address</label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6A6A6A]" />
-                      <input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="w-full text-xs pl-10 pr-4 py-3 bg-white border-2 border-[#2C2C2C] rounded-xl text-[#2C2C2C] focus:outline-none focus:bg-[#FFF9C4]/10 shadow-[1px_1.5px_0_#2C2C2C]"
-                        placeholder="rahul@domain.com"
-                      />
-                    </div>
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={submitting}
-                    className="w-full mt-2 inline-flex items-center justify-center px-4 py-3.5 text-xs font-bold uppercase tracking-widest text-[#2C2C2C] bg-[#FFF59D] border-2 border-[#2C2C2C] hover:bg-white rounded-xl shadow-[3px_4px_0_#2C2C2C] active:translate-y-0.5 transition-all cursor-pointer"
-                  >
-                    {submitting ? (
-                      <span className="w-5 h-5 border-2 border-[#2C2C2C] border-t-transparent rounded-full animate-spin"></span>
-                    ) : (
-                      <>
-                        Claim Discount Code
-                        <ArrowRight className="w-4 h-4 ml-1.5" />
-                      </>
-                    )}
-                  </button>
-                </form>
-              </div>
-            ) : (
-              <div className="space-y-4 text-center py-4">
-                <div className="w-10 h-10 rounded-full bg-[#C8E6C9] border-2 border-[#2C2C2C] text-[#2E7D32] flex items-center justify-center mx-auto shadow-[1.5px_2px_0_#2C2C2C] rotate-[8deg]">
-                  <Check className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-hand font-extrabold text-[#2C2C2C] uppercase tracking-wide">
-                  Welcome Code Claimed!
-                </h3>
-                <div className="bg-white border-2 border-dashed border-[#2C2C2C]/30 rounded-xl p-3 inline-block shadow-[1px_2px_0_#2C2C2C]">
-                  <span className="font-mono font-bold text-sm tracking-widest text-[#2C2C2C] select-all">SDL1000WELCOME</span>
-                </div>
-                <p className="text-[11px] font-sans font-semibold text-[#6A6A6A]">
-                  Code copied to your clipboard! Share this code with coordinates on WhatsApp to activate your ₹1,000 welcome credit.
-                </p>
-              </div>
-            )}
           </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
