@@ -72,23 +72,40 @@ function SketchedBox({ position, rotation, scale, color, offset }) {
   );
 }
 
-// A 3D model of a Notebook/Notepad
-function SketchNotebook({ position, rotation, scale, color }) {
+// A 3D model of a Notebook/Notepad with an opening cover
+function SketchNotebook({ position, rotation, scale, color, openProgress = 0 }) {
   const group = useRef();
-  
+  const coverGroup = useRef();
+
+  useFrame(() => {
+    if (coverGroup.current) {
+      // 0 = closed, 1 = open 144 degrees (0.8 * Math.PI)
+      coverGroup.current.rotation.y = -openProgress * Math.PI * 0.8;
+    }
+  });
+
   return (
     <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
       <group ref={group} position={position} rotation={rotation} scale={scale}>
-        {/* Paper stack */}
-        <mesh castShadow receiveShadow position={[0, 0, 0]}>
-          <boxGeometry args={[4, 5, 0.4]} />
-          <meshStandardMaterial color={color} roughness={0.9} />
+        {/* Back Cover & Pages (White paper block) */}
+        <mesh castShadow receiveShadow position={[0, 0, -0.15]}>
+          <boxGeometry args={[4, 5, 0.3]} />
+          <meshStandardMaterial color="#FFFBF5" roughness={0.9} />
           <Edges scale={1} threshold={15} color="#2C2C2C" />
         </mesh>
+
+        {/* Front Cover Hinge Group */}
+        <group ref={coverGroup} position={[-2, 0, 0.05]}>
+          <mesh castShadow receiveShadow position={[2, 0, 0]}>
+            <boxGeometry args={[4, 5, 0.1]} />
+            <meshStandardMaterial color={color} roughness={0.9} />
+            <Edges scale={1} threshold={15} color="#2C2C2C" />
+          </mesh>
+        </group>
         
         {/* Ring binders */}
         {[...Array(8)].map((_, i) => (
-          <mesh key={i} position={[-1.8, 2 - i * 0.55, 0.2]} rotation={[Math.PI / 2, 0, 0]}>
+          <mesh key={i} position={[-1.8, 2 - i * 0.55, 0]} rotation={[Math.PI / 2, 0, 0]}>
             <torusGeometry args={[0.2, 0.05, 8, 24]} />
             <meshStandardMaterial color="#2C2C2C" roughness={0.5} metalness={0.8} />
           </mesh>
@@ -100,27 +117,54 @@ function SketchNotebook({ position, rotation, scale, color }) {
 
 function SceneElements() {
   const scrollProgress = useScrollProgress();
-  const groupRef = useRef();
+  const groupRef1 = useRef();
+  const groupRef2 = useRef();
+  const groupRef3 = useRef();
 
   useFrame(() => {
-    if (groupRef.current) {
-      // Dynamic rotation based on scroll (2 full spins over the page length)
-      groupRef.current.rotation.y = scrollProgress * Math.PI * 4;
-      groupRef.current.rotation.x = Math.sin(scrollProgress * Math.PI) * 0.5;
-      
-      // Orbit-like movement tied to scroll
-      groupRef.current.position.y = Math.sin(scrollProgress * Math.PI * 2) * 1.5;
-      groupRef.current.position.x = Math.cos(scrollProgress * Math.PI * 2) * 2;
+    // Book 1: Sweeping arcs
+    if (groupRef1.current) {
+      groupRef1.current.position.y = Math.sin(scrollProgress * Math.PI * 2) * 3;
+      groupRef1.current.position.x = Math.cos(scrollProgress * Math.PI * 2) * 5;
+      groupRef1.current.rotation.y = scrollProgress * Math.PI * 4;
+      groupRef1.current.rotation.x = Math.sin(scrollProgress * Math.PI) * 0.5;
+    }
+    // Book 2: Vertical weaving
+    if (groupRef2.current) {
+      groupRef2.current.position.y = Math.cos(scrollProgress * Math.PI * 4) * 4;
+      groupRef2.current.position.x = Math.sin(scrollProgress * Math.PI * 2) * -6;
+      groupRef2.current.rotation.x = scrollProgress * Math.PI * 2;
+      groupRef2.current.rotation.y = scrollProgress * Math.PI;
+    }
+    // Book 3: Deep diagonal crossing
+    if (groupRef3.current) {
+      groupRef3.current.position.y = Math.sin(scrollProgress * Math.PI * 3 + 2) * 5;
+      groupRef3.current.position.x = Math.cos(scrollProgress * Math.PI * 3 + 1) * 4;
+      groupRef3.current.rotation.z = scrollProgress * Math.PI * 2;
+      groupRef3.current.rotation.x = scrollProgress * Math.PI;
     }
   });
 
+  // Calculate opening based on scroll progress (0 to 1 back and forth)
+  const open1 = Math.abs(Math.sin(scrollProgress * Math.PI * 6));
+  const open2 = Math.abs(Math.cos(scrollProgress * Math.PI * 8));
+  const open3 = Math.abs(Math.sin(scrollProgress * Math.PI * 4 + 1));
+
   return (
-    <group ref={groupRef}>
-      <PresentationControls global rotation={[0.1, -0.2, 0]} polar={[-0.4, 0.2]} azimuth={[-0.4, 0.2]} config={{ mass: 2, tension: 500 }} snap={{ mass: 4, tension: 1500 }}>
-        {/* ONE GIANT HERO NOTEBOOK */}
-        <SketchNotebook position={[0, 0, 0]} rotation={[0, 0, 0]} scale={2.5} color="#FFF59D" />
-      </PresentationControls>
-    </group>
+    <PresentationControls global rotation={[0.1, -0.2, 0]} polar={[-0.4, 0.2]} azimuth={[-0.4, 0.2]} config={{ mass: 2, tension: 500 }} snap={{ mass: 4, tension: 1500 }}>
+      {/* Three wandering books */}
+      <group ref={groupRef1}>
+        <SketchNotebook position={[0, 0, -2]} rotation={[0.2, 0.1, 0]} scale={0.7} color="#FFF59D" openProgress={open1} />
+      </group>
+      
+      <group ref={groupRef2}>
+        <SketchNotebook position={[0, 0, -4]} rotation={[-0.2, 0.5, 0.1]} scale={0.6} color="#A5D6A7" openProgress={open2} />
+      </group>
+      
+      <group ref={groupRef3}>
+        <SketchNotebook position={[0, 0, -6]} rotation={[0.1, -0.4, -0.2]} scale={0.8} color="#90CAF9" openProgress={open3} />
+      </group>
+    </PresentationControls>
   );
 }
 
