@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { dbService } from "@/lib/supabase";
-import ThreeScene from "@/components/ThreeScene";
+import ThreeWorld from "@/components/ThreeWorld";
 import { STEPS, calculateTotal, formatINR } from "@/components/ProductCustomizer";
 
 const ICON_MAP = {
@@ -328,16 +328,14 @@ export default function Home() {
   const currentFaqs = siteSettings?.faqs || faqs;
 
   return (
-    <div className="space-y-24 pb-20 relative overflow-hidden bg-[#FAF6EE]">
-      
-      {/* 1. WHIMSICAL HAND-SKETCHED HERO SECTION */}
-      <section className="relative min-h-[92vh] flex items-center justify-center pt-28 overflow-hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <ThreeWorld>
+      <div className="space-y-24 pb-20 relative overflow-hidden bg-transparent">
         
-        {/* Sketch ThreeJS 3D Draft Background */}
-        <ThreeScene />
-
-        {/* ruled paper grid overlay */}
-        <div className="ruled-paper absolute bottom-0 left-0 right-0 h-[22vh] opacity-40 pointer-events-none" />
+        {/* 1. WHIMSICAL HAND-SKETCHED HERO SECTION */}
+        <section className="relative min-h-[92vh] flex items-center justify-center pt-28 overflow-hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          {/* ruled paper grid overlay */}
+          <div className="ruled-paper absolute bottom-0 left-0 right-0 h-[22vh] opacity-40 pointer-events-none" />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10 w-full">
           {/* Hero text */}
@@ -919,5 +917,6 @@ export default function Home() {
 
 
     </div>
+    </ThreeWorld>
   );
 }
