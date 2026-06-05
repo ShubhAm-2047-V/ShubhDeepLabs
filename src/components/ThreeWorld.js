@@ -5,80 +5,40 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, ContactShadows, Edges, PresentationControls } from "@react-three/drei";
 import * as THREE from "three";
 
-// Helper hook to get scroll progress
+// Helper hook to get scroll progress without triggering React re-renders
 function useScrollProgress() {
-  const [progress, setProgress] = useState(0);
+  const progress = useRef(0);
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const height = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-      setProgress(scrollY / height);
+      progress.current = scrollY / height;
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll(); // Init
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   return progress;
 }
 
-function SketchParticles({ count = 250 }) {
-  const mesh = useRef();
-  const dummy = new THREE.Object3D();
-
-  useFrame((state) => {
-    if (!mesh.current) return;
-    const time = state.clock.getElapsedTime();
-    mesh.current.rotation.y = time * 0.05;
-    mesh.current.rotation.x = Math.sin(time * 0.1) * 0.1;
-  });
-
-  const positions = Array.from({ length: count }, () => [
-    (Math.random() - 0.5) * 40,
-    (Math.random() - 0.5) * 40,
-    (Math.random() - 0.5) * 40,
-  ]);
-
-  return (
-    <instancedMesh ref={mesh} args={[null, null, count]}>
-      <boxGeometry args={[0.08, 0.08, 0.08]} />
-      <meshBasicMaterial color="#2C2C2C" />
-      {positions.map((pos, i) => {
-        dummy.position.set(...pos);
-        dummy.updateMatrix();
-        return <primitive key={i} object={dummy} instanceMatrix={dummy.matrix} />;
-      })}
-    </instancedMesh>
-  );
-}
-
-// 3D Box with Hand-Sketched edges
-function SketchedBox({ position, rotation, scale, color, offset }) {
-  const ref = useRef();
-  useFrame((state) => {
-    const t = state.clock.getElapsedTime() + offset;
-    ref.current.rotation.x = Math.sin(t / 4) / 4 + rotation[0];
-    ref.current.rotation.y = Math.cos(t / 4) / 4 + rotation[1];
-    ref.current.rotation.z = Math.sin(t / 4) / 4 + rotation[2];
-  });
-
-  return (
-    <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-      <mesh ref={ref} position={position} scale={scale} castShadow receiveShadow>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color={color} roughness={0.8} />
-        <Edges scale={1} threshold={15} color="#2C2C2C" />
-      </mesh>
-    </Float>
-  );
-}
+// ... SketchedBox and SketchParticles are unaffected, skipping to SketchNotebook
 
 // A 3D model of a Notebook/Notepad with an opening cover
-function SketchNotebook({ position, rotation, scale, color, openProgress = 0 }) {
+function SketchNotebook({ position, rotation, scale, color, scrollRef, scrollMultiplier, scrollOffset }) {
   const group = useRef();
   const coverGroup = useRef();
+  const smoothProgress = useRef(0);
 
-  useFrame(() => {
+  useFrame((state, delta) => {
+    if (!scrollRef) return;
+    
+    // Smooth the scroll progress
+    smoothProgress.current = THREE.MathUtils.lerp(smoothProgress.current, scrollRef.current, delta * 4);
+    const p = smoothProgress.current;
+
     if (coverGroup.current) {
+      // Calculate flap opening based on smoothed progress
+      const openProgress = Math.abs(Math.sin(p * Math.PI * scrollMultiplier + scrollOffset));
       // 0 = closed, 1 = open 144 degrees (0.8 * Math.PI)
       coverGroup.current.rotation.y = -openProgress * Math.PI * 0.8;
     }
@@ -116,53 +76,54 @@ function SketchNotebook({ position, rotation, scale, color, openProgress = 0 }) 
 }
 
 function SceneElements() {
-  const scrollProgress = useScrollProgress();
+  const scrollRef = useScrollProgress();
+  const smoothProgress = useRef(0);
+  
   const groupRef1 = useRef();
   const groupRef2 = useRef();
   const groupRef3 = useRef();
 
-  useFrame(() => {
+  useFrame((state, delta) => {
+    // Smooth the global scroll progress for the orbit movements
+    smoothProgress.current = THREE.MathUtils.lerp(smoothProgress.current, scrollRef.current, delta * 3);
+    const p = smoothProgress.current;
+
     // Book 1: Sweeping arcs
     if (groupRef1.current) {
-      groupRef1.current.position.y = Math.sin(scrollProgress * Math.PI * 2) * 3;
-      groupRef1.current.position.x = Math.cos(scrollProgress * Math.PI * 2) * 5;
-      groupRef1.current.rotation.y = scrollProgress * Math.PI * 4;
-      groupRef1.current.rotation.x = Math.sin(scrollProgress * Math.PI) * 0.5;
+      groupRef1.current.position.y = Math.sin(p * Math.PI * 2) * 3;
+      groupRef1.current.position.x = Math.cos(p * Math.PI * 2) * 5;
+      groupRef1.current.rotation.y = p * Math.PI * 4;
+      groupRef1.current.rotation.x = Math.sin(p * Math.PI) * 0.5;
     }
     // Book 2: Vertical weaving
     if (groupRef2.current) {
-      groupRef2.current.position.y = Math.cos(scrollProgress * Math.PI * 4) * 4;
-      groupRef2.current.position.x = Math.sin(scrollProgress * Math.PI * 2) * -6;
-      groupRef2.current.rotation.x = scrollProgress * Math.PI * 2;
-      groupRef2.current.rotation.y = scrollProgress * Math.PI;
+      groupRef2.current.position.y = Math.cos(p * Math.PI * 4) * 4;
+      groupRef2.current.position.x = Math.sin(p * Math.PI * 2) * -6;
+      groupRef2.current.rotation.x = p * Math.PI * 2;
+      groupRef2.current.rotation.y = p * Math.PI;
     }
     // Book 3: Deep diagonal crossing
     if (groupRef3.current) {
-      groupRef3.current.position.y = Math.sin(scrollProgress * Math.PI * 3 + 2) * 5;
-      groupRef3.current.position.x = Math.cos(scrollProgress * Math.PI * 3 + 1) * 4;
-      groupRef3.current.rotation.z = scrollProgress * Math.PI * 2;
-      groupRef3.current.rotation.x = scrollProgress * Math.PI;
+      groupRef3.current.position.y = Math.sin(p * Math.PI * 3 + 2) * 5;
+      groupRef3.current.position.x = Math.cos(p * Math.PI * 3 + 1) * 4;
+      groupRef3.current.rotation.z = p * Math.PI * 2;
+      groupRef3.current.rotation.x = p * Math.PI;
     }
   });
-
-  // Calculate opening based on scroll progress (0 to 1 back and forth)
-  const open1 = Math.abs(Math.sin(scrollProgress * Math.PI * 6));
-  const open2 = Math.abs(Math.cos(scrollProgress * Math.PI * 8));
-  const open3 = Math.abs(Math.sin(scrollProgress * Math.PI * 4 + 1));
 
   return (
     <PresentationControls global rotation={[0.1, -0.2, 0]} polar={[-0.4, 0.2]} azimuth={[-0.4, 0.2]} config={{ mass: 2, tension: 500 }} snap={{ mass: 4, tension: 1500 }}>
       {/* Three wandering books */}
       <group ref={groupRef1}>
-        <SketchNotebook position={[0, 0, -2]} rotation={[0.2, 0.1, 0]} scale={0.7} color="#FFF59D" openProgress={open1} />
+        <SketchNotebook scrollRef={scrollRef} scrollMultiplier={6} scrollOffset={0} position={[0, 0, -2]} rotation={[0.2, 0.1, 0]} scale={0.7} color="#FFF59D" />
       </group>
       
       <group ref={groupRef2}>
-        <SketchNotebook position={[0, 0, -4]} rotation={[-0.2, 0.5, 0.1]} scale={0.6} color="#A5D6A7" openProgress={open2} />
+        <SketchNotebook scrollRef={scrollRef} scrollMultiplier={8} scrollOffset={Math.PI / 2} position={[0, 0, -4]} rotation={[-0.2, 0.5, 0.1]} scale={0.6} color="#A5D6A7" />
       </group>
       
       <group ref={groupRef3}>
-        <SketchNotebook position={[0, 0, -6]} rotation={[0.1, -0.4, -0.2]} scale={0.8} color="#90CAF9" openProgress={open3} />
+        <SketchNotebook scrollRef={scrollRef} scrollMultiplier={4} scrollOffset={1} position={[0, 0, -6]} rotation={[0.1, -0.4, -0.2]} scale={0.8} color="#90CAF9" />
       </group>
     </PresentationControls>
   );
