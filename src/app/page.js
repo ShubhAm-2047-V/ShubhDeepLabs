@@ -334,7 +334,7 @@ export default function Home() {
       <ThreeWorld />
       
       {/* 1. WHIMSICAL HAND-SKETCHED HERO SECTION */}
-      <section className="relative min-h-[92vh] flex items-center justify-center pt-28 overflow-hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 min-h-[92vh] flex items-center justify-center pt-28 overflow-hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* ruled paper grid overlay */}
         <div className="ruled-paper absolute bottom-0 left-0 right-0 h-[22vh] opacity-40 pointer-events-none" />

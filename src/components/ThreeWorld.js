@@ -133,9 +133,8 @@ export default function ThreeWorld() {
   }, []);
 
   return (
-    <div className="w-full h-screen fixed inset-0 z-[-1] pointer-events-none">
+    <div className="w-full h-screen fixed inset-0 z-0 pointer-events-none">
       <Canvas shadows camera={{ position: [0, 0, 10], fov: 50 }} eventSource={eventSource || undefined} eventPrefix="client">
-        <color attach="background" args={["#FAF6EE"]} />
         <fog attach="fog" args={["#FAF6EE", 8, 30]} />
         
         <ambientLight intensity={1.5} />
