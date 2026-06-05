@@ -445,7 +445,7 @@ export default function Home() {
       </section>
 
       {/* 2. RULED PAPER ASSURANCES CHECKLIST */}
-      <section className="relative py-16 paper-strip">
+      <section className="relative z-10 py-16 paper-strip">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -486,7 +486,7 @@ export default function Home() {
       </section>
 
       {/* 3. SKETCHY CATEGORIES TABLE */}
-      <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="categories" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-4xl font-hand font-extrabold text-[#2C2C2C]">
             Academic Study Areas
@@ -532,7 +532,7 @@ export default function Home() {
       </section>
 
       {/* 4. PREMIUM COSTING SHEET */}
-      <section id="pricing" className="relative py-20 paper-strip">
+      <section id="pricing" className="relative z-10 py-20 paper-strip">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -629,7 +629,7 @@ export default function Home() {
       </section>
 
       {/* 5. BLUEPRINTS SHOWCASE */}
-      <section id="portfolio" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="portfolio" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-4xl font-hand font-extrabold text-[#2C2C2C]">
             Academic System Blueprints
@@ -701,7 +701,7 @@ export default function Home() {
       </section>
 
       {/* 6. POLAROID TESTIMONIALS SHEET */}
-      <section className="relative py-20 paper-strip">
+      <section className="relative z-10 py-20 paper-strip">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -759,7 +759,7 @@ export default function Home() {
       </section>
 
       {/* 7. FAQs */}
-      <section id="faq" className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="faq" className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="text-center mb-16">
           <h2 className="text-4xl font-hand font-extrabold text-[#2C2C2C]">
