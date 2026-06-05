@@ -130,7 +130,6 @@ function SceneElements() {
   
   const groupRef1 = useRef();
   const groupRef2 = useRef();
-  const groupRef3 = useRef();
 
   useFrame((state, delta) => {
     // Smooth the global scroll progress for the orbit movements
@@ -151,28 +150,17 @@ function SceneElements() {
       groupRef2.current.rotation.x = p * Math.PI * 2;
       groupRef2.current.rotation.y = p * Math.PI;
     }
-    // Book 3: Deep diagonal crossing
-    if (groupRef3.current) {
-      groupRef3.current.position.y = Math.sin(p * Math.PI * 3 + 2) * 5;
-      groupRef3.current.position.x = Math.cos(p * Math.PI * 3 + 1) * 4;
-      groupRef3.current.rotation.z = p * Math.PI * 2;
-      groupRef3.current.rotation.x = p * Math.PI;
-    }
   });
 
   return (
     <PresentationControls global rotation={[0.1, -0.2, 0]} polar={[-0.4, 0.2]} azimuth={[-0.4, 0.2]} config={{ mass: 2, tension: 500 }} snap={{ mass: 4, tension: 1500 }}>
-      {/* Three wandering books */}
+      {/* Two wandering books */}
       <group ref={groupRef1}>
         <SketchNotebook scrollRef={scrollRef} scrollMultiplier={6} scrollOffset={0} position={[0, 0, -2]} rotation={[0.2, 0.1, 0]} scale={0.7} color="#FFF59D" />
       </group>
       
       <group ref={groupRef2}>
         <SketchNotebook scrollRef={scrollRef} scrollMultiplier={8} scrollOffset={Math.PI / 2} position={[0, 0, -4]} rotation={[-0.2, 0.5, 0.1]} scale={0.6} color="#A5D6A7" />
-      </group>
-      
-      <group ref={groupRef3}>
-        <SketchNotebook scrollRef={scrollRef} scrollMultiplier={4} scrollOffset={1} position={[0, 0, -6]} rotation={[0.1, -0.4, -0.2]} scale={0.8} color="#90CAF9" />
       </group>
     </PresentationControls>
   );
