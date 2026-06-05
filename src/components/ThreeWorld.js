@@ -103,31 +103,22 @@ function SceneElements() {
   const groupRef = useRef();
 
   useFrame(() => {
-    // Move the entire scene up as we scroll down to give a parallax feeling
     if (groupRef.current) {
-      // Shift objects upwards over a distance of 15 units based on scroll progress
-      groupRef.current.position.y = scrollProgress * 15;
-      groupRef.current.rotation.y = scrollProgress * Math.PI * 0.5;
+      // Dynamic rotation based on scroll (2 full spins over the page length)
+      groupRef.current.rotation.y = scrollProgress * Math.PI * 4;
+      groupRef.current.rotation.x = Math.sin(scrollProgress * Math.PI) * 0.5;
+      
+      // Orbit-like movement tied to scroll
+      groupRef.current.position.y = Math.sin(scrollProgress * Math.PI * 2) * 1.5;
+      groupRef.current.position.x = Math.cos(scrollProgress * Math.PI * 2) * 2;
     }
   });
 
   return (
     <group ref={groupRef}>
-      <PresentationControls global rotation={[0, 0, 0]} polar={[-0.4, 0.2]} azimuth={[-0.4, 0.2]} config={{ mass: 2, tension: 500 }} snap={{ mass: 4, tension: 1500 }}>
-        {/* Central interactive elements */}
-        
-        {/* Hero Level */}
-        <SketchNotebook position={[4, 0, -2]} rotation={[-0.2, -0.4, 0.1]} scale={1.2} color="#FFF59D" />
-        <SketchedBox position={[-3, 2, -1]} rotation={[0, 0, 0]} scale={1} color="#90CAF9" offset={0} />
-
-        {/* Section 2 Level */}
-        <SketchNotebook position={[-5, -4, -4]} rotation={[0.2, 0.5, -0.1]} scale={1.5} color="#A5D6A7" />
-        <SketchedBox position={[5, -5, -2]} rotation={[0.5, 0.5, 0]} scale={1.5} color="#FFCA28" offset={2} />
-        
-        {/* Section 3 Level */}
-        <SketchNotebook position={[3, -10, -5]} rotation={[-0.1, -0.2, 0.2]} scale={1} color="#EF9A9A" />
-        <SketchedBox position={[-4, -12, 1]} rotation={[1, 0, 0.5]} scale={2} color="#CE93D8" offset={4} />
-
+      <PresentationControls global rotation={[0.1, -0.2, 0]} polar={[-0.4, 0.2]} azimuth={[-0.4, 0.2]} config={{ mass: 2, tension: 500 }} snap={{ mass: 4, tension: 1500 }}>
+        {/* ONE GIANT HERO NOTEBOOK */}
+        <SketchNotebook position={[0, 0, 0]} rotation={[0, 0, 0]} scale={2.5} color="#FFF59D" />
       </PresentationControls>
     </group>
   );
