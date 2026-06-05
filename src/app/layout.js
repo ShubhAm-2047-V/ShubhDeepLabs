@@ -4,7 +4,6 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import VisitorPromoWidget from "@/components/VisitorPromoWidget";
 import SupportChatbotWidget from "@/components/SupportChatbotWidget";
 import ProductCustomizer from "@/components/ProductCustomizer";
 import CursorGlow from "@/components/CursorGlow";
@@ -88,9 +87,6 @@ export default function RootLayout({ children }) {
             {/* WhatsApp direct contact */}
             <WhatsAppButton />
           </div>
-
-          {/* Welcome Offer Promo Modal Pop-up */}
-          <VisitorPromoWidget />
           
           {/* Custom handwritten toaster notification */}
           <Toaster 
