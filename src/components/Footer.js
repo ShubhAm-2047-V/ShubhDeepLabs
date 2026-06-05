@@ -66,7 +66,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-[#EBE5D9] text-[#2C2C2C] pt-16 pb-8 border-t-3 border-[#2C2C2C] transition-colors relative">
+    <footer className="bg-[#EBE5D9]/85 backdrop-blur-md text-[#2C2C2C] pt-16 pb-8 border-t-3 border-[#2C2C2C] transition-colors relative">
       {/* Sketch card holes simulated */}
       <div className="absolute top-0 left-0 right-0 h-4 bg-transparent flex justify-around items-start -translate-y-2 pointer-events-none">
         {[...Array(12)].map((_, i) => (
