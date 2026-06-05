@@ -1,9 +1,25 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { ScrollControls, Scroll, Float, ContactShadows, Edges, PresentationControls } from "@react-three/drei";
+import { Float, ContactShadows, Edges, PresentationControls } from "@react-three/drei";
 import * as THREE from "three";
+
+// Helper hook to get scroll progress
+function useScrollProgress() {
+  const [progress, setProgress] = useState(0);
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const height = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+      setProgress(scrollY / height);
+    };
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Init
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  return progress;
+}
 
 function SketchParticles({ count = 250 }) {
   const mesh = useRef();
@@ -63,12 +79,14 @@ function SketchNotebook({ position, rotation, scale, color }) {
   return (
     <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
       <group ref={group} position={position} rotation={rotation} scale={scale}>
+        {/* Paper stack */}
         <mesh castShadow receiveShadow position={[0, 0, 0]}>
           <boxGeometry args={[4, 5, 0.4]} />
           <meshStandardMaterial color={color} roughness={0.9} />
           <Edges scale={1} threshold={15} color="#2C2C2C" />
         </mesh>
         
+        {/* Ring binders */}
         {[...Array(8)].map((_, i) => (
           <mesh key={i} position={[-1.8, 2 - i * 0.55, 0.2]} rotation={[Math.PI / 2, 0, 0]}>
             <torusGeometry args={[0.2, 0.05, 8, 24]} />
@@ -80,40 +98,52 @@ function SketchNotebook({ position, rotation, scale, color }) {
   );
 }
 
-// Moves elements based on scroll in the 3D space
 function SceneElements() {
+  const scrollProgress = useScrollProgress();
   const groupRef = useRef();
 
-  useFrame((state) => {
-    // In ScrollControls, state.camera or scroll offset can be accessed, but let's just make the objects float beautifully globally
+  useFrame(() => {
+    // Move the entire scene up as we scroll down to give a parallax feeling
+    if (groupRef.current) {
+      // Shift objects upwards over a distance of 15 units based on scroll progress
+      groupRef.current.position.y = scrollProgress * 15;
+      groupRef.current.rotation.y = scrollProgress * Math.PI * 0.5;
+    }
   });
 
   return (
     <group ref={groupRef}>
-      <PresentationControls global rotation={[0, 0, 0]} polar={[-0.2, 0.2]} azimuth={[-0.2, 0.2]} config={{ mass: 2, tension: 500 }} snap={{ mass: 4, tension: 1500 }}>
-        {/* Floating background elements spread vertically so they appear as you scroll */}
+      <PresentationControls global rotation={[0, 0, 0]} polar={[-0.4, 0.2]} azimuth={[-0.4, 0.2]} config={{ mass: 2, tension: 500 }} snap={{ mass: 4, tension: 1500 }}>
+        {/* Central interactive elements */}
         
-        {/* Hero Section depth items */}
-        <SketchNotebook position={[5, 1, -3]} rotation={[-0.2, -0.4, 0.1]} scale={1.2} color="#FFF59D" />
-        <SketchedBox position={[-4, 2, -2]} rotation={[0, 0, 0]} scale={1} color="#90CAF9" offset={0} />
+        {/* Hero Level */}
+        <SketchNotebook position={[4, 0, -2]} rotation={[-0.2, -0.4, 0.1]} scale={1.2} color="#FFF59D" />
+        <SketchedBox position={[-3, 2, -1]} rotation={[0, 0, 0]} scale={1} color="#90CAF9" offset={0} />
 
-        {/* Section 2 depth items */}
-        <SketchNotebook position={[-6, -6, -4]} rotation={[0.2, 0.5, -0.1]} scale={1.5} color="#A5D6A7" />
+        {/* Section 2 Level */}
+        <SketchNotebook position={[-5, -4, -4]} rotation={[0.2, 0.5, -0.1]} scale={1.5} color="#A5D6A7" />
         <SketchedBox position={[5, -5, -2]} rotation={[0.5, 0.5, 0]} scale={1.5} color="#FFCA28" offset={2} />
-
-        {/* Section 3 depth items */}
-        <SketchNotebook position={[4, -14, -5]} rotation={[-0.1, -0.2, 0.2]} scale={1} color="#EF9A9A" />
-        <SketchedBox position={[-5, -16, -1]} rotation={[1, 0, 0.5]} scale={2} color="#CE93D8" offset={4} />
+        
+        {/* Section 3 Level */}
+        <SketchNotebook position={[3, -10, -5]} rotation={[-0.1, -0.2, 0.2]} scale={1} color="#EF9A9A" />
+        <SketchedBox position={[-4, -12, 1]} rotation={[1, 0, 0.5]} scale={2} color="#CE93D8" offset={4} />
 
       </PresentationControls>
     </group>
   );
 }
 
-export default function ThreeWorld({ children }) {
+export default function ThreeWorld() {
+  const [eventSource, setEventSource] = useState(null);
+
+  useEffect(() => {
+    // Attach event source to body so canvas gets events even if pointer-events: none
+    setEventSource(document.body);
+  }, []);
+
   return (
-    <div className="w-full h-screen fixed inset-0 z-0">
-      <Canvas shadows camera={{ position: [0, 0, 10], fov: 50 }}>
+    <div className="w-full h-screen fixed inset-0 z-0 pointer-events-none">
+      <Canvas shadows camera={{ position: [0, 0, 10], fov: 50 }} eventSource={eventSource || undefined} eventPrefix="client">
         <color attach="background" args={["#FAF6EE"]} />
         <fog attach="fog" args={["#FAF6EE", 8, 30]} />
         
@@ -121,22 +151,10 @@ export default function ThreeWorld({ children }) {
         <directionalLight position={[10, 10, 10]} intensity={0.6} castShadow shadow-mapSize={[1024, 1024]} />
         <directionalLight position={[-10, 10, -10]} intensity={0.3} color="#FFF59D" />
 
-        <ScrollControls pages={6} damping={0.1}>
-          
-          <Scroll>
-            {/* 3D Content that scrolls with the page */}
-            <SceneElements />
-          </Scroll>
+        <SceneElements />
+        <SketchParticles count={300} />
 
-          <Scroll html style={{ width: '100%' }}>
-            {/* 2D HTML Content (The original website) */}
-            {children}
-          </Scroll>
-
-        </ScrollControls>
-
-        <SketchParticles count={200} />
-        <ContactShadows position={[0, -20, 0]} opacity={0.3} scale={40} blur={2} far={10} color="#2C2C2C" />
+        <ContactShadows position={[0, -5, 0]} opacity={0.3} scale={40} blur={2} far={10} color="#2C2C2C" />
       </Canvas>
     </div>
   );
