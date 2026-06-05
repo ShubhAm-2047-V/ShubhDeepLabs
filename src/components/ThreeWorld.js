@@ -21,7 +21,56 @@ function useScrollProgress() {
   return progress;
 }
 
-// ... SketchedBox and SketchParticles are unaffected, skipping to SketchNotebook
+function SketchParticles({ count = 250 }) {
+  const mesh = useRef();
+  const dummy = new THREE.Object3D();
+
+  useFrame((state) => {
+    if (!mesh.current) return;
+    const time = state.clock.getElapsedTime();
+    mesh.current.rotation.y = time * 0.05;
+    mesh.current.rotation.x = Math.sin(time * 0.1) * 0.1;
+  });
+
+  const positions = Array.from({ length: count }, () => [
+    (Math.random() - 0.5) * 40,
+    (Math.random() - 0.5) * 40,
+    (Math.random() - 0.5) * 40,
+  ]);
+
+  return (
+    <instancedMesh ref={mesh} args={[null, null, count]}>
+      <boxGeometry args={[0.08, 0.08, 0.08]} />
+      <meshBasicMaterial color="#2C2C2C" />
+      {positions.map((pos, i) => {
+        dummy.position.set(...pos);
+        dummy.updateMatrix();
+        return <primitive key={i} object={dummy} instanceMatrix={dummy.matrix} />;
+      })}
+    </instancedMesh>
+  );
+}
+
+// 3D Box with Hand-Sketched edges
+function SketchedBox({ position, rotation, scale, color, offset }) {
+  const ref = useRef();
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime() + offset;
+    ref.current.rotation.x = Math.sin(t / 4) / 4 + rotation[0];
+    ref.current.rotation.y = Math.cos(t / 4) / 4 + rotation[1];
+    ref.current.rotation.z = Math.sin(t / 4) / 4 + rotation[2];
+  });
+
+  return (
+    <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
+      <mesh ref={ref} position={position} scale={scale} castShadow receiveShadow>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color={color} roughness={0.8} />
+        <Edges scale={1} threshold={15} color="#2C2C2C" />
+      </mesh>
+    </Float>
+  );
+}
 
 // A 3D model of a Notebook/Notepad with an opening cover
 function SketchNotebook({ position, rotation, scale, color, scrollRef, scrollMultiplier, scrollOffset }) {
