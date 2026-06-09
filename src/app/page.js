@@ -248,55 +248,7 @@ export default function Home() {
     { title: "Clean Documented Code", desc: "Neat model structures, clean controllers, and comprehensive code comments that make logic review easy.", icon: Code, marker: "marker-red", border: "border-t-[#EF5350]" }
   ];
 
-  const pricing = [
-    {
-      name: "EASY PROJECT",
-      price: "Free",
-      desc: "Perfect for basic requirements, simple utilities, or mini-semester submissions.",
-      features: [
-        "Basic Clean UI Layout",
-        "Simple Core functionality",
-        "PPT + Draft Report",
-        "1 Free logic revision",
-        "Complete Source Code & Guide"
-      ],
-      highlightColor: "marker-green",
-      textColor: "text-[#1B5E20]",
-      accentColor: "#A5D6A7"
-    },
-    {
-      name: "MEDIUM PROJECT",
-      price: "1999",
-      desc: "Best for final year projects requiring database integrations or custom interactive modules.",
-      features: [
-        "Database integration (SQL/NoSQL)",
-        "Premium Responsive UI",
-        "Multiple functional features",
-        "PPT + Complete Project Report",
-        "2 Free logic revisions",
-        "Detailed Viva prep guidance"
-      ],
-      highlightColor: "marker-blue",
-      textColor: "text-[#0D47A1]",
-      accentColor: "#90CAF9"
-    },
-    {
-      name: "HARD PROJECT",
-      price: "2999",
-      desc: "Engineered for advanced AI/ML models, intensive custom APIs, or high-grade thesis dashboards.",
-      features: [
-        "Advanced Logic (AI/ML/Complex APIs)",
-        "Secure user authentication & dashboard",
-        "Thesis-grade PPT + Full Project Report",
-        "3 Free code revisions",
-        "Direct Remote Installation support",
-        "Deep 1-on-1 Viva code walkthrough"
-      ],
-      highlightColor: "marker-red",
-      textColor: "text-[#B71C1C]",
-      accentColor: "#EF9A9A"
-    },
-  ];
+
 
   const portfolio = [
     { title: "AI Plant Disease Detector", tech: "Python, Next.js, TensorFlow, FastAPI", desc: "A neural-network visual scanning web application detecting agricultural leaf diseases with detailed metric analytics.", markerColor: "marker-green" },
@@ -562,25 +514,33 @@ export default function Home() {
               <div className="absolute top-3 right-3 w-4 h-4 bg-[#FAF6EE] border-2 border-[#2C2C2C] rounded-full" />
               
               <h3 className="text-2xl font-marker font-extrabold text-[#2C2C2C] mb-4">
-                <span className="marker-yellow px-2">Tailored Solutions & Direct Coding</span>
+                <span className="marker-yellow px-2">Website Display Pricing</span>
               </h3>
               
               <p className="text-sm font-sans font-semibold text-[#5A5A5A] leading-relaxed max-w-xl mx-auto mb-8">
-                Every final year academic submission is unique. Instead of static, cookie-cutter packages, we custom-build each codebase to align precisely with your college syllabus, technical guidelines, and timeline requirements.
+                Get a transparent overview of our starting costs for various project scales. Every codebase is custom-built to align perfectly with your exact technical requirements and business goals.
               </p>
               
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left mb-8">
-                <div className="p-4 bg-[#FAF6EE]/50 border-2 border-dashed border-[#2C2C2C]/20 rounded-xl">
-                  <span className="text-[#2C2C2C] font-extrabold text-base block mb-1">✓ Complete Files</span>
-                  <span className="text-xs text-[#6A6A6A] leading-relaxed block font-sans">Full source code, PPT presentation slides, and thesis reports.</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left mb-8">
+                <div className="p-4 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-xl flex items-center justify-between shadow-[2px_2px_0_#2C2C2C]">
+                  <span className="text-[#2C2C2C] font-marker font-extrabold text-sm sm:text-base flex items-center gap-2">🎓 Academic Projects</span>
+                  <span className="text-xs text-[#2C2C2C] bg-[#FFF59D] font-bold px-2 py-1 border border-[#2C2C2C] rounded shrink-0">Starting at ₹1,999</span>
                 </div>
-                <div className="p-4 bg-[#FAF6EE]/50 border-2 border-dashed border-[#2C2C2C]/20 rounded-xl">
-                  <span className="text-[#2C2C2C] font-extrabold text-base block mb-1">✓ Viva Support</span>
-                  <span className="text-xs text-[#6A6A6A] leading-relaxed block font-sans">Line-by-line preparatory explanations and walkthrough guides.</span>
+                <div className="p-4 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-xl flex items-center justify-between shadow-[2px_2px_0_#2C2C2C]">
+                  <span className="text-[#2C2C2C] font-marker font-extrabold text-sm sm:text-base flex items-center gap-2">🌐 Business Website</span>
+                  <span className="text-xs text-[#2C2C2C] bg-[#FFF59D] font-bold px-2 py-1 border border-[#2C2C2C] rounded shrink-0">Starting at ₹9,999</span>
                 </div>
-                <div className="p-4 bg-[#FAF6EE]/50 border-2 border-dashed border-[#2C2C2C]/20 rounded-xl">
-                  <span className="text-[#2C2C2C] font-extrabold text-base block mb-1">✓ Remote Setup</span>
-                  <span className="text-xs text-[#6A6A6A] leading-relaxed block font-sans">Free remotely guided compiler & database setup on Zoom.</span>
+                <div className="p-4 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-xl flex items-center justify-between shadow-[2px_2px_0_#2C2C2C]">
+                  <span className="text-[#2C2C2C] font-marker font-extrabold text-sm sm:text-base flex items-center gap-2">🛒 E-Commerce Website</span>
+                  <span className="text-xs text-[#2C2C2C] bg-[#FFF59D] font-bold px-2 py-1 border border-[#2C2C2C] rounded shrink-0">Starting at ₹29,999</span>
+                </div>
+                <div className="p-4 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-xl flex items-center justify-between shadow-[2px_2px_0_#2C2C2C]">
+                  <span className="text-[#2C2C2C] font-marker font-extrabold text-sm sm:text-base flex items-center gap-2">📱 Mobile App Development</span>
+                  <span className="text-xs text-[#2C2C2C] bg-[#FFF59D] font-bold px-2 py-1 border border-[#2C2C2C] rounded shrink-0">Starting at ₹19,999</span>
+                </div>
+                <div className="p-4 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-xl flex items-center justify-between shadow-[2px_2px_0_#2C2C2C] md:col-span-2 md:w-5/6 md:mx-auto">
+                  <span className="text-[#2C2C2C] font-marker font-extrabold text-sm sm:text-base flex items-center gap-2">☁️ SaaS Platform Development</span>
+                  <span className="text-xs text-[#2C2C2C] bg-[#FFF59D] font-bold px-2 py-1 border border-[#2C2C2C] rounded shrink-0">Starting at ₹49,999</span>
                 </div>
               </div>
               
