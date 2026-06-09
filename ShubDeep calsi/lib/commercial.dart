@@ -6,6 +6,18 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Global Data for Commercial Mode
+
+String formatINR(int value) {
+  String s = value.toString();
+  if (s.length > 3) {
+    String lastThree = s.substring(s.length - 3);
+    String otherNumbers = s.substring(0, s.length - 3);
+    otherNumbers = otherNumbers.replaceAllMapped(RegExp(r'\B(?=(\d{2})+(?!\d))'), (match) => ",");
+    return otherNumbers + ',' + lastThree;
+  }
+  return s;
+}
+
 final List<_Opt> projectOpts = [
   _Opt('app', 'Mobile App', Icons.smartphone, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Native or Cross-platform', 49999),
   _Opt('website', 'Website / Web App', Icons.language, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'SaaS, E-commerce, Portals', 29999),
@@ -456,7 +468,7 @@ class _CommercialScreenState extends State<CommercialScreen> {
                         fit: BoxFit.scaleDown,
                         alignment: Alignment.centerRight,
                         child: Text(
-                          projectType != null ? '₹$totalAmount' : '—',
+                          projectType != null ? '₹${formatINR(totalAmount)}' : '—',
                           style: const TextStyle(color: Color(0xFFC8E6C9), fontWeight: FontWeight.w900, fontSize: 16),
                         ),
                       ),

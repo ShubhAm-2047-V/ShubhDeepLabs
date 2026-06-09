@@ -9,6 +9,17 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:local_auth/local_auth.dart';
 import 'glass_widgets.dart';
 
+String formatINR(int value) {
+  String s = value.toString();
+  if (s.length > 3) {
+    String lastThree = s.substring(s.length - 3);
+    String otherNumbers = s.substring(0, s.length - 3);
+    otherNumbers = otherNumbers.replaceAllMapped(RegExp(r'\B(?=(\d{2})+(?!\d))'), (match) => ",");
+    return otherNumbers + ',' + lastThree;
+  }
+  return s;
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await loadSavedPrices();
@@ -536,10 +547,10 @@ class _CustomizerScreenState extends State<CustomizerScreen> {
             }
 
             String priceLabel = step.id == 'category'
-                ? 'Starting at ₹$displayPrice'
+                ? 'Starting at ₹${formatINR(displayPrice)}'
                 : displayPrice == 0
                     ? 'Free 🌿'
-                    : '+ ₹$displayPrice';
+                    : '+ ₹${formatINR(displayPrice)}';
 
             return GestureDetector(
               onTap: () => handleToggle(step.id, opt.id, step.type),
@@ -639,7 +650,7 @@ class _CustomizerScreenState extends State<CustomizerScreen> {
                         fit: BoxFit.scaleDown,
                         alignment: Alignment.centerRight,
                         child: Text(
-                          selections['category'] != null ? '₹$totalAmount' : '—',
+                          selections['category'] != null ? '₹${formatINR(totalAmount)}' : '—',
                           style: const TextStyle(color: Color(0xFFFFF59D), fontWeight: FontWeight.w900, fontSize: 16),
                         ),
                       ),
@@ -715,7 +726,7 @@ class _CustomizerScreenState extends State<CustomizerScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text('Total Estimate', style: TextStyle(color: Color(0xFF2C2C2C), fontWeight: FontWeight.w900, fontSize: 16)),
-                  Text('₹$totalAmount', style: const TextStyle(color: Color(0xFF2E7D32), fontWeight: FontWeight.w900, fontSize: 24)),
+                  Text('₹${formatINR(totalAmount)}', style: const TextStyle(color: Color(0xFF2E7D32), fontWeight: FontWeight.w900, fontSize: 24)),
                 ],
               ),
             ],
@@ -893,7 +904,7 @@ ${addOnTexts.isEmpty ? '  🔹 None' : addOnTexts.map((e) => '  🔹 $e').join('
   🔸 $timelineText
 
 ━━━━━━━━━━━━━━━━━━━━━━
-💰 *Total Estimate*: ₹$totalAmount
+💰 *Total Estimate*: ₹${formatINR(totalAmount)}
 ━━━━━━━━━━━━━━━━━━━━━━
 
 Let us know when you're ready to start building! 🚀👨‍💻
