@@ -12,7 +12,7 @@ const ENGINEERING_PROJECTS = [
     title: "Hospital Management Core Desk",
     tech: "React + Node.js + Express + MongoDB",
     desc: "A complete multi-role clinic desk. Patient appointment scheduler, doctor consultation records, medical history, dynamic billing module, and custom report export.",
-    price: "₹6499",
+    price: "₹5499",
     accent: "#66BB6A",
     tags: ["MERN Stack", "Role Auth", "Database Design"],
   },
@@ -20,7 +20,7 @@ const ENGINEERING_PROJECTS = [
     title: "College ERP Portal",
     tech: "Next.js + Node.js + PostgreSQL",
     desc: "Comprehensive academic platform. Separate dashboards for Student, Faculty, and Admin. Handles attendance grids, fee tracking, assignment submission, and result generation.",
-    price: "₹7999",
+    price: "₹6999",
     accent: "#EF5350",
     tags: ["Next.js", "PostgreSQL", "Full Dashboard"],
   },
@@ -28,7 +28,7 @@ const ENGINEERING_PROJECTS = [
     title: "Real-time Chat Portal",
     tech: "React + Firebase Auth + Firestore",
     desc: "Live messaging application with custom chatrooms, active status trackers, picture attachments, and secure Google/Email authentication.",
-    price: "₹4999",
+    price: "₹3999",
     accent: "#42A5F5",
     tags: ["Real-time", "Firebase", "Auth"],
   },
@@ -36,7 +36,7 @@ const ENGINEERING_PROJECTS = [
     title: "E-Library Hub with Reader",
     tech: "Python + Django + SQLite",
     desc: "A robust digital library featuring book searches, automated return tracking, reservation notifications, and an integrated PDF reader module.",
-    price: "₹4999",
+    price: "₹3999",
     accent: "#AB47BC",
     tags: ["Django", "CRUD", "SQLite"],
   },
@@ -44,7 +44,7 @@ const ENGINEERING_PROJECTS = [
     title: "Smart Parking Reservation System",
     tech: "HTML + CSS + PHP + MySQL",
     desc: "Web portal allowing users to view real-time parking slot availability, reserve a slot via automated token codes, and calculate billing based on usage hours.",
-    price: "₹6499",
+    price: "₹5499",
     accent: "#FFA726",
     tags: ["PHP", "Booking Logic", "MySQL"],
   },
@@ -52,7 +52,7 @@ const ENGINEERING_PROJECTS = [
     title: "Automated Billing & Inventory Desk",
     tech: "Java + Swing + MySQL",
     desc: "Desktop ERP built for small-medium businesses. Includes low-stock alerts, supplier tracking, cash/card payment logs, and dynamic PDF receipt printing.",
-    price: "₹6499",
+    price: "₹5499",
     accent: "#26A69A",
     tags: ["Java Swing", "MySQL", "PDF Export"],
   },
@@ -60,7 +60,7 @@ const ENGINEERING_PROJECTS = [
     title: "Secure Cloud File Vault",
     tech: "Python + Flask + Cryptography + MySQL",
     desc: "File storage system featuring secure user sign-ups, dual AES-256 encryption keys, automatic file-splitting, and safe share-link generations.",
-    price: "₹7999",
+    price: "₹6999",
     accent: "#EF5350",
     tags: ["Security", "Encryption", "Flask"],
   },
@@ -68,7 +68,7 @@ const ENGINEERING_PROJECTS = [
     title: "Smart Travel Planner with Routes",
     tech: "React + Node.js + Mapbox API",
     desc: "Travel planner that dynamically maps multi-stop routes, calculates distance matrices, lets users plan itinerary lists, and estimates cost budgets.",
-    price: "₹7999",
+    price: "₹6999",
     accent: "#29B6F6",
     tags: ["Maps API", "React", "Node.js"],
   },
@@ -125,7 +125,7 @@ export default function EngineeringPage() {
 
           <h1 className="text-4xl sm:text-6xl font-marker font-black text-[#2C2C2C] leading-tight mb-4">
             B.E. / B.Tech Projects<br />
-            <span className="underline decoration-[#66BB6A] decoration-4">Starting at ₹4999</span>
+            <span className="underline decoration-[#66BB6A] decoration-4">Starting at ₹3999</span>
           </h1>
 
           <p className="text-base sm:text-lg font-sans font-semibold text-[#5A5A5A] max-w-2xl mx-auto leading-relaxed mb-8">

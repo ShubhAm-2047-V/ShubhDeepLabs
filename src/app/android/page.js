@@ -12,7 +12,7 @@ const ANDROID_PROJECTS = [
     title: "Student Attendance App",
     tech: "Android Studio + Java + SQLite",
     desc: "A neat native app designed to register student lists, mark daily attendance in a local database, and view simple attendance charts.",
-    price: "₹5499",
+    price: "₹4999",
     accent: "#66BB6A",
     tags: ["SQLite", "Java", "Native App"],
   },
@@ -20,7 +20,7 @@ const ANDROID_PROJECTS = [
     title: "Expense Tracker App",
     tech: "Flutter + Dart + Hive Database",
     desc: "A cross-platform mobile tracker app. Records daily income/expense logs, visualizes monthly expenditures using charts, and sets budgets.",
-    price: "₹5499",
+    price: "₹4999",
     accent: "#42A5F5",
     tags: ["Flutter", "Hive", "Cross Platform"],
   },
@@ -28,7 +28,7 @@ const ANDROID_PROJECTS = [
     title: "Online Food Delivery App",
     tech: "React Native + Node.js + Express + MongoDB",
     desc: "An interactive mobile store displaying food catalog items, active shopping cart counters, mock secure payments checkout, and order tracking pages.",
-    price: "₹7499",
+    price: "₹6999",
     accent: "#FFA726",
     tags: ["React Native", "Food App", "Database"],
   },
@@ -36,7 +36,7 @@ const ANDROID_PROJECTS = [
     title: "Movie Booking App",
     tech: "Android Studio + Kotlin + Firebase",
     desc: "A visual ticket selector. Users can browse movies, pick seat availability cards, trigger mock payments, and access active tickets lists.",
-    price: "₹7499",
+    price: "₹6999",
     accent: "#26A69A",
     tags: ["Kotlin", "Firebase", "Seat Picker"],
   },
@@ -44,7 +44,7 @@ const ANDROID_PROJECTS = [
     title: "Bluetooth Chat App",
     tech: "Android Studio + Java + Bluetooth API",
     desc: "A direct offline peer-to-peer message logger. Automatically discovers nearby devices, establishes RFCOMM channels, and transfers messages.",
-    price: "₹5499",
+    price: "₹4999",
     accent: "#AB47BC",
     tags: ["Bluetooth", "Offline Chat", "Native"],
   },
@@ -52,7 +52,7 @@ const ANDROID_PROJECTS = [
     title: "E-Commerce App with Admin Desk",
     tech: "React Native + Firebase Store + Firestore",
     desc: "A full online store dashboard. Features product categories, real-time cart, push notifications, and administrative panel to manage inventory.",
-    price: "₹9499",
+    price: "₹8999",
     accent: "#EF5350",
     tags: ["Firebase Auth", "Firestore", "React Native"],
   },
@@ -60,7 +60,7 @@ const ANDROID_PROJECTS = [
     title: "GPS Real-time Vehicle Tracker",
     tech: "Android Studio + Kotlin + Google Maps API",
     desc: "A location tracker app mapping real-time coordinates, plotting routes on Google Maps, calculating travel distances, and logging logs in Firebase.",
-    price: "₹9499",
+    price: "₹8999",
     accent: "#EF5350",
     tags: ["Maps API", "GPS Locate", "Kotlin"],
   },
@@ -68,7 +68,7 @@ const ANDROID_PROJECTS = [
     title: "QR-code Attendance App",
     tech: "Android Studio + Java + ZXing Decoder",
     desc: "A fast scanner portal allowing students to scan dynamic generator QR codes to log class attendance in real-time.",
-    price: "₹7499",
+    price: "₹6999",
     accent: "#29B6F6",
     tags: ["QR Scanner", "ZXing Decoder", "SQLite"],
   },
@@ -125,7 +125,7 @@ export default function AndroidPage() {
 
           <h1 className="text-4xl sm:text-6xl font-marker font-black text-[#2C2C2C] leading-tight mb-4">
             Android Mobile Apps<br />
-            <span className="underline decoration-[#26A69A] decoration-4">Starting at ₹5499</span>
+            <span className="underline decoration-[#26A69A] decoration-4">Starting at ₹4999</span>
           </h1>
 
           <p className="text-base sm:text-lg font-sans font-semibold text-[#5A5A5A] max-w-2xl mx-auto leading-relaxed mb-8">

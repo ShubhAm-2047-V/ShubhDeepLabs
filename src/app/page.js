@@ -251,7 +251,7 @@ export default function Home() {
   const pricing = [
     {
       name: "EASY PROJECT",
-      price: "1999",
+      price: "Free",
       desc: "Perfect for basic requirements, simple utilities, or mini-semester submissions.",
       features: [
         "Basic Clean UI Layout",
@@ -266,7 +266,7 @@ export default function Home() {
     },
     {
       name: "MEDIUM PROJECT",
-      price: "3499",
+      price: "1999",
       desc: "Best for final year projects requiring database integrations or custom interactive modules.",
       features: [
         "Database integration (SQL/NoSQL)",
@@ -282,7 +282,7 @@ export default function Home() {
     },
     {
       name: "HARD PROJECT",
-      price: "4599",
+      price: "2999",
       desc: "Engineered for advanced AI/ML models, intensive custom APIs, or high-grade thesis dashboards.",
       features: [
         "Advanced Logic (AI/ML/Complex APIs)",

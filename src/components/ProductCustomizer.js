@@ -11,6 +11,7 @@ import {
   Gift, Tag, Star, AlertCircle, RefreshCw, Copy, Check,
 } from "lucide-react";
 import { dbService } from "@/lib/supabase";
+import CommercialCustomizerWizard from "./CommercialCustomizer";
 
 // ─── HELPERS ───────────────────────────────────────────────────────────────────
 
@@ -160,7 +161,7 @@ function OptionCard({ option, selected, onToggle, isBase = false, displayPrice }
   const actualPrice = displayPrice !== undefined ? displayPrice : option.price;
 
   const priceLabel = isBase
-    ? `from ${formatINR(actualPrice)}`
+    ? `Starting at ${formatINR(actualPrice)}`
     : actualPrice === 0
     ? "Free 🌿"
     : `+ ${formatINR(actualPrice)}`;
@@ -633,6 +634,7 @@ function OffersPanel({ selections = {}, customPrices = {} }) {
 
 export default function ProductCustomizer() {
   const [open, setOpen]               = useState(false);
+  const [mode, setMode]               = useState("academic");
   const [currentStep, setCurrentStep] = useState(0);
   const [selections, setSelections]   = useState({ category: null, tech: [], addons: [], timeline: null });
   const [showSummary, setShowSummary] = useState(false);
@@ -828,18 +830,28 @@ export default function ProductCustomizer() {
                 <div className="absolute top-3 left-3 w-3 h-3 bg-[#FAF6EE] border-2 border-[#2C2C2C] rounded-full hidden sm:block" />
                 <div className="absolute top-3 right-14 w-3 h-3 bg-[#FAF6EE] border-2 border-[#2C2C2C] rounded-full hidden sm:block" />
 
-                {/* Tab switcher */}
-                <div className="flex items-center gap-2">
+                {/* Mode switcher & Tab switcher */}
+                <div className="flex items-center gap-2 overflow-x-auto custom-scrollbar no-scrollbar py-1">
+                  {/* Academic Mode Toggle */}
                   <button
-                    onClick={() => setShowOffers(false)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 font-marker font-bold text-xs transition-all
-                      ${ !showOffers ? "bg-[#2C2C2C] text-[#FFF59D] border-[#2C2C2C] shadow-[2px_2px_0_#FAF6EE]" : "bg-white/60 text-[#2C2C2C] border-[#2C2C2C]/30 hover:border-[#2C2C2C]" }`}
+                    onClick={() => { setMode("academic"); setShowOffers(false); }}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 font-marker font-bold text-xs transition-all whitespace-nowrap
+                      ${ mode === "academic" && !showOffers ? "bg-[#2C2C2C] text-[#FFF59D] border-[#2C2C2C] shadow-[2px_2px_0_#FAF6EE]" : "bg-white/60 text-[#2C2C2C] border-[#2C2C2C]/30 hover:border-[#2C2C2C]" }`}
                   >
-                    🎨 Customise
+                    🎓 Academic
                   </button>
+                  {/* Commercial Mode Toggle */}
+                  <button
+                    onClick={() => { setMode("commercial"); setShowOffers(false); }}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 font-marker font-bold text-xs transition-all whitespace-nowrap
+                      ${ mode === "commercial" && !showOffers ? "bg-[#42A5F5] text-white border-[#2C2C2C] shadow-[2px_2px_0_#2C2C2C]" : "bg-white/60 text-[#2C2C2C] border-[#2C2C2C]/30 hover:border-[#42A5F5]" }`}
+                  >
+                    💼 Commercial
+                  </button>
+                  {/* Offers Toggle */}
                   <button
                     onClick={() => setShowOffers(true)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 font-marker font-bold text-xs transition-all relative
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border-2 font-marker font-bold text-xs transition-all relative whitespace-nowrap
                       ${ showOffers ? "bg-[#EF5350] text-white border-[#2C2C2C] shadow-[2px_2px_0_#2C2C2C]" : "bg-white/60 text-[#2C2C2C] border-[#2C2C2C]/30 hover:border-[#EF5350]" }`}
                   >
                     🔥 Offers
@@ -858,7 +870,7 @@ export default function ProductCustomizer() {
               </div>
 
               {/* Progress bar */}
-              {!showSummary && !showOffers && (
+              {!showSummary && !showOffers && mode !== "commercial" && (
                 <div className="w-full h-2 bg-[#E0E0E0] shrink-0">
                   <motion.div
                     className="h-full bg-[#2C2C2C]"
@@ -869,7 +881,7 @@ export default function ProductCustomizer() {
               )}
 
               {/* Step counter */}
-              {!showSummary && !showOffers && (
+              {!showSummary && !showOffers && mode !== "commercial" && (
                 <div className="flex justify-between px-6 pt-3 pb-0 shrink-0">
                   {STEPS.map((s, i) => (
                     <div
@@ -892,6 +904,8 @@ export default function ProductCustomizer() {
                 <AnimatePresence mode="wait">
                   {showOffers ? (
                     <OffersPanel key="offers" selections={selections} customPrices={customPrices} />
+                  ) : mode === "commercial" ? (
+                    <CommercialCustomizerWizard key="commercial" onBack={() => setMode("academic")} />
                   ) : showSummary ? (
                     <SummaryScreen
                       key="summary"

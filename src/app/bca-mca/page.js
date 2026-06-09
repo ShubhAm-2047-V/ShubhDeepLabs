@@ -12,7 +12,7 @@ const BCA_MCA_PROJECTS = [
     title: "Student Database Portal",
     tech: "HTML + CSS + PHP + MySQL",
     desc: "A neat administration console handling student details, course registration, automated roll calls, grade entry, and transcript reports generation.",
-    price: "₹3999",
+    price: "₹2999",
     accent: "#66BB6A",
     tags: ["CRUD", "PHP", "MySQL"],
   },
@@ -20,7 +20,7 @@ const BCA_MCA_PROJECTS = [
     title: "Employee Payroll Desk",
     tech: "Java + Swing + MySQL",
     desc: "Desktop ERP system designed to calculate salary slips, record employee attendance logs, process leave applications, and print PDF salary sheets.",
-    price: "₹3999",
+    price: "₹2999",
     accent: "#42A5F5",
     tags: ["Desktop App", "Java", "PDF Slip"],
   },
@@ -28,7 +28,7 @@ const BCA_MCA_PROJECTS = [
     title: "Online Book Store Desk",
     tech: "React + Node.js + Express + MongoDB",
     desc: "Interactive catalog page allowing search and cart operations, safe mock credit card checkouts, and an admin page to add or remove books.",
-    price: "₹5499",
+    price: "₹4499",
     accent: "#FFA726",
     tags: ["MERN Stack", "Cart System", "Database"],
   },
@@ -36,7 +36,7 @@ const BCA_MCA_PROJECTS = [
     title: "Movie Ticket Reservation System",
     tech: "PHP + Bootstrap + MySQL",
     desc: "Visual seat picker desk. Logged-in members can pick available seats, check showtimes, make mock bookings, and download PDF tickets with QR codes.",
-    price: "₹5499",
+    price: "₹4499",
     accent: "#26A69A",
     tags: ["Seat Picker", "Bootstrap", "MySQL"],
   },
@@ -44,7 +44,7 @@ const BCA_MCA_PROJECTS = [
     title: "Gym Membership Console",
     tech: "Python + Flask + SQLite",
     desc: "Gym desk system managing customer plans, active trainer schedules, automated payment alerts, and dynamic attendance sheet logs.",
-    price: "₹3999",
+    price: "₹2999",
     accent: "#AB47BC",
     tags: ["Flask", "SQLite", "Alerts"],
   },
@@ -52,7 +52,7 @@ const BCA_MCA_PROJECTS = [
     title: "E-Commerce portal with Admin Panel",
     tech: "React + Firebase + Firestore",
     desc: "Full online store dashboard. Includes product categories, real-time cart counters, secure checkouts, and order-tracking charts.",
-    price: "₹6999",
+    price: "₹5999",
     accent: "#EF5350",
     tags: ["React", "Firebase Store", "Dashboard"],
   },
@@ -60,7 +60,7 @@ const BCA_MCA_PROJECTS = [
     title: "College Alumni Directory",
     tech: "Next.js + Node.js + MongoDB",
     desc: "Alumni network search desk. Features secure email invites, interactive user bio profiles, jobs board posts, and batch directories.",
-    price: "₹5499",
+    price: "₹4499",
     accent: "#29B6F6",
     tags: ["Next.js", "Alumni System", "MongoDB"],
   },
@@ -68,7 +68,7 @@ const BCA_MCA_PROJECTS = [
     title: "Patient Electronic Health Record",
     tech: "React + Node.js + MongoDB",
     desc: "Medical records platform. Doctors can enter diagnoses, patient members check active prescriptions, and download PDF clinical health cards.",
-    price: "₹6999",
+    price: "₹5999",
     accent: "#EF5350",
     tags: ["MERN Stack", "Healthcare", "Secure Auth"],
   },
@@ -125,7 +125,7 @@ export default function BcaMcaPage() {
 
           <h1 className="text-4xl sm:text-6xl font-marker font-black text-[#2C2C2C] leading-tight mb-4">
             BCA & MCA Projects<br />
-            <span className="underline decoration-[#AB47BC] decoration-4">Starting at ₹3999</span>
+            <span className="underline decoration-[#AB47BC] decoration-4">Starting at ₹2999</span>
           </h1>
 
           <p className="text-base sm:text-lg font-sans font-semibold text-[#5A5A5A] max-w-2xl mx-auto leading-relaxed mb-8">

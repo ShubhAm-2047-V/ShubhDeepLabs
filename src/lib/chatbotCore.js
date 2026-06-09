@@ -6,24 +6,24 @@ export const SUPPORT_CONTEXT = [
     keywords: ["price", "pricing", "cost", "budget", "fees", "tier", "plan", "easy", "medium", "hard", "mtech", "diploma", "engineering", "bca", "mca", "ai", "ml", "android", "category", "categories"],
     content: (prices) => {
       return `PROJECT CATEGORIES BASE PRICING:
-Diploma (Easy) = ₹${getVal("diploma", 1999)}
-Diploma (Medium) = ₹${getVal("diploma_medium", 3499)}
-Diploma (Hard) = ₹${getVal("diploma_hard", 4599)}
-Engineering (B.E/B.Tech) = ₹${getVal("engineering", 4999)}
-M.Tech / Research = ₹${getVal("mtech", 8999)}
-BCA / MCA = ₹${getVal("bca-mca", 3999)}
-AI / ML = ₹${getVal("ai-ml", 6999)}
-Android App = ₹${getVal("android", 5499)}
+Diploma (Easy) = ${getVal("diploma", "Free 🌿")}
+Diploma (Medium) = ₹${getVal("diploma_medium", 1999)}
+Diploma (Hard) = ₹${getVal("diploma_hard", 2999)}
+Engineering (B.E/B.Tech) = ₹${getVal("engineering", 3999)}
+M.Tech / Research = ₹${getVal("mtech", 7499)}
+BCA / MCA = ₹${getVal("bca-mca", 2999)}
+AI / ML = ₹${getVal("ai-ml", 5999)}
+Android App = ₹${getVal("android", 4999)}
 
 TECH STACK PRICING:
 HTML / CSS / JavaScript = ₹${getVal("html", 0)}
-Python + Flask = +₹${getVal("python-flask", 999)}
-React.js = +₹${getVal("react", 1499)}
-Next.js = +₹${getVal("nextjs", 1999)}
-MERN Stack = +₹${getVal("mern", 2999)}
-Android (Java/Kotlin) = +₹${getVal("android-dev", 3499)}
-Firebase Integration = +₹${getVal("firebase", 999)}
-MySQL / MongoDB = +₹${getVal("db", 799)}
+Python + Flask = +₹${getVal("python-flask", 1999)}
+React.js = +₹${getVal("react", 2499)}
+Next.js = +₹${getVal("nextjs", 2999)}
+MERN Stack = +₹${getVal("mern", 4499)}
+Android (Java/Kotlin) = +₹${getVal("android-dev", 5499)}
+Firebase Integration = +₹${getVal("firebase", 1499)}
+MySQL / MongoDB = +₹${getVal("db", 1499)}
 AI Integration = +₹${getVal("ai-integration", 2499)}
 Machine Learning Model = +₹${getVal("ml-model", 3499)}
 OpenCV = +₹${getVal("opencv", 2999)}
@@ -42,10 +42,10 @@ Blockchain / Web3 = +₹${getVal("blockchain", 5999)}`;
 - Support & Basic Customization Support
 
 ADD-ONS PRICING:
-PPT Presentation = +₹${getVal("ppt", 499)}
-Thesis Report = +₹${getVal("report", 999)}
-Viva Guidance Sheet = +₹${getVal("viva", 399)}
-Remote Setup (Zoom) = +₹${getVal("remote", 699)}
+PPT Presentation = +₹${getVal("ppt", 699)}
+Thesis Report = +₹${getVal("report", 1299)}
+Viva Guidance Sheet = +₹${getVal("viva", 499)}
+Remote Setup (Zoom) = +₹${getVal("remote", 999)}
 Cloud Deployment = +₹${getVal("deployment", 1499)}
 Code Walkthrough Doc = +₹${getVal("docs", 599)}`;
     }
@@ -55,7 +55,7 @@ Code Walkthrough Doc = +₹${getVal("docs", 599)}`;
     content: (prices) => {
       const getVal = (id, def) => (prices[id] !== undefined ? prices[id] : def);
       return `DEADLINE CHARGES:
-1–3 Days (Urgent) = +₹${getVal("urgent", 2499)}
+1–3 Days (Urgent) = +₹${getVal("urgent", 1999)}
 4–7 Days (Standard) = +₹${getVal("normal", 999)}
 8–14 Days (Relaxed) = +₹0
 Flexible / No Rush = +₹0`;
@@ -211,7 +211,7 @@ CHATBOT RULES:
    Do NOT output this tag until all fields are collected.
 
 CONTEXT DATABASE (RAG MATCHES):
-${context || `No matching context found. Rely on the factual details of Shubdeep Labs: Diploma pricing has three tiers (Easy is ₹${getVal("diploma", 1999)}, Medium is ₹${getVal("diploma_medium", 3499)}, and Hard is ₹${getVal("diploma_hard", 4599)}). B.E./B.Tech from ₹${getVal("engineering", 4999)}, BCA/MCA from ₹${getVal("bca-mca", 3999)}, AI/ML from ₹${getVal("ai-ml", 6999)}, Android from ₹${getVal("android", 5499)}. Easy stack add-ons like HTML/CSS/JS are ₹${getVal("html", 0)}. PPT is ₹${getVal("ppt", 499)}, thesis report ₹${getVal("report", 999)}. Customization is always supported.`}`;
+${context || `No matching context found. Rely on the factual details of Shubdeep Labs: Diploma pricing has three tiers (Easy is ${getVal("diploma", "Free 🌿")}, Medium is ₹${getVal("diploma_medium", 1999)}, and Hard is ₹${getVal("diploma_hard", 2999)}). B.E./B.Tech from ₹${getVal("engineering", 3999)}, BCA/MCA from ₹${getVal("bca-mca", 2999)}, AI/ML from ₹${getVal("ai-ml", 5999)}, Android from ₹${getVal("android", 4999)}. Easy stack add-ons like HTML/CSS/JS are ₹${getVal("html", 0)}. PPT is ₹${getVal("ppt", 699)}, thesis report ₹${getVal("report", 1299)}. Customization is always supported.`}`;
 
     const contents = [];
     history.slice(-8).forEach(h => {
@@ -226,7 +226,7 @@ ${context || `No matching context found. Rely on the factual details of Shubdeep
     });
 
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${geminiKey}`;
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`;
       const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

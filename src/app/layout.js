@@ -77,15 +77,21 @@ export default function RootLayout({ children }) {
           
           {/* ── Unified FAB column (bottom-right) ── */}
           {/* Order: Customizer (top) → Chatbot (middle) → WhatsApp (bottom) */}
-          <div className="fixed bottom-6 right-4 sm:right-6 z-[100] flex flex-col items-end gap-3">
+          <div className="fixed bottom-6 right-4 sm:right-6 z-[100] flex flex-col items-end gap-3 pointer-events-none [&>*]:pointer-events-auto">
             {/* Customiser widget */}
-            <ProductCustomizer />
+            <div className="flex flex-col items-end">
+              <ProductCustomizer />
+            </div>
 
             {/* AI support chatbot widget */}
-            <SupportChatbotWidget />
+            <div className="flex flex-col items-end">
+              <SupportChatbotWidget />
+            </div>
 
             {/* WhatsApp direct contact */}
-            <WhatsAppButton />
+            <div className="flex flex-col items-end">
+              <WhatsAppButton />
+            </div>
           </div>
           
           {/* Custom handwritten toaster notification */}

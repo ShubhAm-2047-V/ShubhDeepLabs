@@ -12,7 +12,7 @@ const MTECH_PROJECTS = [
     title: "Hybrid Cryptography Cloud Storage",
     tech: "Java + AES + RSA + SHA-256 + Cloud",
     desc: "A secure cloud storage architecture using hybrid encryption (AES-256 for data, RSA-2048 for key sharing, SHA-256 for integrity check). Fully compliant with IEEE cloud parameters.",
-    price: "₹13999",
+    price: "₹12499",
     accent: "#EF5350",
     tags: ["Cryptography", "Cloud Security", "IEEE Model"],
   },
@@ -20,7 +20,7 @@ const MTECH_PROJECTS = [
     title: "Deep Learning Heart Care Analyzer",
     tech: "Python + TensorFlow + CNN + Flask",
     desc: "A highly precise clinical decision support model trained on medical image datasets. Uses convolutional layers to classify heart anomalies with 98% accuracy metrics.",
-    price: "₹13999",
+    price: "₹12499",
     accent: "#EF5350",
     tags: ["Deep Learning", "Healthcare AI", "TensorFlow"],
   },
@@ -28,7 +28,7 @@ const MTECH_PROJECTS = [
     title: "Advanced Big Data Analytics Engine",
     tech: "Python + Spark + Hadoop + Dash",
     desc: "A pipeline designed to digest stream datasets, map cluster nodes, compute key-value pairs, and render dynamic predictive metrics on a custom dashboard.",
-    price: "₹11499",
+    price: "₹9999",
     accent: "#FFCA28",
     tags: ["Big Data", "Spark/Hadoop", "Predictive"],
   },
@@ -36,7 +36,7 @@ const MTECH_PROJECTS = [
     title: "SVM Network Intrusion Detector",
     tech: "Python + Scikit-Learn + Pandas",
     desc: "Security gateway analyzing dynamic data flows. Employs Support Vector Machines (SVM) to detect network attacks and classify anomalies in real-time.",
-    price: "₹8999",
+    price: "₹7499",
     accent: "#42A5F5",
     tags: ["ML", "Security", "SVM Classify"],
   },
@@ -44,7 +44,7 @@ const MTECH_PROJECTS = [
     title: "Content-Based Image Retrieval Hub",
     tech: "Python + OpenCV + PyTensor",
     desc: "A visual database query engine. Extracts texture, color histogram, and spatial values to fetch structurally identical images from high-volume catalogues.",
-    price: "₹8999",
+    price: "₹7499",
     accent: "#AB47BC",
     tags: ["Computer Vision", "OpenCV", "Image Query"],
   },
@@ -52,7 +52,7 @@ const MTECH_PROJECTS = [
     title: "WSN Cluster Routing Optimizer",
     tech: "MATLAB / NS3 Simulator",
     desc: "Energy-efficient routing simulation. Utilizes LEACH protocols to optimize sensor node clusters, minimize battery drain, and maximize data pack delivery rates.",
-    price: "₹11499",
+    price: "₹9999",
     accent: "#26A69A",
     tags: ["WSN", "LEACH Protocol", "Simulation"],
   },
@@ -60,7 +60,7 @@ const MTECH_PROJECTS = [
     title: "Medical Ledger Blockchain",
     tech: "React + Solidity + Ethereum Smart Contracts",
     desc: "Decentralized patient medical record system. Custom smart contracts control record accesses, store cryptographic hashes on IPFS, and log ledger entries.",
-    price: "₹13999",
+    price: "₹12499",
     accent: "#EF5350",
     tags: ["Blockchain", "Ethereum", "Solidity"],
   },
@@ -68,7 +68,7 @@ const MTECH_PROJECTS = [
     title: "Text Summarizer NLP Model",
     tech: "Python + NLTK + BERT + Flask",
     desc: "A natural language system utilizing transformer models to parse high-volume articles, generate abstractive text summaries, and display key tag terms.",
-    price: "₹11499",
+    price: "₹9999",
     accent: "#29B6F6",
     tags: ["NLP", "BERT Model", "Transformers"],
   },
@@ -125,7 +125,7 @@ export default function MTechPage() {
 
           <h1 className="text-4xl sm:text-6xl font-marker font-black text-[#2C2C2C] leading-tight mb-4">
             M.Tech & Research<br />
-            <span className="underline decoration-[#42A5F5] decoration-4">Starting at ₹8999</span>
+            <span className="underline decoration-[#42A5F5] decoration-4">Starting at ₹7499</span>
           </h1>
 
           <p className="text-base sm:text-lg font-sans font-semibold text-[#5A5A5A] max-w-2xl mx-auto leading-relaxed mb-8">

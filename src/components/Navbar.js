@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Layers, Cpu, Award, FileText, Lock, ArrowRight, Sparkles, Terminal, Gift, MessageSquare } from "lucide-react";
+import { Layers, Cpu, Award, FileText, Lock, ArrowRight, Sparkles, Terminal, Gift, MessageSquare, Briefcase, GraduationCap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import toast from "react-hot-toast";
  
@@ -73,6 +73,24 @@ export default function Navbar() {
  
           {/* Action CTAs */}
           <div className="hidden md:flex items-center space-x-3">
+            {/* Mode Toggle */}
+            <div className="flex items-center space-x-1 bg-white border-2 border-[#2C2C2C] rounded-full p-1 shadow-[2px_2px_0_#2C2C2C]">
+              <Link 
+                href="/"
+                className={`p-1.5 rounded-full flex items-center justify-center transition-colors ${pathname !== '/commercial' ? 'bg-[#FFF59D] text-[#2C2C2C]' : 'text-gray-400 hover:text-[#2C2C2C]'}`}
+                title="Student Projects"
+              >
+                <GraduationCap className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/commercial"
+                className={`p-1.5 rounded-full flex items-center justify-center transition-colors ${pathname === '/commercial' ? 'bg-[#C8E6C9] text-[#2C2C2C]' : 'text-gray-400 hover:text-[#2C2C2C]'}`}
+                title="Commercial Products"
+              >
+                <Briefcase className="w-4 h-4" />
+              </Link>
+            </div>
+
             {/* Friendly Hand-Written status badge */}
             <button
               onClick={handleSystemSync}
@@ -103,6 +121,22 @@ export default function Navbar() {
  
           {/* Mobile elements */}
           <div className="flex md:hidden items-center space-x-2">
+            {/* Mobile Mode Toggle */}
+            <div className="flex items-center bg-white border-2 border-[#2C2C2C] rounded-full p-0.5 shadow-[1px_2px_0_#2C2C2C]">
+              <Link 
+                href="/"
+                className={`p-1.5 rounded-full flex items-center justify-center transition-colors ${pathname !== '/commercial' ? 'bg-[#FFF59D] text-[#2C2C2C]' : 'text-gray-400'}`}
+              >
+                <GraduationCap className="w-3.5 h-3.5" />
+              </Link>
+              <Link
+                href="/commercial"
+                className={`p-1.5 rounded-full flex items-center justify-center transition-colors ${pathname === '/commercial' ? 'bg-[#C8E6C9] text-[#2C2C2C]' : 'text-gray-400'}`}
+              >
+                <Briefcase className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
             <button
               onClick={handleSystemSync}
               className="p-2 rounded-xl text-[#2C2C2C] border-2 border-[#2C2C2C] bg-[#C8E6C9] shadow-[1px_2px_0_#2C2C2C]"

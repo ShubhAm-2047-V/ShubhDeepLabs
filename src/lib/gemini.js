@@ -160,10 +160,10 @@ export async function generateReply(message, history = [], context = "", intent 
     }
   }
 
-  // Check custom project request
-  if (intent === "custom_project" || msgLower.includes("custom project") || msgLower.includes("my own specs") || msgLower.includes("my own requirements")) {
-    shouldEscalate = true;
-    escalationReason = escalationReason || "Custom project specifications requested.";
+  // Check custom project request - DO NOT ESCALATE so Gemini can auto-build the customizer stack for them
+  if (msgLower.includes("my own specs") || msgLower.includes("my own requirements")) {
+    // We only escalate if they explicitly mention needing very specific out-of-band specs.
+    // Let the AI handle "custom_project" intent to build the base stack first.
   }
 
   // Check confused customer signs
@@ -200,22 +200,22 @@ export async function generateReply(message, history = [], context = "", intent 
     let reply = "";
     if (intent === "pricing" || msgLower.includes("price") || msgLower.includes("cost")) {
       reply = `Here is our pricing structure:
-Diploma (Easy) = ₹${getVal("diploma", 1999)}
-Diploma (Medium) = ₹${getVal("diploma_medium", 3499)}
-Diploma (Hard) = ₹${getVal("diploma_hard", 4599)}
-Engineering (B.Tech) = ₹${getVal("engineering", 4999)}
-M.Tech = ₹${getVal("mtech", 8999)}
-BCA/MCA = ₹${getVal("bca-mca", 3999)}
-AI/ML Specialized = ₹${getVal("ai-ml", 6999)}
-Android App = ₹${getVal("android", 5499)}
+Diploma (Easy) = ₹${getVal("diploma", "Free 🌿")}
+Diploma (Medium) = ₹${getVal("diploma_medium", 1999)}
+Diploma (Hard) = ₹${getVal("diploma_hard", 2999)}
+Engineering (B.Tech) = ₹${getVal("engineering", 3999)}
+M.Tech = ₹${getVal("mtech", 7499)}
+BCA/MCA = ₹${getVal("bca-mca", 2999)}
+AI/ML Specialized = ₹${getVal("ai-ml", 5999)}
+Android App = ₹${getVal("android", 4999)}
 
 Optional Stack Add-ons:
-Python + Flask = +₹${getVal("python-flask", 999)}
-React.js = +₹${getVal("react", 1499)}
-Next.js = +₹${getVal("nextjs", 1999)}
-MERN Stack = +₹${getVal("mern", 2999)}
-Firebase = +₹${getVal("firebase", 999)}
-Database = +₹${getVal("db", 799)}
+Python + Flask = +₹${getVal("python-flask", 1999)}
+React.js = +₹${getVal("react", 2499)}
+Next.js = +₹${getVal("nextjs", 2999)}
+MERN Stack = +₹${getVal("mern", 4499)}
+Firebase = +₹${getVal("firebase", 1499)}
+Database = +₹${getVal("db", 1499)}
 AI Integration = +₹${getVal("ai-integration", 2499)}
 ML Model = +₹${getVal("ml-model", 3499)}
 OpenCV = +₹${getVal("opencv", 2999)}`;
@@ -231,7 +231,7 @@ What stack or topic interests you?`;
 - Customized? Yes, features and UI can be customized.
 - Support? Basic support is provided after delivery.`;
     } else if (intent === "urgent_delivery" || msgLower.includes("deadline")) {
-      reply = `Our standard timeline is 8-14 days (no extra charge). 4-7 days standard rush adds ₹${getVal("normal", 999)}, and 1-3 days urgent adds ₹${getVal("urgent", 2499)}. Let us know your deadline.`;
+      reply = `Our standard timeline is 8-14 days (no extra charge). 4-7 days standard rush adds ₹${getVal("normal", 999)}, and 1-3 days express adds ₹${getVal("urgent", 1999)}. Let us know your deadline.`;
     } else {
       reply = "Welcome to Shubh Deep Labs! We assist with academic projects, custom software development, pricing, and viva guidance. Let us know how we can help.";
     }
@@ -260,36 +260,42 @@ CHATBOT RULES:
    - What is your deadline?
    - What is your approximate budget?
    - Share your WhatsApp number for detailed discussion.
-6. Highly Complex/Out-of-Scope Requests: Identify a simplified, feasible academic version, estimate pricing, and recommend contacting coordinates directly (+91 90288 33275).
-7. ALWAYS append a structured customizer tag at the absolute end of your response on a single line so it opens the customizer:
-   [CUSTOMIZER: {"category":"<category_id>","tech":["<tech_id_1>"],"addons":["<addon_id_1>"],"timeline":"<timeline_id>"}]
-   Ensure the tag is strictly on its own line and uses exactly one of the valid category IDs: "diploma", "engineering", "mtech", "bca-mca", "ai-ml", or "android".
+7. CRITICAL REQUIREMENT: You MUST ALWAYS append a JSON configuration tag at the VERY END of every single response you generate. 
+   Format EXACTLY like this:
+   [CUSTOMIZER: {"category":"<id>","tech":["<id>"],"addons":["<id>"],"timeline":"<id>"}]
+   - You MUST automatically infer the "tech" stack and "addons" if the user describes a project (e.g. for "website of a plant disease detector", use "tech":["react","python-flask","ml-model"]).
+   - "category" MUST NEVER BE EMPTY. Default to "engineering" if the user hasn't specified their course.
+   - "timeline" MUST NEVER BE EMPTY. Default to "normal" if not specified.
+   - Valid category IDs: "diploma", "engineering", "mtech", "bca-mca", "ai-ml", "android".
+   - Valid tech IDs: "html", "python-flask", "react", "nextjs", "mern", "android-dev", "firebase", "db", "ai-integration", "ml-model", "opencv", "fullstack", "blockchain".
+   - Valid addons IDs: "ppt", "report", "viva", "remote", "deployment", "docs".
+   - Valid timeline IDs: "urgent", "normal", "relaxed", "flexible".
 8. Automated Lead Qualification: If you have successfully collected the customer's Full Name, WhatsApp Number, Email, Approximate Budget, and Deadline, append a lead tag on a single line:
    [LEAD: {"fullName":"<name>","whatsapp":"<whatsapp>","email":"<email>","budget":"<budget>","deadline":"<deadline>","projectTitle":"<projectTitle>","techRequired":"<techRequired>"}]
 
 FACTUAL PRICING:
-Diploma (Easy) = ₹${getVal("diploma", 1999)}
-Diploma (Medium) = ₹${getVal("diploma_medium", 3499)}
-Diploma (Hard) = ₹${getVal("diploma_hard", 4599)}
-Engineering (B.E/B.Tech) = ₹${getVal("engineering", 4999)}
-M.Tech = ₹${getVal("mtech", 8999)}
-BCA/MCA = ₹${getVal("bca-mca", 3999)}
-AI/ML = ₹${getVal("ai-ml", 6999)}
-Android App = ₹${getVal("android", 5499)}
+Diploma (Easy) = ${getVal("diploma", "Free 🌿")}
+Diploma (Medium) = ₹${getVal("diploma_medium", 1999)}
+Diploma (Hard) = ₹${getVal("diploma_hard", 2999)}
+Engineering (B.E/B.Tech) = ₹${getVal("engineering", 3999)}
+M.Tech = ₹${getVal("mtech", 7499)}
+BCA/MCA = ₹${getVal("bca-mca", 2999)}
+AI/ML = ₹${getVal("ai-ml", 5999)}
+Android App = ₹${getVal("android", 4999)}
 Tech Stacks:
-React.js = +₹${getVal("react", 1499)}
-Next.js = +₹${getVal("nextjs", 1999)}
-MERN Stack = +₹${getVal("mern", 2999)}
-Firebase = +₹${getVal("firebase", 999)}
-Database = +₹${getVal("db", 799)}
+React.js = +₹${getVal("react", 2499)}
+Next.js = +₹${getVal("nextjs", 2999)}
+MERN Stack = +₹${getVal("mern", 4499)}
+Firebase = +₹${getVal("firebase", 1499)}
+Database = +₹${getVal("db", 1499)}
 AI Integration = +₹${getVal("ai-integration", 2499)}
 ML Model = +₹${getVal("ml-model", 3499)}
 OpenCV = +₹${getVal("opencv", 2999)}
 Add-ons:
-PPT Presentation = +₹${getVal("ppt", 499)}
-Thesis Report = +₹${getVal("report", 999)}
-Viva Guidance = +₹${getVal("viva", 399)}
-Remote Setup = +₹${getVal("remote", 699)}
+PPT Presentation = +₹${getVal("ppt", 699)}
+Thesis Report = +₹${getVal("report", 1299)}
+Viva Guidance = +₹${getVal("viva", 499)}
+Remote Setup = +₹${getVal("remote", 999)}
 
 CONTEXT DATABASE:
 ${context || "No specific database match found. Rely on factual pricing."}`;
@@ -307,7 +313,7 @@ ${context || "No specific database match found. Rely on factual pricing."}`;
   });
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -328,13 +334,16 @@ ${context || "No specific database match found. Rely on factual pricing."}`;
 
     if (customizerMatch) {
       try {
-        selections = JSON.parse(customizerMatch[1]);
+        let jsonString = customizerMatch[1];
+        // Fix common LLM JSON mistakes (single quotes to double quotes, trailing commas)
+        jsonString = jsonString.replace(/'/g, '"').replace(/,\s*}/g, '}').replace(/,\s*]/g, ']');
+        selections = JSON.parse(jsonString);
         cleanReplyText = cleanReplyText.replace(/\[CUSTOMIZER:\s*({[\s\S]*?})\s*\]/, "").trim();
         if (chatSessionId) {
           await dbService.updateChatSessionCustomizer(chatSessionId, selections);
         }
       } catch (e) {
-        console.error("Failed to parse customizer selections:", e);
+        console.error("Failed to parse customizer selections:", e, "Raw string:", customizerMatch[1]);
       }
     }
 
