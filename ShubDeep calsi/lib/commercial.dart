@@ -19,80 +19,80 @@ String formatINR(int value) {
 }
 
 final List<_Opt> projectOpts = [
-  _Opt('app', 'Mobile App', Icons.smartphone, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Native or Cross-platform', 49999),
-  _Opt('website', 'Website / Web App', Icons.language, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'SaaS, E-commerce, Portals', 29999),
+  _Opt('app', 'Mobile App', Icons.smartphone, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Native or Cross-platform', 19999),
+  _Opt('website', 'Website / Web App', Icons.language, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'SaaS, E-commerce, Portals', 9999),
 ];
 
 final List<_Opt> appPlatformOpts = [
-  _Opt('android', 'Android Only', Icons.android, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Play Store', 19999),
-  _Opt('ios', 'iOS Only', Icons.apple, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'App Store', 24999),
-  _Opt('both', 'Cross-Platform', Icons.layers, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Flutter / React Native', 39999),
+  _Opt('android', 'Android Only', Icons.android, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Play Store', 4999),
+  _Opt('ios', 'iOS Only', Icons.apple, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'App Store', 9999),
+  _Opt('both', 'Cross-Platform', Icons.layers, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Flutter / React Native', 14999),
 ];
 
 final List<_Opt> webPlatformOpts = [
-  _Opt('ecommerce', 'E-Commerce', Icons.shopping_cart, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'Online Store', 39999),
-  _Opt('saas', 'SaaS Platform', Icons.cloud, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Software as a Service', 79999),
-  _Opt('dashboard', 'Admin Dashboard', Icons.dashboard, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Internal Tools', 44999),
-  _Opt('landing', 'Landing Page', Icons.web, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Marketing Site', 14999),
+  _Opt('ecommerce', 'E-Commerce', Icons.shopping_cart, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'Online Store', 19999),
+  _Opt('saas', 'SaaS Platform', Icons.cloud, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Software as a Service', 39999),
+  _Opt('dashboard', 'Admin Dashboard', Icons.dashboard, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Internal Tools', 19999),
+  _Opt('landing', 'Landing Page', Icons.web, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Marketing Site', 4999),
 ];
 
 final List<_Opt> appFeaturesOpts = [
-  _Opt('auth', 'User Auth', Icons.lock, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Email/Password Login', 4999),
-  _Opt('social_auth', 'Social Login', Icons.group, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Google, Apple, Facebook', 9999),
-  _Opt('otp_verify', 'OTP Verification', Icons.pin, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'SMS / WhatsApp OTP', 7999),
-  _Opt('biometrics', 'Biometric Login', Icons.fingerprint, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'FaceID / TouchID', 12999),
-  _Opt('payment', 'Payments', Icons.payment, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'Stripe/Razorpay', 14999),
-  _Opt('iap', 'In-App Purchases', Icons.shopping_bag, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Subscriptions & IAP', 24999),
-  _Opt('push', 'Push Notifications', Icons.notifications, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'FCM/APNs Alerts', 9999),
-  _Opt('chat', 'Live Chat', Icons.chat, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Real-time messaging', 29999),
-  _Opt('video_call', 'Video/Voice Call', Icons.video_call, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'WebRTC / Agora', 39999),
-  _Opt('maps', 'Maps & Routing', Icons.map, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'GPS & Live Tracking', 24999),
-  _Opt('qr_scanner', 'QR/Barcode', Icons.qr_code_scanner, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Built-in scanner', 9999),
-  _Opt('bluetooth', 'Bluetooth/IoT', Icons.bluetooth, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'BLE & Hardware APIs', 34999),
-  _Opt('health', 'Health SDKs', Icons.favorite, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'HealthKit/Google Fit', 34999),
-  _Opt('file_upload', 'Media Uploads', Icons.cloud_upload, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'AWS S3/Cloudinary', 12999),
-  _Opt('pdf_gen', 'PDF Reports', Icons.picture_as_pdf, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'Generate & Export Docs', 14999),
-  _Opt('gamification', 'Gamification', Icons.sports_esports, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Badges, Streaks & Points', 24999),
-  _Opt('offline', 'Offline Mode', Icons.wifi_off, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Local DB Sync (SQLite)', 29999),
-  _Opt('dark_mode', 'Dark Mode', Icons.dark_mode, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Dynamic Theme Support', 9999),
-  _Opt('multi_lang', 'Multi-Language', Icons.translate, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'i18n Localization', 19999),
-  _Opt('deep_link', 'Deep Linking', Icons.link, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'Universal Links', 9999),
-  _Opt('analytics', 'Analytics SDK', Icons.analytics, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Firebase / Mixpanel', 7999),
-  _Opt('crm', 'CRM Integration', Icons.contacts, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Salesforce/HubSpot', 34999),
-  _Opt('camera', 'Advanced Camera', Icons.camera_alt, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Custom UI/AR Elements', 49999),
+  _Opt('auth', 'User Authentication', Icons.lock, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Email/Password Login', 2999),
+  _Opt('social_auth', 'Social Login', Icons.group, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Google, Apple, Facebook', 4999),
+  _Opt('otp_verify', 'OTP Verification', Icons.pin, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'SMS / WhatsApp OTP', 3999),
+  _Opt('biometrics', 'Biometric Login', Icons.fingerprint, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'FaceID / TouchID', 5999),
+  _Opt('payment', 'Payment Gateway', Icons.payment, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'Stripe/Razorpay', 7999),
+  _Opt('iap', 'In-App Purchases', Icons.shopping_bag, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Subscriptions & IAP', 12999),
+  _Opt('push', 'Push Notifications', Icons.notifications, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'FCM/APNs Alerts', 3999),
+  _Opt('chat', 'Live Chat', Icons.chat, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Real-time messaging', 9999),
+  _Opt('video_call', 'Video / Voice Calling', Icons.video_call, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'WebRTC / Agora', 14999),
+  _Opt('maps', 'Maps & Routing', Icons.map, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'GPS & Live Tracking', 7999),
+  _Opt('qr_scanner', 'QR / Barcode Scanner', Icons.qr_code_scanner, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Built-in scanner', 4999),
+  _Opt('bluetooth', 'Bluetooth / IoT', Icons.bluetooth, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'BLE & Hardware APIs', 14999),
+  _Opt('health', 'Health SDK Integration', Icons.favorite, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'HealthKit/Google Fit', 14999),
+  _Opt('file_upload', 'Media Uploads', Icons.cloud_upload, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'AWS S3/Cloudinary', 4999),
+  _Opt('pdf_gen', 'PDF Reports', Icons.picture_as_pdf, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'Generate & Export Docs', 4999),
+  _Opt('gamification', 'Gamification', Icons.sports_esports, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Badges, Streaks & Points', 9999),
+  _Opt('offline', 'Offline Mode', Icons.wifi_off, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Local DB Sync (SQLite)', 9999),
+  _Opt('dark_mode', 'Dark Mode', Icons.dark_mode, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Dynamic Theme Support', 2999),
+  _Opt('multi_lang', 'Multi-Language', Icons.translate, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'i18n Localization', 7999),
+  _Opt('deep_link', 'Deep Linking', Icons.link, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'Universal Links', 3999),
+  _Opt('analytics', 'Analytics SDK', Icons.analytics, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Firebase / Mixpanel', 2999),
+  _Opt('crm', 'CRM Integration', Icons.contacts, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Salesforce/HubSpot', 12999),
+  _Opt('camera', 'Advanced Camera / AR', Icons.camera_alt, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Custom UI/AR Elements', 19999),
 ];
 
 final List<_Opt> webFeaturesOpts = [
-  _Opt('auth', 'User Auth', Icons.lock, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Email/Password Login', 4999),
-  _Opt('sso', 'Enterprise SSO', Icons.vpn_key, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'SAML / OAuth', 29999),
-  _Opt('rbac', 'Role-based Access', Icons.manage_accounts, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Complex Permissions', 24999),
-  _Opt('payment', 'Payment Gateway', Icons.payment, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'Stripe/Razorpay', 14999),
-  _Opt('subscriptions', 'Recurring Billing', Icons.autorenew, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'SaaS Subscriptions', 29999),
-  _Opt('multi_currency', 'Multi-Currency', Icons.currency_exchange, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Dynamic local pricing', 19999),
-  _Opt('cms', 'Admin CMS', Icons.admin_panel_settings, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Content Management', 34999),
-  _Opt('seo', 'Advanced SEO', Icons.search, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Meta, Schema, Sitemap', 19999),
-  _Opt('ai', 'AI Integration', Icons.psychology, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'OpenAI APIs', 39999),
-  _Opt('advanced_search', 'Algolia Search', Icons.manage_search, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'Lightning fast indexing', 24999),
-  _Opt('chat', 'Support Chatbot', Icons.support_agent, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'AI/Live Agent Support', 14999),
-  _Opt('analytics', 'Analytics Dash', Icons.analytics, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Custom Dashboards', 44999),
-  _Opt('pwa', 'PWA Support', Icons.install_mobile, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Installable Web App', 19999),
-  _Opt('multi_tenant', 'Multi-Tenant', Icons.business, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'SaaS Architecture', 59999),
-  _Opt('webhooks', 'Webhooks & APIs', Icons.webhook, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'Expose APIs to clients', 34999),
-  _Opt('api', '3rd Party APIs', Icons.api, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Zapier, Hubspot, etc.', 24999),
-  _Opt('websockets', 'WebSockets', Icons.sync_alt, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Real-time Live Data', 29999),
-  _Opt('email', 'Email Marketing', Icons.mail, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Mailchimp / Sendgrid', 11999),
-  _Opt('inventory', 'Inventory/WMS', Icons.inventory, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'Warehouse Management', 49999),
-  _Opt('affiliate', 'Referral System', Icons.people_outline, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'Affiliate tracking', 29999),
-  _Opt('gdpr', 'GDPR Compliance', Icons.policy, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Cookie consent, export', 14999),
-  _Opt('backups', 'Auto Backups', Icons.backup, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Automated DB snapshots', 9999),
-  _Opt('blog', 'Blog / News', Icons.article, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Content Marketing Hub', 24999),
+  _Opt('auth', 'User Authentication', Icons.lock, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Email/Password Login', 2999),
+  _Opt('sso', 'Enterprise SSO', Icons.vpn_key, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'SAML / OAuth', 12999),
+  _Opt('rbac', 'Role-Based Access (RBAC)', Icons.manage_accounts, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Complex Permissions', 9999),
+  _Opt('payment', 'Payment Gateway', Icons.payment, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'Stripe/Razorpay', 7999),
+  _Opt('subscriptions', 'Subscription Billing', Icons.autorenew, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'SaaS Subscriptions', 12999),
+  _Opt('multi_currency', 'Multi-Currency', Icons.currency_exchange, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Dynamic local pricing', 7999),
+  _Opt('cms', 'Admin CMS', Icons.admin_panel_settings, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Content Management', 12999),
+  _Opt('seo', 'Advanced SEO', Icons.search, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Meta, Schema, Sitemap', 7999),
+  _Opt('ai', 'AI Integration', Icons.psychology, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'OpenAI APIs', 19999),
+  _Opt('advanced_search', 'Smart Search', Icons.manage_search, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'Lightning fast indexing', 7999),
+  _Opt('chat', 'Support Chatbot', Icons.support_agent, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'AI/Live Agent Support', 4999),
+  _Opt('analytics', 'Analytics Dashboard', Icons.analytics, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Custom Dashboards', 14999),
+  _Opt('pwa', 'PWA Support', Icons.install_mobile, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Installable Web App', 7999),
+  _Opt('multi_tenant', 'Multi-Tenant SaaS', Icons.business, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'SaaS Architecture', 29999),
+  _Opt('webhooks', 'Webhooks & APIs', Icons.webhook, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'Expose APIs to clients', 12999),
+  _Opt('api', 'Third-Party APIs', Icons.api, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Zapier, Hubspot, etc.', 7999),
+  _Opt('websockets', 'Real-Time Features', Icons.sync_alt, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Real-time Live Data', 12999),
+  _Opt('email', 'Email Marketing', Icons.mail, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Mailchimp / Sendgrid', 4999),
+  _Opt('inventory', 'Inventory / WMS', Icons.inventory, const Color(0xFFF3E5F5), const Color(0xFFAB47BC), 'Warehouse Management', 19999),
+  _Opt('affiliate', 'Referral System', Icons.people_outline, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'Affiliate tracking', 12999),
+  _Opt('gdpr', 'GDPR Compliance', Icons.policy, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Cookie consent, export', 7999),
+  _Opt('backups', 'Auto Backups', Icons.backup, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Automated DB snapshots', 2999),
+  _Opt('blog', 'Blog / News Module', Icons.article, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Content Marketing Hub', 7999),
 ];
 
 final List<_Opt> timelineOpts = [
-  _Opt('urgent', '1-2 Weeks', Icons.bolt, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'MVP Fast Track (Rush Fee)', 39999),
-  _Opt('standard', '3-4 Weeks', Icons.schedule, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Standard Dev', 0),
-  _Opt('relaxed', '1-2 Months', Icons.calendar_month, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Full Scale (Discount)', -15000),
-  _Opt('flexible', 'Flexible', Icons.all_inclusive, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'No rush', 0),
+  _Opt('urgent', '1-2 Weeks', Icons.bolt, const Color(0xFFFFEBEE), const Color(0xFFEF5350), 'Express Delivery', 9999),
+  _Opt('standard', '3-4 Weeks', Icons.schedule, const Color(0xFFFFF9C4), const Color(0xFFFFCA28), 'Standard Delivery', 0),
+  _Opt('flexible', 'Flexible', Icons.all_inclusive, const Color(0xFFE1F5FE), const Color(0xFF42A5F5), 'Flexible Timeline', 0),
+  _Opt('relaxed', '1-2 Months', Icons.calendar_month, const Color(0xFFE8F5E9), const Color(0xFF66BB6A), 'Relaxed Timeline', -5000),
 ];
 
 Future<void> loadCommercialPrices() async {
@@ -588,11 +588,14 @@ class _CommercialScreenState extends State<CommercialScreen> {
 
     final text = 'Hello ShubDeep Labs! 👋\n\nI used your Commercial Customizer and here is my requirement:\n\n💼 Project Type: $pt\n📱 Platform: $pl\n✨ Features: $feats\n⏱️ Timeline: $tl\n💰 My Estimate: ₹$totalAmount\n\nPlease confirm the final quote for my commercial project!';
     final encodedText = Uri.encodeComponent(text);
-    final url = Uri.parse('https://wa.me/919028833275?text=$encodedText');
+    final appUrl = Uri.parse('whatsapp://send?phone=919028833275&text=$encodedText');
+    final webUrl = Uri.parse('https://wa.me/919028833275?text=$encodedText');
 
     try {
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url, mode: LaunchMode.externalApplication);
+      if (await canLaunchUrl(appUrl)) {
+        await launchUrl(appUrl, mode: LaunchMode.externalApplication);
+      } else if (await canLaunchUrl(webUrl)) {
+        await launchUrl(webUrl, mode: LaunchMode.externalApplication);
       } else {
         throw 'Could not launch WhatsApp';
       }

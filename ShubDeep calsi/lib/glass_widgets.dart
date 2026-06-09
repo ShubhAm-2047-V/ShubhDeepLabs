@@ -80,9 +80,9 @@ class GlassCard extends StatelessWidget {
     required this.baseColor,
   });
 
-  @override
   Widget build(BuildContext context) {
-    Widget card = Container(
+    final card = AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         boxShadow: isSelected
@@ -116,12 +116,12 @@ class GlassCard extends StatelessWidget {
       ),
     );
 
-    if (isSelected) {
-      card = card.animate(target: isSelected ? 1 : 0)
-        .scaleXY(end: 1.05, duration: 150.ms, curve: Curves.easeOutBack);
-    }
-
-    return card;
+    return AnimatedScale(
+      scale: isSelected ? 1.05 : 1.0,
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.easeOutBack,
+      child: card,
+    );
   }
 }
 

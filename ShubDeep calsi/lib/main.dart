@@ -147,26 +147,26 @@ List<StepData> stepsData = [
       OptionItem(id: 'python-flask', label: 'Python + Flask', icon: Icons.code, bgColor: Color(0xFFE8F5E9), borderColor: Color(0xFF66BB6A), price: 1999, desc: 'REST APIs & ML', visibleForCategories: null),
       OptionItem(id: 'nodejs', label: 'Node.js', icon: Icons.javascript, bgColor: Color(0xFFE8F5E9), borderColor: Color(0xFF66BB6A), price: 2499, desc: 'Fast JS backend', visibleForCategories: ['engineering', 'mtech', 'bca-mca', 'android', 'bsc-msc', 'phd', 'web-dev', 'blockchain']),
       OptionItem(id: 'django', label: 'Django', icon: Icons.table_chart, bgColor: Color(0xFFE1F5FE), borderColor: Color(0xFF42A5F5), price: 2999, desc: 'Robust Python backend', visibleForCategories: null),
-      OptionItem(id: 'springboot', label: 'Spring Boot', icon: Icons.coffee, bgColor: Color(0xFFF3E5F5), borderColor: Color(0xFFAB47BC), price: 3499, desc: 'Enterprise Java', visibleForCategories: null),
-      OptionItem(id: 'laravel', label: 'PHP / Laravel', icon: Icons.php, bgColor: Color(0xFFFFEBEE), borderColor: Color(0xFFEF5350), price: 1999, desc: 'Elegant PHP framework', visibleForCategories: null),
+      OptionItem(id: 'springboot', label: 'Spring Boot', icon: Icons.coffee, bgColor: Color(0xFFF3E5F5), borderColor: Color(0xFFAB47BC), price: 4499, desc: 'Enterprise Java', visibleForCategories: null),
+      OptionItem(id: 'laravel', label: 'PHP / Laravel', icon: Icons.php, bgColor: Color(0xFFFFEBEE), borderColor: Color(0xFFEF5350), price: 2499, desc: 'Elegant PHP framework', visibleForCategories: null),
 
-      OptionItem(id: 'sql', label: 'PostgreSQL/MySQL', icon: Icons.storage, bgColor: Color(0xFFE1F5FE), borderColor: Color(0xFF42A5F5), price: 999, desc: 'Relational DBs', visibleForCategories: null),
-      OptionItem(id: 'mongodb', label: 'MongoDB', icon: Icons.data_usage, bgColor: Color(0xFFE8F5E9), borderColor: Color(0xFF66BB6A), price: 999, desc: 'NoSQL document DB', visibleForCategories: null),
-      OptionItem(id: 'redis', label: 'Redis', icon: Icons.memory, bgColor: Color(0xFFFFEBEE), borderColor: Color(0xFFEF5350), price: 499, desc: 'High-speed caching', visibleForCategories: null),
-      OptionItem(id: 'firebase', label: 'Firebase', icon: Icons.local_fire_department, bgColor: Color(0xFFFFF9C4), borderColor: Color(0xFFFFCA28), price: 999, desc: 'Auth, real-time DB', visibleForCategories: null),
+      OptionItem(id: 'sql', label: 'PostgreSQL/MySQL', icon: Icons.storage, bgColor: Color(0xFFE1F5FE), borderColor: Color(0xFF42A5F5), price: 1499, desc: 'Relational DBs', visibleForCategories: null),
+      OptionItem(id: 'mongodb', label: 'MongoDB', icon: Icons.data_usage, bgColor: Color(0xFFE8F5E9), borderColor: Color(0xFF66BB6A), price: 1499, desc: 'NoSQL document DB', visibleForCategories: null),
+      OptionItem(id: 'redis', label: 'Redis', icon: Icons.memory, bgColor: Color(0xFFFFEBEE), borderColor: Color(0xFFEF5350), price: 999, desc: 'High-speed caching', visibleForCategories: null),
+      OptionItem(id: 'firebase', label: 'Firebase', icon: Icons.local_fire_department, bgColor: Color(0xFFFFF9C4), borderColor: Color(0xFFFFCA28), price: 1499, desc: 'Auth, real-time DB', visibleForCategories: null),
 
-      OptionItem(id: 'android-dev', label: 'Android (Java/XML)', icon: Icons.android, bgColor: Color(0xFFE8F5E9), borderColor: Color(0xFF26A69A), price: 3499, desc: 'Legacy Android apps', visibleForCategories: ['engineering', 'mtech', 'bca-mca', 'android', 'bsc-msc', 'phd']),
-      OptionItem(id: 'kotlin', label: 'Kotlin Native', icon: Icons.phone_android, bgColor: Color(0xFFE1F5FE), borderColor: Color(0xFF42A5F5), price: 3499, desc: 'Modern Android apps', visibleForCategories: ['engineering', 'mtech', 'bca-mca', 'android', 'bsc-msc', 'phd']),
-      OptionItem(id: 'swift', label: 'Swift (iOS)', icon: Icons.apple, bgColor: Color(0xFFF3E5F5), borderColor: Color(0xFFAB47BC), price: 4499, desc: 'Native Apple apps', visibleForCategories: ['engineering', 'mtech', 'bca-mca', 'android', 'bsc-msc', 'phd']),
-      OptionItem(id: 'flutter', label: 'Flutter', icon: Icons.layers, bgColor: Color(0xFFE1F5FE), borderColor: Color(0xFF42A5F5), price: 3999, desc: 'Cross-platform mobile', visibleForCategories: ['engineering', 'mtech', 'bca-mca', 'android', 'bsc-msc', 'phd']),
-      OptionItem(id: 'react-native', label: 'React Native', icon: Icons.code, bgColor: Color(0xFFF3E5F5), borderColor: Color(0xFFAB47BC), price: 3999, desc: 'JS cross-platform', visibleForCategories: ['engineering', 'mtech', 'bca-mca', 'android', 'bsc-msc', 'phd']),
+      OptionItem(id: 'android-dev', label: 'Android (Java/XML)', icon: Icons.android, bgColor: Color(0xFFE8F5E9), borderColor: Color(0xFF26A69A), price: 5499, desc: 'Legacy Android apps', visibleForCategories: ['engineering', 'mtech', 'bca-mca', 'android', 'bsc-msc', 'phd']),
+      OptionItem(id: 'kotlin', label: 'Kotlin Native', icon: Icons.phone_android, bgColor: Color(0xFFE1F5FE), borderColor: Color(0xFF42A5F5), price: 5499, desc: 'Modern Android apps', visibleForCategories: ['engineering', 'mtech', 'bca-mca', 'android', 'bsc-msc', 'phd']),
+      OptionItem(id: 'swift', label: 'Swift (iOS)', icon: Icons.apple, bgColor: Color(0xFFF3E5F5), borderColor: Color(0xFFAB47BC), price: 6999, desc: 'Native Apple apps', visibleForCategories: ['engineering', 'mtech', 'bca-mca', 'android', 'bsc-msc', 'phd']),
+      OptionItem(id: 'flutter', label: 'Flutter', icon: Icons.layers, bgColor: Color(0xFFE1F5FE), borderColor: Color(0xFF42A5F5), price: 5999, desc: 'Cross-platform mobile', visibleForCategories: ['engineering', 'mtech', 'bca-mca', 'android', 'bsc-msc', 'phd']),
+      OptionItem(id: 'react-native', label: 'React Native', icon: Icons.code, bgColor: Color(0xFFF3E5F5), borderColor: Color(0xFFAB47BC), price: 5999, desc: 'JS cross-platform', visibleForCategories: ['engineering', 'mtech', 'bca-mca', 'android', 'bsc-msc', 'phd']),
 
-      OptionItem(id: 'aws-gcp', label: 'AWS / GCP', icon: Icons.cloud, bgColor: Color(0xFFFFF9C4), borderColor: Color(0xFFFFCA28), price: 1999, desc: 'Cloud infrastructure', visibleForCategories: null),
-      OptionItem(id: 'docker', label: 'Docker & K8s', icon: Icons.directions_boat, bgColor: Color(0xFFE1F5FE), borderColor: Color(0xFF42A5F5), price: 2499, desc: 'Container deployment', visibleForCategories: ['engineering', 'mtech', 'bca-mca', 'bsc-msc', 'phd', 'web-dev', 'cyber-sec', 'blockchain']),
-      OptionItem(id: 'solidity', label: 'Solidity / Web3', icon: Icons.link, bgColor: Color(0xFFF3E5F5), borderColor: Color(0xFFAB47BC), price: 2999, desc: 'Smart Contracts', visibleForCategories: ['phd', 'blockchain']),
+      OptionItem(id: 'aws-gcp', label: 'AWS / GCP', icon: Icons.cloud, bgColor: Color(0xFFFFF9C4), borderColor: Color(0xFFFFCA28), price: 2999, desc: 'Cloud infrastructure', visibleForCategories: null),
+      OptionItem(id: 'docker', label: 'Docker & K8s', icon: Icons.directions_boat, bgColor: Color(0xFFE1F5FE), borderColor: Color(0xFF42A5F5), price: 4499, desc: 'Container deployment', visibleForCategories: ['engineering', 'mtech', 'bca-mca', 'bsc-msc', 'phd', 'web-dev', 'cyber-sec', 'blockchain']),
+      OptionItem(id: 'solidity', label: 'Solidity / Web3', icon: Icons.link, bgColor: Color(0xFFF3E5F5), borderColor: Color(0xFFAB47BC), price: 5999, desc: 'Smart Contracts', visibleForCategories: ['phd', 'blockchain']),
 
-      OptionItem(id: 'tensorflow', label: 'TensorFlow/PyTorch', icon: Icons.psychology, bgColor: Color(0xFFFFEBEE), borderColor: Color(0xFFEF5350), price: 4999, desc: 'Deep learning', visibleForCategories: ['ai-ml', 'mtech', 'engineering', 'bca-mca', 'bsc-msc', 'phd']),
-      OptionItem(id: 'pandas', label: 'Data Analysis', icon: Icons.analytics, bgColor: Color(0xFFE8F5E9), borderColor: Color(0xFF66BB6A), price: 1999, desc: 'Data & visualization', visibleForCategories: ['ai-ml', 'engineering', 'mtech', 'bca-mca', 'bsc-msc', 'phd', 'cyber-sec']),
+      OptionItem(id: 'tensorflow', label: 'TensorFlow/PyTorch', icon: Icons.psychology, bgColor: Color(0xFFFFEBEE), borderColor: Color(0xFFEF5350), price: 6999, desc: 'Deep learning', visibleForCategories: ['ai-ml', 'mtech', 'engineering', 'bca-mca', 'bsc-msc', 'phd']),
+      OptionItem(id: 'pandas', label: 'Data Analysis', icon: Icons.analytics, bgColor: Color(0xFFE8F5E9), borderColor: Color(0xFF66BB6A), price: 2499, desc: 'Data & visualization', visibleForCategories: ['ai-ml', 'engineering', 'mtech', 'bca-mca', 'bsc-msc', 'phd', 'cyber-sec']),
     ],
   ),
   StepData(
@@ -176,10 +176,11 @@ List<StepData> stepsData = [
     hint: 'Available as add-ons',
     type: 'multi',
     options: [
-      OptionItem(id: 'ppt', label: 'PPT Presentation', icon: Icons.slideshow, bgColor: Color(0xFFFFF9C4), borderColor: Color(0xFFFFCA28), price: 499),
-      OptionItem(id: 'report', label: 'Thesis Report', icon: Icons.description, bgColor: Color(0xFFE8F5E9), borderColor: Color(0xFF66BB6A), price: 999),
-      OptionItem(id: 'viva', label: 'Viva Guidance Sheet', icon: Icons.menu_book, bgColor: Color(0xFFE1F5FE), borderColor: Color(0xFF42A5F5), price: 399),
-      OptionItem(id: 'remote', label: 'Remote Setup', icon: Icons.verified_user, bgColor: Color(0xFFFFEBEE), borderColor: Color(0xFFEF5350), price: 699),
+      OptionItem(id: 'ppt', label: 'PPT Presentation', icon: Icons.slideshow, bgColor: Color(0xFFFFF9C4), borderColor: Color(0xFFFFCA28), price: 699),
+      OptionItem(id: 'report', label: 'Thesis Report', icon: Icons.description, bgColor: Color(0xFFE8F5E9), borderColor: Color(0xFF66BB6A), price: 1299),
+      OptionItem(id: 'viva', label: 'Viva Preparation Kit', icon: Icons.menu_book, bgColor: Color(0xFFE1F5FE), borderColor: Color(0xFF42A5F5), price: 499),
+      OptionItem(id: 'remote', label: 'Remote Setup', icon: Icons.verified_user, bgColor: Color(0xFFFFEBEE), borderColor: Color(0xFFEF5350), price: 999),
+      OptionItem(id: 'success', label: 'Project Success Pack', icon: Icons.workspace_premium, bgColor: Color(0xFFFFF9C4), borderColor: Color(0xFFFFCA28), price: 1999, desc: 'PPT+Thesis+Viva+Setup'),
     ],
   ),
   StepData(
@@ -189,7 +190,7 @@ List<StepData> stepsData = [
     hint: 'Pick the closest deadline',
     type: 'single',
     options: [
-      OptionItem(id: 'urgent', label: '1–3 Days', icon: Icons.bolt, bgColor: Color(0xFFFFEBEE), borderColor: Color(0xFFEF5350), price: 2499),
+      OptionItem(id: 'urgent', label: '1–3 Days', icon: Icons.bolt, bgColor: Color(0xFFFFEBEE), borderColor: Color(0xFFEF5350), price: 1999),
       OptionItem(id: 'normal', label: '4–7 Days', icon: Icons.schedule, bgColor: Color(0xFFFFF9C4), borderColor: Color(0xFFFFCA28), price: 999),
       OptionItem(id: 'relaxed', label: '8–14 Days', icon: Icons.check_circle, bgColor: Color(0xFFE8F5E9), borderColor: Color(0xFF66BB6A), price: 0),
       OptionItem(id: 'flexible', label: 'Flexible', icon: Icons.star, bgColor: Color(0xFFE1F5FE), borderColor: Color(0xFF42A5F5), price: 0),
@@ -994,11 +995,14 @@ Please provide a high-level architecture overview, a step-by-step development pl
     final text = _generateSummaryText();
     final encodedText = Uri.encodeComponent(text);
     // You can replace this number with your business WhatsApp number
-    final url = Uri.parse('https://wa.me/919028833275?text=$encodedText'); 
+    final appUrl = Uri.parse('whatsapp://send?phone=919028833275&text=$encodedText');
+    final webUrl = Uri.parse('https://wa.me/919028833275?text=$encodedText'); 
     
     try {
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url, mode: LaunchMode.externalApplication);
+      if (await canLaunchUrl(appUrl)) {
+        await launchUrl(appUrl, mode: LaunchMode.externalApplication);
+      } else if (await canLaunchUrl(webUrl)) {
+        await launchUrl(webUrl, mode: LaunchMode.externalApplication);
       } else {
         throw 'Could not launch WhatsApp';
       }
