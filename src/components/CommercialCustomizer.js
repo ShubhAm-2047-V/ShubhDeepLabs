@@ -11,7 +11,7 @@ import {
   Shield, History, RefreshCw, ArrowRightLeft,
   Settings, Search, Brain, Headphones, 
   Download, Briefcase, Network, RefreshCcw,
-  Mail, Box, ShieldCheck, Database,
+  Mail, Box, ShieldCheck, Database, Building,
   Zap, Clock, CalendarDays, Infinity as InfinityIcon,
   MessageSquare, ArrowRight
 } from "lucide-react";

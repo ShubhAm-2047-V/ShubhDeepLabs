@@ -7,7 +7,7 @@ import {
   Laptop, Code, Brain, Smartphone, Network, Database,
   Clock, FileText, Presentation, BookOpen, MessageSquare,
   Cpu, LayoutDashboard, ShieldCheck, Zap, ArrowRight,
-  Globe, Flame, Eye, Link, Server,
+  Globe, Flame, Eye, Link, Server, Cloud, BarChart,
   Gift, Tag, Star, AlertCircle, RefreshCw, Copy, Check,
 } from "lucide-react";
 import { dbService } from "@/lib/supabase";
@@ -57,12 +57,6 @@ export const STEPS = [
         tooltip: "React makes websites feel like apps — pages change instantly without reloading. ⚡\n\nBest for: Dashboard, booking system, real-time tracker, admin panel with live updates." },
       { id: "nextjs",         label: "Next.js",                  icon: Zap,            color: "bg-[#F3E5F5]", border: "border-[#AB47BC]", accent: "#AB47BC", price: 2999, desc: "Full-stack SSR web apps",
         tooltip: "Next.js handles both the frontend (what users see) and backend (server) in one place. Loads super fast. 🚀\n\nBest for: E-commerce site, college portal, professional web app, SaaS platform." },
-      { id: "html",           label: "HTML/CSS/JS",              icon: Globe,          color: "bg-[#FFF9C4]", border: "border-[#FFCA28]", accent: "#FFCA28", price: 0, desc: "Websites & landing pages",
-        tooltip: "Basic web technologies. 🌿" },
-      { id: "react",          label: "React.js",                 icon: LayoutDashboard,color: "bg-[#E1F5FE]", border: "border-[#42A5F5]", accent: "#42A5F5", price: 2499, desc: "Interactive web dashboards",
-        tooltip: "The most popular UI library by Meta. ⚛️" },
-      { id: "nextjs",         label: "Next.js",                  icon: Bolt,           color: "bg-[#F3E5F5]", border: "border-[#AB47BC]", accent: "#AB47BC", price: 2999, desc: "Full-stack SSR web apps",
-        tooltip: "The React framework for production. 🚀" },
       { id: "mern",           label: "MERN Stack",               icon: Server,         color: "bg-[#FFEBEE]", border: "border-[#EF5350]", accent: "#EF5350", price: 4499, desc: "End-to-end JS portals",
         tooltip: "MongoDB + Express + React + Node.js. 🏗️" },
       { id: "vue",            label: "Vue.js",                   icon: LayoutDashboard,color: "bg-[#E8F5E9]", border: "border-[#66BB6A]", accent: "#66BB6A", price: 2499, desc: "Lightweight web apps",

@@ -6,37 +6,38 @@ import { motion, AnimatePresence } from "framer-motion";
 import { dbService } from "@/lib/db";
 
 const CATEGORIES = [
-  { id: "diploma", label: "Diploma", price: 1999 },
-  { id: "engineering", label: "Engineering (B.Tech)", price: 4999 },
-  { id: "mtech", label: "M.Tech / Research", price: 8999 },
-  { id: "bca-mca", label: "BCA/MCA", price: 3999 },
-  { id: "ai-ml", label: "AI/ML Specialized", price: 6999 },
-  { id: "android", label: "Android App", price: 5499 }
+  { id: "diploma", label: "Diploma", price: 0 },
+  { id: "engineering", label: "Engineering (B.Tech)", price: 3999 },
+  { id: "mtech", label: "M.Tech / Research", price: 7499 },
+  { id: "bca-mca", label: "BCA/MCA", price: 2999 },
+  { id: "ai-ml", label: "AI/ML Specialized", price: 5999 },
+  { id: "android", label: "Android App", price: 4999 }
 ];
 
 const TECH_STACKS = [
   { id: "html", label: "HTML/CSS/JS", price: 0 },
-  { id: "react", label: "React.js", price: 1499 },
-  { id: "nextjs", label: "Next.js", price: 1999 },
-  { id: "mern", label: "MERN Stack", price: 2999 },
-  { id: "python-flask", label: "Python + Flask", price: 999 },
-  { id: "firebase", label: "Firebase", price: 999 },
-  { id: "db", label: "Database (SQL/Mongo)", price: 799 },
-  { id: "ai-integration", label: "AI Integration (Gemini)", price: 2499 },
-  { id: "ml-model", label: "Machine Learning Model", price: 3499 },
+  { id: "react", label: "React.js", price: 2499 },
+  { id: "nextjs", label: "Next.js", price: 2999 },
+  { id: "mern", label: "MERN Stack", price: 4499 },
+  { id: "python-flask", label: "Python + Flask", price: 1999 },
+  { id: "firebase", label: "Firebase", price: 1499 },
+  { id: "db", label: "Database (SQL/Mongo)", price: 1499 },
+  { id: "ai-integration", label: "AI Integration (Gemini)", price: 1999 },
+  { id: "ml-model", label: "Machine Learning Model", price: 6999 },
   { id: "opencv", label: "OpenCV / Face Detection", price: 2999 }
 ];
 
 const ADDONS = [
-  { id: "ppt", label: "PPT Presentation", price: 499 },
-  { id: "report", label: "Thesis Report", price: 999 },
-  { id: "viva", label: "Viva Guidance Sheet", price: 399 },
+  { id: "ppt", label: "PPT Presentation", price: 699 },
+  { id: "report", label: "Thesis Report", price: 1299 },
+  { id: "viva", label: "Viva Guidance Sheet", price: 499 },
   { id: "deployment", label: "Cloud Deployment", price: 1499 },
-  { id: "docs", label: "Code Walkthrough Doc", price: 599 }
+  { id: "docs", label: "Code Walkthrough Doc", price: 599 },
+  { id: "success", label: "Project Success Pack", price: 1999 }
 ];
 
 const DEADLINES = [
-  { id: "urgent", label: "1–3 Days (Urgent)", price: 2499 },
+  { id: "urgent", label: "1–3 Days (Urgent)", price: 1999 },
   { id: "normal", label: "4–7 Days (Standard)", price: 999 },
   { id: "relaxed", label: "8–14 Days (Relaxed)", price: 0 }
 ];

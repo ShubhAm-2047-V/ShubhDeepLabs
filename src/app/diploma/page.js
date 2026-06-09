@@ -148,7 +148,7 @@ export default function DiplomaPage() {
 
           <h1 className="text-4xl sm:text-6xl font-marker font-black text-[#2C2C2C] leading-tight mb-4">
             Diploma Projects<br />
-            <span className="underline decoration-[#FFCA28] decoration-4">Starting at ₹1999</span>
+            <span className="underline decoration-[#FFCA28] decoration-4">Starting at Free 🌿</span>
           </h1>
 
           <p className="text-base sm:text-lg font-sans font-semibold text-[#5A5A5A] max-w-2xl mx-auto leading-relaxed mb-8">

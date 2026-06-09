@@ -259,7 +259,7 @@ ${context || `No matching context found. Rely on the factual details of Shubdeep
     } else {
       const contextLower = context.toLowerCase();
       if (contextLower.includes("pricing") || contextLower.includes("diploma")) {
-        reply = `We support projects from Diploma (starting at ₹${getVal("diploma", 1999)}), B.E/B.Tech (starting at ₹${getVal("engineering", 4999)}), and M.Tech (starting at ₹${getVal("mtech", 8999)}). Let me know which level you need!`;
+        reply = `We support projects from Diploma (starting at ${getVal("diploma", "Free 🌿")}), B.E/B.Tech (starting at ₹${getVal("engineering", 3999)}), and M.Tech (starting at ₹${getVal("mtech", 7499)}). Let me know which level you need!`;
       } else if (contextLower.includes("recommend") || contextLower.includes("ideas")) {
         reply = "I recommend our AI Resume Analyzer or Smart Notes Summarizer for easy projects. For advanced projects, check out our AI Plant Disease Detector or Face Recognition Attendance System.";
       } else {

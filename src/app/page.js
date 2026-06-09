@@ -540,7 +540,7 @@ export default function Home() {
                 </div>
                 <div className="p-4 bg-[#FAF6EE]/50 border-2 border-[#2C2C2C] rounded-xl flex items-center justify-between shadow-[2px_2px_0_#2C2C2C] md:col-span-2 md:w-5/6 md:mx-auto">
                   <span className="text-[#2C2C2C] font-marker font-extrabold text-sm sm:text-base flex items-center gap-2">☁️ SaaS Platform Development</span>
-                  <span className="text-xs text-[#2C2C2C] bg-[#FFF59D] font-bold px-2 py-1 border border-[#2C2C2C] rounded shrink-0">Starting at ₹49,999</span>
+                  <span className="text-xs text-[#2C2C2C] bg-[#FFF59D] font-bold px-2 py-1 border border-[#2C2C2C] rounded shrink-0">Starting at ₹59,999</span>
                 </div>
               </div>
               
