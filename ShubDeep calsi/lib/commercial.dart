@@ -409,7 +409,7 @@ class _CommercialScreenState extends State<CommercialScreen> {
             ),
           ),
         ),
-        ).animate(key: ValueKey('${currentStep}_${opt.id}')).fade(delay: (index * 50).ms).slideY(begin: 0.2, end: 0, delay: (index * 50).ms);
+        );
       },
     );
   }
