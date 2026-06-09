@@ -10,8 +10,8 @@ import {
   Moon, Languages, Link, BarChart, BookOpen, Camera,
   Shield, History, RefreshCw, ArrowRightLeft,
   Settings, Search, Brain, Headphones, 
-  Download, Briefcase, Link, Network, RefreshCcw,
-  Mail, Box, Users, ShieldCheck, Database, FileText,
+  Download, Briefcase, Network, RefreshCcw,
+  Mail, Box, ShieldCheck, Database,
   Zap, Clock, CalendarDays, Infinity as InfinityIcon,
   MessageSquare, ArrowRight
 } from "lucide-react";
