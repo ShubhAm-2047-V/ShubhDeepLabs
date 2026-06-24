@@ -186,19 +186,31 @@ export default function Footer() {
         </div>
 
         {/* Divider & Copyright */}
-        <div className="pt-8 mt-12 border-t-2 border-[#2C2C2C] flex flex-col sm:flex-row items-center justify-between text-xs text-[#6A6A6A] space-y-4 sm:space-y-0">
-          <p className="flex items-center">
-            &copy; {currentYear} Shubdeep Labs. Made with&nbsp;<Heart className="w-3.5 h-3.5 fill-[#EF9A9A] text-[#EF9A9A] inline" />&nbsp;for Diploma Students.
-          </p>
-          <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center sm:justify-end">
-            <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
-            <Link href="/terms" className="hover:underline">Terms of Service</Link>
-            <Link href="/admin" className="hover:underline flex items-center">
-              Admin Login <ExternalLink className="w-3.5 h-3.5 ml-1" />
-            </Link>
-            <a href="https://shub-deep-dev.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center">
-              ShubDeep Dev <ExternalLink className="w-3.5 h-3.5 ml-1" />
+        <div className="pt-8 mt-12 border-t-2 border-[#2C2C2C] flex flex-col items-center justify-center space-y-6">
+          {/* Centered Portfolio Link */}
+          <div className="text-center">
+            <a 
+              href="https://shub-deep-dev.vercel.app/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="inline-flex items-center gap-2 font-hand font-extrabold text-[#2C2C2C] hover:scale-105 transition-all text-xl sm:text-2xl bg-white px-5 py-2.5 rounded-2xl border-2 border-[#2C2C2C] shadow-[3.5px_4px_0_#2C2C2C] hover:shadow-[1.5px_2px_0_#2C2C2C]"
+            >
+              <span>ShubDeep Dev</span>
+              <ExternalLink className="w-5 h-5 text-[#2C2C2C]" />
             </a>
+          </div>
+
+          <div className="w-full flex flex-col sm:flex-row items-center justify-between text-xs text-[#6A6A6A] space-y-4 sm:space-y-0 pt-2">
+            <p className="flex items-center">
+              &copy; {currentYear} Shubdeep Labs. Made with&nbsp;<Heart className="w-3.5 h-3.5 fill-[#EF9A9A] text-[#EF9A9A] inline" />&nbsp;for Diploma Students.
+            </p>
+            <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center sm:justify-end">
+              <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
+              <Link href="/terms" className="hover:underline">Terms of Service</Link>
+              <Link href="/admin" className="hover:underline flex items-center">
+                Admin Login <ExternalLink className="w-3.5 h-3.5 ml-1" />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
