@@ -32,7 +32,9 @@ export default function Footer() {
     { name: "Project Topics", href: "/#categories" },
     { name: "Daily Deals & Offers", href: "/offers" },
     { name: "Blueprints Showcase", href: "/#portfolio" },
+    { name: "Download Portfolio PDF", href: "/portfolio-pdf" },
     { name: "Get In Touch", href: "/#contact" },
+    { name: "ShubDeep Dev", href: "https://shub-deep-dev.vercel.app/" },
   ];
 
   const categories = [
@@ -66,7 +68,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-[#EBE5D9]/60 backdrop-blur-md text-[#2C2C2C] pt-16 pb-8 border-t-3 border-[#2C2C2C] transition-colors relative">
+    <footer className="bg-[#EBE5D9]/60 backdrop-blur-md text-[#2C2C2C] pt-16 pb-8 border-t-3 border-[#2C2C2C] transition-colors relative no-print">
       {/* Sketch card holes simulated */}
       <div className="absolute top-0 left-0 right-0 h-4 bg-transparent flex justify-around items-start -translate-y-2 pointer-events-none">
         {[...Array(12)].map((_, i) => (
@@ -113,12 +115,23 @@ export default function Footer() {
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-sm font-sans text-[#2C2C2C] hover:underline hover:translate-x-1 inline-flex items-center transition-all duration-150"
-                  >
-                    <span>→ {link.name}</span>
-                  </Link>
+                  {link.href.startsWith("http") ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm font-sans text-[#2C2C2C] hover:underline hover:translate-x-1 inline-flex items-center transition-all duration-150"
+                    >
+                      <span>→ {link.name}</span>
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="text-sm font-sans text-[#2C2C2C] hover:underline hover:translate-x-1 inline-flex items-center transition-all duration-150"
+                    >
+                      <span>→ {link.name}</span>
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -177,12 +190,15 @@ export default function Footer() {
           <p className="flex items-center">
             &copy; {currentYear} Shubdeep Labs. Made with&nbsp;<Heart className="w-3.5 h-3.5 fill-[#EF9A9A] text-[#EF9A9A] inline" />&nbsp;for Diploma Students.
           </p>
-          <div className="flex space-x-6">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 justify-center sm:justify-end">
             <Link href="/privacy" className="hover:underline">Privacy Policy</Link>
             <Link href="/terms" className="hover:underline">Terms of Service</Link>
             <Link href="/admin" className="hover:underline flex items-center">
               Admin Login <ExternalLink className="w-3.5 h-3.5 ml-1" />
             </Link>
+            <a href="https://shub-deep-dev.vercel.app/" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center">
+              ShubDeep Dev <ExternalLink className="w-3.5 h-3.5 ml-1" />
+            </a>
           </div>
         </div>
       </div>

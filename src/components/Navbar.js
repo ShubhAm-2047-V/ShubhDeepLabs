@@ -25,6 +25,7 @@ export default function Navbar() {
     { name: "Daily Offer", href: "/offers", icon: Gift },
     { name: "Success Stories", href: "/#portfolio", icon: Award },
     { name: "Common Doubts", href: "/#faq", icon: FileText },
+    { name: "Portfolio PDF", href: "/portfolio-pdf", icon: FileText },
   ];
  
   const handleSystemSync = () => {
@@ -36,7 +37,7 @@ export default function Navbar() {
  
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 no-print ${
         scrolled
           ? "bg-[#FAF6EE]/95 border-b-3 border-[#2C2C2C] py-2.5 shadow-[0_4px_0_rgba(44,44,44,0.1)]"
           : "bg-transparent py-5"

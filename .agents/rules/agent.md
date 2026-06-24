@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # Jetro Agent Context
 
 > Finance features: **Enabled**

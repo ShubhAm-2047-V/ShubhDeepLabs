@@ -387,15 +387,15 @@ useEffect(() => {
                 </div>
 
                 <div className="pl-4 sm:pl-10 space-y-6 relative z-10">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-16 h-16 rounded-full bg-white border-2.5 border-[#2C2C2C] flex items-center justify-center text-4xl shadow-[2.5px_3px_0_#2C2C2C] shrink-0 animate-sketch-float">
-                      {activeOffer.emoji || "🎁"}
+                  <div className="flex items-center space-x-3.5">
+                    <div className="w-16 h-16 rounded-2xl bg-white border-2.5 border-[#2C2C2C] overflow-hidden relative shadow-[2.5px_3px_0_#2C2C2C] rotate-[-3deg] shrink-0 animate-sketch-float">
+                      <img src="/logo.jpg" alt="Shubdeep Labs Logo" className="w-full h-full object-cover" />
                     </div>
                     <div>
-                      <span className="marker-red text-xs font-marker font-extrabold text-[#B71C1C] border border-[#B71C1C] px-2 py-0.5 rounded uppercase tracking-wider">
+                      <span className="inline-block bg-[#FFF59D] text-[#2C2C2C] border-2 border-[#2C2C2C] text-xs font-marker font-extrabold px-3 py-1 rounded-xl shadow-[1.5px_2px_0_#2C2C2C] uppercase tracking-wider rotate-[-1deg]">
                         {activeOffer.ribbon || "Special Offer!"}
                       </span>
-                      <p className="text-[10px] text-[#6A6A6A] font-sans font-bold uppercase tracking-wider mt-1">Updated Today</p>
+                      <p className="text-[10px] text-[#6A6A6A] font-sans font-bold uppercase tracking-wider mt-1.5">Updated Today {activeOffer.emoji || "⚡"}</p>
                     </div>
                   </div>
 

@@ -96,10 +96,10 @@ const getLocalOffers = () => {
     const seed = [
       {
         id: "off-1",
-        title: "First 8 Special Students of diploma get 30% OFF + Assured Free Gift!",
-        subtext: "* Terms & conditions apply. Connect on WhatsApp to reserve code discount spots.",
-        ribbon: "Special Offer!",
-        emoji: "🎁",
+        title: "Flat 20% OFF on B.Tech & Diploma Projects + Free PPT & Thesis Report!",
+        subtext: "* Limited-time offer. Connect with our desk on WhatsApp with your syllabus structure to claim!",
+        ribbon: "End-of-Season Offer!",
+        emoji: "⚡",
         isActive: true,
         createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000 * 2).toISOString()
       },

@@ -28,7 +28,7 @@ export default function CursorGlow() {
   if (!visible) return null;
 
   return (
-    <div className="cursor-glow-container">
+    <div className="cursor-glow-container no-print">
       <div
         className="cursor-glow-element"
         style={{

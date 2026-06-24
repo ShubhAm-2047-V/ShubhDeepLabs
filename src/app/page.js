@@ -555,32 +555,46 @@ export default function Home() {
           </div>
 
           {/* SPECIAL STUDENT DISCOUNT BANNER */}
-          <div className="max-w-3xl mx-auto mt-20 text-center relative">
-            <div className="sketch-border bg-[#FFCDD2] p-8 shadow-[6px_8px_0px_#2C2C2C] flex flex-col sm:flex-row items-center justify-around gap-6 rotate-[0.5deg]">
+          <div className="max-w-4xl mx-auto mt-20 text-center relative z-10">
+            <div className="sketch-border bg-[#FCF9F2] p-6 sm:p-8 shadow-[6px_8px_0px_#2C2C2C] flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 rotate-[0.5deg]">
               
-              {/* Ribbon Sticker */}
-              <div className="w-18 h-18 rounded-full bg-[#CE93D8] border-3 border-[#2C2C2C] flex items-center justify-center text-4xl shadow-[3px_4px_0_#2C2C2C] rotate-[-10deg] shrink-0 animate-sketch-float">
-                {activeOffer.emoji || "🎁"}
+              {/* Logo / Badge Area */}
+              <div className="flex items-center justify-center space-x-3 shrink-0">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white border-3 border-[#2C2C2C] overflow-hidden relative shadow-[3px_4px_0_#2C2C2C] rotate-[-4deg] shrink-0 animate-sketch-float">
+                  <img src="/logo.jpg" alt="Shubdeep Labs Logo" className="w-full h-full object-cover" />
+                </div>
+                <div className="text-4xl animate-bounce hidden sm:block">
+                  {activeOffer.emoji || "⚡"}
+                </div>
               </div>
 
-              <div className="flex-1 text-center sm:text-left">
-                <span className="marker-red text-xs font-marker font-extrabold text-[#B71C1C] border border-[#B71C1C] px-2 py-0.5 rounded uppercase tracking-wider">
-                  {activeOffer.ribbon || "Special Offer!"}
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-hand font-extrabold text-[#2C2C2C] mt-2">
+              {/* Offer Text */}
+              <div className="flex-1 text-center md:text-left space-y-2.5">
+                <div>
+                  <span className="inline-block bg-[#FFF59D] text-[#2C2C2C] border-2 border-[#2C2C2C] text-xs font-marker font-extrabold px-3 py-1 rounded-xl shadow-[1.5px_2px_0_#2C2C2C] uppercase tracking-wider rotate-[-1deg]">
+                    {activeOffer.ribbon || "End-of-Season Offer!"}
+                  </span>
+                </div>
+                <h3 className="text-2xl sm:text-3.5xl font-hand font-extrabold text-[#2C2C2C] leading-snug">
                   {activeOffer.title}
                 </h3>
-                <p className="text-xs font-marker text-[#6A6A6A] mt-1">{activeOffer.subtext}</p>
+                <p className="text-xs sm:text-sm font-marker text-[#6A6A6A] leading-relaxed">
+                  {activeOffer.subtext}
+                </p>
               </div>
 
-              <a
-                href={waOfferUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-sketch py-3.5 px-6 text-sm shrink-0"
-              >
-                Claim Offer
-              </a>
+              {/* Action Button */}
+              <div className="shrink-0 w-full md:w-auto">
+                <a
+                  href={waOfferUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-sketch w-full md:w-auto py-4 px-8 text-base inline-flex items-center justify-center bg-[#C8E6C9] hover:bg-[#A5D6A7] shadow-[3.5px_4px_0_#2C2C2C]"
+                >
+                  <MessageSquare className="w-5 h-5 mr-2 text-[#2C2C2C] fill-[#FAF6EE]" />
+                  Claim Deal
+                </a>
+              </div>
 
             </div>
           </div>
