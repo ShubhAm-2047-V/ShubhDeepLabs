@@ -358,8 +358,8 @@ Estimated Price:
                 </div>
 
                 <div className="flex items-center gap-2.5 pl-3 sm:pl-14">
-                  <div className="w-7 h-7 bg-[#FFF176] rounded-lg border-1.5 border-[#2C2C2C] flex items-center justify-center shadow-[1px_1.5px_0_#2C2C2C]">
-                    <Brain size={14} className="text-[#2C2C2C]" />
+                  <div className="w-7 h-7 rounded-lg border-1.5 border-[#2C2C2C] overflow-hidden flex items-center justify-center shadow-[1px_1.5px_0_#2C2C2C] bg-white">
+                    <img src="/logo.jpg" alt="Shubdeep Labs Logo" className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <h3 className="text-xs font-marker font-extrabold text-[#2C2C2C] leading-none">Support Desk AI</h3>
@@ -789,8 +789,13 @@ Estimated Price:
                   <div className="flex-1 flex flex-col justify-between h-full overflow-hidden">
                     <div className="flex-1 overflow-y-auto space-y-3">
                       {messages.map(msg => (
-                        <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
-                          <div className={`max-w-[85%] rounded-xl p-3 text-xs border border-[#2C2C2C] shadow-[1.5px_2px_0_#2C2C2C] ${
+                        <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"} items-end gap-2`}>
+                          {msg.sender === "bot" && (
+                            <div className="w-6 h-6 rounded-full border border-[#2C2C2C] overflow-hidden shrink-0 shadow-[1px_1.5px_0_#2C2C2C] bg-white mb-0.5">
+                              <img src="/logo.jpg" alt="Logo" className="w-full h-full object-cover" />
+                            </div>
+                          )}
+                          <div className={`max-w-[80%] rounded-xl p-3 text-xs border border-[#2C2C2C] shadow-[1.5px_2px_0_#2C2C2C] ${
                             msg.sender === "user" 
                               ? "bg-[#FFF9C4] text-[#2C2C2C] rounded-tr-none" 
                               : "bg-white text-[#2C2C2C] rounded-tl-none"
@@ -801,7 +806,10 @@ Estimated Price:
                       ))}
                       
                       {isTyping && (
-                        <div className="flex justify-start">
+                        <div className="flex justify-start items-end gap-2">
+                          <div className="w-6 h-6 rounded-full border border-[#2C2C2C] overflow-hidden shrink-0 shadow-[1px_1.5px_0_#2C2C2C] bg-white mb-0.5">
+                            <img src="/logo.jpg" alt="Logo" className="w-full h-full object-cover" />
+                          </div>
                           <div className="bg-white border border-[#2C2C2C] rounded-xl rounded-tl-none p-2.5 shadow-[1.5px_2px_0_#2C2C2C]">
                             <div className="flex gap-1 items-center">
                               <span className="w-1.5 h-1.5 bg-[#2C2C2C] rounded-full animate-bounce"></span>
@@ -879,11 +887,15 @@ Estimated Price:
 
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-12 h-12 sm:w-14 sm:h-14 bg-[#FFF59D] rounded-full flex items-center justify-center text-[#2C2C2C] shadow-[3px_4px_0_#2C2C2C] hover:bg-[#FFF9C4] hover:shadow-[4px_5px_0_#2C2C2C] transition-all border-2.5 border-[#2C2C2C] cursor-pointer"
+          className="w-12 h-12 sm:w-14 sm:h-14 bg-[#FFF59D] rounded-full flex items-center justify-center text-[#2C2C2C] shadow-[3px_4px_0_#2C2C2C] hover:bg-[#FFF9C4] hover:shadow-[4px_5px_0_#2C2C2C] transition-all border-2.5 border-[#2C2C2C] cursor-pointer overflow-hidden"
           whileTap={{ scale: 0.9 }}
           whileHover={{ scale: 1.05 }}
         >
-          {isOpen ? <X size={20} /> : <MessageSquare size={20} />}
+          {isOpen ? (
+            <X size={20} />
+          ) : (
+            <img src="/logo.jpg" alt="Shubdeep Labs Logo" className="w-full h-full object-cover" />
+          )}
         </motion.button>
       </div>
 

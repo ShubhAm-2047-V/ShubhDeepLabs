@@ -52,3 +52,9 @@ build/
 .env.production.local
 .vercel/
 
+# Backup files
+*.bak
+
+# Jetro files
+.jetro/
+

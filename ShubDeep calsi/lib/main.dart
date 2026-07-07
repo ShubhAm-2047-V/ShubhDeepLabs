@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:local_auth/local_auth.dart';
 import 'glass_widgets.dart';
+import 'performance_config.dart';
 
 String formatINR(int value) {
   String s = value.toString();
@@ -50,6 +51,9 @@ class ShubDeepCustomizerApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.transparent,
         useMaterial3: true,
       ),
+      builder: (context, child) {
+        return LaggyOverlay(child: child ?? const SizedBox());
+      },
       home: const CustomizerScreen(),
     );
   }
