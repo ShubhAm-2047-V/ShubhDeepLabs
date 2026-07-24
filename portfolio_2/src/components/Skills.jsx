@@ -179,6 +179,68 @@ export default function Skills() {
 
         </div>
 
+        {/* Technical Directory Segment */}
+        <div className="w-full border-t border-white/5 pt-16 mt-8 mb-16 flex flex-col gap-10">
+          <div className="flex flex-col text-left">
+            <span className="text-[10px] font-mono text-slate-500 uppercase tracking-[0.2em] mb-2 block">
+              // Technical Directory
+            </span>
+            <h3 className="text-xl sm:text-2xl font-bold font-display text-white uppercase tracking-wider">
+              Categorized Stack
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full text-left font-sans">
+            {/* Column 1: Languages */}
+            <div className="glass-premium p-6 rounded-xl border border-white/5 bg-[#09090b]/20 flex flex-col gap-4">
+              <span className="text-[9px] font-mono text-accent-blue uppercase tracking-widest">// Languages</span>
+              <div className="flex flex-wrap gap-2">
+                {["C", "C++", "Java", "Python", "JavaScript", "SQL", "HTML", "CSS"].map((s, i) => (
+                  <span key={i} className="px-2.5 py-1 rounded text-[10px] font-mono uppercase tracking-wide border border-white/5 bg-[#050505] text-slate-300 hover:border-accent-blue/30 hover:text-white transition-all duration-300">
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Column 2: Frameworks & Libraries */}
+            <div className="glass-premium p-6 rounded-xl border border-white/5 bg-[#09090b]/20 flex flex-col gap-4">
+              <span className="text-[9px] font-mono text-accent-blue uppercase tracking-widest">// Frameworks & Libs</span>
+              <div className="flex flex-wrap gap-2">
+                {["React.js", "Node.js", "Express.js"].map((s, i) => (
+                  <span key={i} className="px-2.5 py-1 rounded text-[10px] font-mono uppercase tracking-wide border border-white/5 bg-[#050505] text-slate-300 hover:border-accent-blue/30 hover:text-white transition-all duration-300">
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Column 3: Tools & Technologies */}
+            <div className="glass-premium p-6 rounded-xl border border-white/5 bg-[#09090b]/20 flex flex-col gap-4">
+              <span className="text-[9px] font-mono text-accent-blue uppercase tracking-widest">// Tools & Platforms</span>
+              <div className="flex flex-wrap gap-2">
+                {["Git", "GitHub", "VS Code", "MySQL", "Postman", "Vercel"].map((s, i) => (
+                  <span key={i} className="px-2.5 py-1 rounded text-[10px] font-mono uppercase tracking-wide border border-white/5 bg-[#050505] text-slate-300 hover:border-accent-blue/30 hover:text-white transition-all duration-300">
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Column 4: Competencies */}
+            <div className="glass-premium p-6 rounded-xl border border-white/5 bg-[#09090b]/20 flex flex-col gap-4">
+              <span className="text-[9px] font-mono text-accent-blue uppercase tracking-widest">// Competencies</span>
+              <div className="flex flex-wrap gap-2">
+                {["Web Dev", "UI/UX Design", "Problem Solving", "Teamwork", "Time Management", "Communication"].map((s, i) => (
+                  <span key={i} className="px-2.5 py-1 rounded text-[10px] font-mono uppercase tracking-wide border border-white/5 bg-[#050505] text-slate-300 hover:border-accent-blue/30 hover:text-white transition-all duration-300">
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Buttons at the bottom */}
         <div 
           ref={buttonsRef}

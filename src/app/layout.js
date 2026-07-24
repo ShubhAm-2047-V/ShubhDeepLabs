@@ -8,6 +8,7 @@ import SupportChatbotWidget from "@/components/SupportChatbotWidget";
 import ProductCustomizer from "@/components/ProductCustomizer";
 import CursorGlow from "@/components/CursorGlow";
 import { Toaster } from "react-hot-toast";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -103,6 +104,7 @@ export default function RootLayout({ children }) {
             }}
           />
         </ThemeProvider>
+        <GoogleAnalytics gaId="G-MK3YY3EFX7" />
       </body>
     </html>
   );

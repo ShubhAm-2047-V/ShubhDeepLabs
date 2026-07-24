@@ -3,6 +3,7 @@ import ThreeCanvas from "./components/ThreeCanvas";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Hero from "./components/Hero";
 import About from "./components/About";
+import Resume from "./components/Resume";
 import Skills from "./components/Skills";
 import Projects from "./components/Projects";
 import AcademicProjects from "./components/AcademicProjects";
@@ -208,6 +209,7 @@ function App() {
         {/* Desktop Navigation */}
         <nav className="hidden xl:flex items-center gap-6 text-[10px] font-mono text-slate-400 uppercase tracking-widest">
           <a href="#about" className="hover:text-white transition-colors underline-hover scramble-hover">About</a>
+          <a href="#resume" className="hover:text-white transition-colors underline-hover scramble-hover">Resume</a>
           <a href="#skills" className="hover:text-white transition-colors underline-hover scramble-hover">Skills</a>
           <a href="#projects" className="hover:text-white transition-colors underline-hover scramble-hover">Projects</a>
           <a href="#process" className="hover:text-white transition-colors underline-hover scramble-hover">Process</a>
@@ -232,6 +234,7 @@ function App() {
         {isMenuOpen && (
           <div className="absolute top-full left-0 w-full bg-[#050505]/95 border-b border-white/10 backdrop-blur-lg flex flex-col items-center py-6 gap-4 text-xs font-mono text-slate-300 xl:hidden z-40 animate-fade-in uppercase tracking-wider">
             <a href="#about" onClick={() => setIsMenuOpen(false)} className="hover:text-white transition-colors py-2 w-full text-center">About</a>
+            <a href="#resume" onClick={() => setIsMenuOpen(false)} className="hover:text-white transition-colors py-2 w-full text-center">Resume</a>
             <a href="#skills" onClick={() => setIsMenuOpen(false)} className="hover:text-white transition-colors py-2 w-full text-center">Skills</a>
             <a href="#projects" onClick={() => setIsMenuOpen(false)} className="hover:text-white transition-colors py-2 w-full text-center">Projects</a>
             <a href="#process" onClick={() => setIsMenuOpen(false)} className="hover:text-white transition-colors py-2 w-full text-center">Process</a>
@@ -252,6 +255,9 @@ function App() {
         </div>
         <div className="section-fade">
           <About />
+        </div>
+        <div className="section-fade">
+          <Resume />
         </div>
         <div className="section-fade">
           <Skills />

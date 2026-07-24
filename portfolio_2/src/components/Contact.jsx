@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Send, CheckCircle, Mail, MapPin } from "lucide-react";
+import { Send, CheckCircle, Mail, MapPin, Phone } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -97,8 +97,14 @@ export default function Contact() {
           <div className="space-y-4 font-mono text-xs text-slate-400">
             <div className="flex items-center gap-3">
               <Mail className="w-4 h-4 text-accent-blue" />
-              <a href="mailto:shubhamvernekar@gmail.com" className="hover:text-white transition-colors underline-hover">
-                shubhamvernekar@gmail.com
+              <a href="mailto:dvernekar59@gmail.com" className="hover:text-white transition-colors underline-hover">
+                dvernekar59@gmail.com
+              </a>
+            </div>
+            <div className="flex items-center gap-3">
+              <Phone className="w-4 h-4 text-accent-blue" />
+              <a href="tel:+919028833275" className="hover:text-white transition-colors underline-hover">
+                +91 90288 33275
               </a>
             </div>
             <div className="flex items-center gap-3">
@@ -111,7 +117,7 @@ export default function Contact() {
           <div className="flex gap-4 border-t border-white/5 pt-6 w-full">
             {/* LinkedIn */}
             <a 
-              href="https://linkedin.com" 
+              href="https://www.linkedin.com/in/shubham-vernekar-99a8a1337" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="p-2.5 rounded-lg border border-white/10 hover:border-white/20 bg-white/5 text-slate-400 hover:text-white transition-all cursor-pointer"
@@ -123,7 +129,7 @@ export default function Contact() {
             </a>
             {/* GitHub */}
             <a 
-              href="https://github.com" 
+              href="https://github.com/ShubhAm-2047-V" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="p-2.5 rounded-lg border border-white/10 hover:border-white/20 bg-white/5 text-slate-400 hover:text-white transition-all cursor-pointer"
@@ -147,7 +153,7 @@ export default function Contact() {
             </a>
             {/* Email */}
             <a 
-              href="mailto:shubhamvernekar@gmail.com" 
+              href="mailto:dvernekar59@gmail.com" 
               className="p-2.5 rounded-lg border border-white/10 hover:border-white/20 bg-white/5 text-slate-400 hover:text-white transition-all cursor-pointer"
               aria-label="Email"
             >
