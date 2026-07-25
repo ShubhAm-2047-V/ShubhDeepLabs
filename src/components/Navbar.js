@@ -11,6 +11,9 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+
+  const isStudentPage = pathname === '/student';
+  const isBusinessPage = !isStudentPage;
  
   useEffect(() => {
     const handleScroll = () => {
@@ -20,18 +23,33 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
  
-  const navLinks = [
-    { name: "Project Topics", href: "/#categories", icon: Layers },
+  const businessNavLinks = [
+    { name: "Solutions", href: "/#services", icon: Briefcase },
+    { name: "Customizer", href: "/#customizer", icon: Layers },
+    { name: "Student Desk", href: "/student", icon: GraduationCap },
+    { name: "Blueprints", href: "/student#portfolio", icon: Award },
+    { name: "FAQs", href: "/#faq", icon: FileText },
+  ];
+
+  const studentNavLinks = [
+    { name: "Student Desk", href: "/student", icon: GraduationCap },
+    { name: "Business Solutions", href: "/", icon: Briefcase },
     { name: "Daily Offer", href: "/offers", icon: Gift },
-    { name: "Success Stories", href: "/#portfolio", icon: Award },
-    { name: "Common Doubts", href: "/#faq", icon: FileText },
+    { name: "Blueprints", href: "/student#portfolio", icon: Award },
     { name: "Portfolio PDF", href: "/portfolio-pdf", icon: FileText },
   ];
+
+  const navLinks = isStudentPage ? studentNavLinks : businessNavLinks;
  
   const handleSystemSync = () => {
-    toast.success("All systems ready! Built with focus & care.", {
-      icon: "✏️",
-      className: "sketch-card text-[#2C2C2C] border-2 border-[#2C2C2C] bg-[#FAF6EE] rounded-xl font-marker text-sm"
+    toast.success("ShubDeep Labs systems active & ready!", {
+      icon: "✨",
+      style: {
+        background: isStudentPage ? '#FAF6EE' : '#0D3B47',
+        color: isStudentPage ? '#2C2C2C' : '#F0FBFF',
+        border: isStudentPage ? '2px solid #2C2C2C' : '1.5px solid #66C2D1',
+        borderRadius: '12px'
+      }
     });
   };
  
@@ -39,32 +57,48 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 no-print ${
         scrolled
-          ? "bg-[#FAF6EE]/95 border-b-3 border-[#2C2C2C] py-2.5 shadow-[0_4px_0_rgba(44,44,44,0.1)]"
-          : "bg-transparent py-5"
+          ? isStudentPage
+            ? "bg-[#FAF6EE]/95 border-b-3 border-[#2C2C2C] py-2.5 shadow-[0_4px_0_rgba(44,44,44,0.1)]"
+            : "bg-[#F0FBFF]/90 backdrop-blur-md border-b border-[#66C2D1]/30 py-2.5 shadow-sm"
+          : "bg-transparent py-4 sm:py-5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
-          {/* Hand-Drawn Logo */}
+          
+          {/* Logo & Tagline */}
           <Link href="/" className="flex items-center space-x-2.5 group">
-            <div className="w-10 h-10 rounded-xl bg-white border-2.5 border-[#2C2C2C] overflow-hidden relative shadow-[2px_3px_0_#2C2C2C] group-hover:translate-y-0.5 group-hover:shadow-[1px_1px_0_#2C2C2C] transition-all duration-150">
+            <div className={`w-10 h-10 rounded-xl bg-white overflow-hidden relative transition-all duration-150 ${
+              isStudentPage 
+                ? "border-2.5 border-[#2C2C2C] shadow-[2px_3px_0_#2C2C2C]" 
+                : "border-1.5 border-[#66C2D1] shadow-sm"
+            }`}>
               <img src="/logo.jpg" alt="Shubdeep Labs Logo" className="w-full h-full object-cover" />
             </div>
-            <span className="font-hand font-black text-2xl tracking-tight text-[#2C2C2C] flex flex-col leading-none">
+            <span className={`font-black text-xl sm:text-2xl tracking-tight flex flex-col leading-none ${
+              isStudentPage ? "font-hand text-[#2C2C2C]" : "font-sans text-[#0D3B47]"
+            }`}>
               Shubdeep Labs
-              <span className="text-[10px] font-marker text-[#6A6A6A] tracking-wider leading-none">Building Intelligent Solutions</span>
+              <span className={`text-[10px] tracking-wider leading-none ${
+                isStudentPage ? "font-marker text-[#6A6A6A]" : "font-sans font-semibold text-[#164E63]"
+              }`}>
+                {isStudentPage ? "Building Academic Solutions" : "Enterprise Digital Solutions"}
+              </span>
             </span>
           </Link>
  
-          {/* Nav Directory */}
-          <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
+          {/* Nav Links */}
+          <div className="hidden md:flex items-center space-x-1 lg:space-x-3">
             {navLinks.map((link) => {
-              const Icon = link.icon;
               return (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="flex items-center space-x-1 px-3 py-1.5 rounded-lg text-sm font-marker tracking-wide text-[#2C2C2C] hover:text-[#2C2C2C] hover:bg-[#FFF59D]/60 transition-all duration-150 border-1.5 border-transparent hover:border-[#2C2C2C]"
+                  className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-all duration-150 ${
+                    isStudentPage
+                      ? "font-marker text-[#2C2C2C] hover:bg-[#FFF59D]/60 border-1.5 border-transparent hover:border-[#2C2C2C]"
+                      : "font-sans text-[#0D3B47] hover:bg-[#BFE8F7]/50 hover:text-[#0D3B47]"
+                  }`}
                 >
                   <span>{link.name}</span>
                 </Link>
@@ -72,95 +106,113 @@ export default function Navbar() {
             })}
           </div>
  
-          {/* Action CTAs */}
+          {/* Action CTAs & Toggle Button */}
           <div className="hidden md:flex items-center space-x-3">
-            {/* Mode Toggle */}
-            <div className="flex items-center space-x-1 bg-white border-2 border-[#2C2C2C] rounded-full p-1 shadow-[2px_2px_0_#2C2C2C]">
+            
+            {/* High Impact Mode Switch Toggle */}
+            <div className={`flex items-center p-1 rounded-full border transition-all ${
+              isStudentPage 
+                ? "bg-white border-2 border-[#2C2C2C] shadow-[2px_2px_0_#2C2C2C]" 
+                : "bg-white/80 backdrop-blur-sm border-1.5 border-[#66C2D1] shadow-sm"
+            }`}>
               <Link 
                 href="/"
-                className={`p-1.5 rounded-full flex items-center justify-center transition-colors ${pathname !== '/commercial' ? 'bg-[#FFF59D] text-[#2C2C2C]' : 'text-gray-400 hover:text-[#2C2C2C]'}`}
-                title="Student Projects"
+                className={`px-3 py-1 rounded-full flex items-center space-x-1.5 text-xs font-bold transition-all ${
+                  isBusinessPage 
+                    ? "bg-[#66C2D1] text-[#0D3B47] shadow-sm" 
+                    : "text-[#5A5A5A] hover:text-[#2C2C2C]"
+                }`}
+                title="Business Solutions Page"
               >
-                <GraduationCap className="w-4 h-4" />
+                <Briefcase className="w-3.5 h-3.5" />
+                <span>Business</span>
               </Link>
+              
               <Link
-                href="/commercial"
-                className={`p-1.5 rounded-full flex items-center justify-center transition-colors ${pathname === '/commercial' ? 'bg-[#C8E6C9] text-[#2C2C2C]' : 'text-gray-400 hover:text-[#2C2C2C]'}`}
-                title="Commercial Products"
+                href="/student"
+                className={`px-3 py-1 rounded-full flex items-center space-x-1.5 text-xs font-bold transition-all ${
+                  isStudentPage 
+                    ? "bg-[#FFF59D] text-[#2C2C2C] border border-[#2C2C2C]" 
+                    : "text-[#5A5A5A] hover:text-[#0D3B47]"
+                }`}
+                title="Student Projects Page"
               >
-                <Briefcase className="w-4 h-4" />
+                <GraduationCap className="w-3.5 h-3.5" />
+                <span>Students</span>
               </Link>
             </div>
 
-            {/* Friendly Hand-Written status badge */}
-            <button
-              onClick={handleSystemSync}
-              className="px-3.5 py-1.5 rounded-xl text-sm font-hand font-extrabold text-[#2C2C2C] bg-[#C8E6C9] border-2 border-[#2C2C2C] hover:bg-[#A5D6A7] transition-all flex items-center space-x-1.5 cursor-pointer shadow-[2px_3px_0_#2C2C2C]"
-            >
-              <Sparkles className="w-4 h-4 text-[#2C2C2C]" />
-              <span>DONE WITH CARE</span>
-            </button>
- 
             {/* Admin icon link */}
             <Link
               href="/admin"
-              className="p-2 rounded-xl text-[#2C2C2C] hover:bg-[#EBE5D9] border-2 border-[#2C2C2C] bg-white transition-all shadow-[2px_2px_0_#2C2C2C]"
-              title="Coordinator Panel"
+              className={`p-2 rounded-xl transition-all ${
+                isStudentPage
+                  ? "text-[#2C2C2C] hover:bg-[#EBE5D9] border-2 border-[#2C2C2C] bg-white shadow-[2px_2px_0_#2C2C2C]"
+                  : "text-[#0D3B47] hover:bg-[#BFE8F7] border border-[#66C2D1] bg-white/90"
+              }`}
+              title="Admin Panel"
             >
               <Lock className="w-4 h-4" />
             </Link>
  
             {/* Launch CTA */}
-            <Link
-              href="/order"
-              className="btn-sketch inline-flex items-center justify-center px-4 py-2 text-sm"
-            >
-              <span>Build My Project!</span>
-              <ArrowRight className="w-4 h-4 ml-1.5 text-[#2C2C2C]" />
-            </Link>
+            {isStudentPage ? (
+              <Link
+                href="/order"
+                className="btn-sketch inline-flex items-center justify-center px-4 py-2 text-sm"
+              >
+                <span>Build My Project!</span>
+                <ArrowRight className="w-4 h-4 ml-1.5 text-[#2C2C2C]" />
+              </Link>
+            ) : (
+              <a
+                href="#consultation"
+                className="ocean-btn-primary inline-flex items-center justify-center px-4 py-2 text-sm"
+              >
+                <span>Get Consultation</span>
+                <ArrowRight className="w-4 h-4 ml-1.5" />
+              </a>
+            )}
           </div>
  
-          {/* Mobile elements */}
+          {/* Mobile mode elements */}
           <div className="flex md:hidden items-center space-x-2">
-            {/* Mobile Mode Toggle */}
-            <div className="flex items-center bg-white border-2 border-[#2C2C2C] rounded-full p-0.5 shadow-[1px_2px_0_#2C2C2C]">
+            
+            {/* Mobile Mode Switcher */}
+            <div className={`flex items-center p-0.5 rounded-full border ${
+              isStudentPage ? "bg-white border-2 border-[#2C2C2C]" : "bg-white border border-[#66C2D1]"
+            }`}>
               <Link 
                 href="/"
-                className={`p-1.5 rounded-full flex items-center justify-center transition-colors ${pathname !== '/commercial' ? 'bg-[#FFF59D] text-[#2C2C2C]' : 'text-gray-400'}`}
+                className={`px-2 py-1 rounded-full text-[11px] font-bold ${
+                  isBusinessPage ? "bg-[#66C2D1] text-[#0D3B47]" : "text-gray-500"
+                }`}
               >
-                <GraduationCap className="w-3.5 h-3.5" />
+                Biz
               </Link>
               <Link
-                href="/commercial"
-                className={`p-1.5 rounded-full flex items-center justify-center transition-colors ${pathname === '/commercial' ? 'bg-[#C8E6C9] text-[#2C2C2C]' : 'text-gray-400'}`}
+                href="/student"
+                className={`px-2 py-1 rounded-full text-[11px] font-bold ${
+                  isStudentPage ? "bg-[#FFF59D] text-[#2C2C2C]" : "text-gray-500"
+                }`}
               >
-                <Briefcase className="w-3.5 h-3.5" />
+                Student
               </Link>
             </div>
 
             <button
-              onClick={handleSystemSync}
-              className="p-2 rounded-xl text-[#2C2C2C] border-2 border-[#2C2C2C] bg-[#C8E6C9] shadow-[1px_2px_0_#2C2C2C]"
-            >
-              <Sparkles className="w-4 h-4" />
-            </button>
- 
-            <Link
-              href="/admin"
-              className="p-2 rounded-xl text-[#2C2C2C] border-2 border-[#2C2C2C] bg-white shadow-[1px_2px_0_#2C2C2C]"
-            >
-              <Lock className="w-4 h-4" />
-            </Link>
- 
-            <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-xl text-[#2C2C2C] border-2 border-[#2C2C2C] bg-white focus:outline-none shadow-[1px_2px_0_#2C2C2C]"
+              className={`p-2 rounded-xl focus:outline-none ${
+                isStudentPage
+                  ? "text-[#2C2C2C] border-2 border-[#2C2C2C] bg-white shadow-[1px_2px_0_#2C2C2C]"
+                  : "text-[#0D3B47] border border-[#66C2D1] bg-white"
+              }`}
               aria-label="Toggle Menu"
             >
               <div className="space-y-1">
-                <span className={`block w-5 h-0.5 bg-[#2C2C2C] transform transition-transform duration-300 ${isOpen ? "rotate-45 translate-y-1.5" : ""}`} />
-                <span className={`block w-4 h-0.5 bg-[#2C2C2C] transition-opacity duration-300 ${isOpen ? "opacity-0" : ""}`} />
-                <span className={`block w-5 h-0.5 bg-[#2C2C2C] transform transition-transform duration-300 ${isOpen ? "-rotate-45 -translate-y-1.5" : ""}`} />
+                <span className={`block w-5 h-0.5 ${isStudentPage ? "bg-[#2C2C2C]" : "bg-[#0D3B47]"} transform transition-transform duration-300 ${isOpen ? "rotate-45 translate-y-1.5" : ""}`} />
+                <span className={`block w-4 h-0.5 ${isStudentPage ? "bg-[#2C2C2C]" : "bg-[#0D3B47]"} transition-opacity duration-300 ${isOpen ? "opacity-0" : ""}`} />
+                <span className={`block w-5 h-0.5 ${isStudentPage ? "bg-[#2C2C2C]" : "bg-[#0D3B47]"} transform transition-transform duration-300 ${isOpen ? "-rotate-45 -translate-y-1.5" : ""}`} />
               </div>
             </button>
           </div>
@@ -175,27 +227,35 @@ export default function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="md:hidden bg-[#FAF6EE] border-t-2 border-[#2C2C2C] shadow-lg"
+            className={`md:hidden ${
+              isStudentPage 
+                ? "bg-[#FAF6EE] border-t-2 border-[#2C2C2C] shadow-lg" 
+                : "bg-[#F0FBFF] border-t border-[#66C2D1]/40 shadow-lg"
+            }`}
           >
-            <div className="px-4 pt-3 pb-6 space-y-2 font-marker text-lg">
+            <div className="px-4 pt-3 pb-6 space-y-2 font-semibold">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center space-x-3 px-4 py-3.5 rounded-xl text-[#2C2C2C] hover:bg-[#FFF59D]/60 transition-colors border-2 border-transparent hover:border-[#2C2C2C]"
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors ${
+                    isStudentPage
+                      ? "text-[#2C2C2C] hover:bg-[#FFF59D]/60 font-marker"
+                      : "text-[#0D3B47] hover:bg-[#BFE8F7]/60"
+                  }`}
                 >
                   <span>{link.name}</span>
                 </Link>
               ))}
               
-              <div className="pt-4 border-t-2 border-[#2C2C2C] mt-4">
+              <div className="pt-4 border-t border-[#66C2D1]/30 mt-4 space-y-2">
                 <Link
-                  href="/order"
+                  href={isStudentPage ? "/order" : "/#consultation"}
                   onClick={() => setIsOpen(false)}
-                  className="btn-sketch flex items-center justify-center w-full py-3.5 text-center"
+                  className={isStudentPage ? "btn-sketch flex items-center justify-center w-full py-3 text-center" : "ocean-btn-primary flex items-center justify-center w-full py-3 text-center"}
                 >
-                  <span>Build My Project!</span>
+                  <span>{isStudentPage ? "Build My Project!" : "Request Consultation"}</span>
                   <ArrowRight className="w-4 h-4 ml-1.5" />
                 </Link>
               </div>

@@ -90,7 +90,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-sm font-sans text-[#2C2C2C] leading-relaxed">
-              We design original, high-quality, and robust academic project codebases and reports. Specially structured to help final year students score top marks.
+              We engineer production-ready software, custom web solutions, and scalable SaaS platforms for businesses and startups. Specially offering secondary capstone support for students.
             </p>
             
             <div className="flex space-x-3 pt-2">
