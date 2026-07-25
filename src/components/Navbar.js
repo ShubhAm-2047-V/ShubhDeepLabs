@@ -45,9 +45,9 @@ export default function Navbar() {
     toast.success("ShubDeep Labs systems active & ready!", {
       icon: "✨",
       style: {
-        background: isStudentPage ? '#FAF6EE' : '#0D3B47',
-        color: isStudentPage ? '#2C2C2C' : '#F0FBFF',
-        border: isStudentPage ? '2px solid #2C2C2C' : '1.5px solid #66C2D1',
+        background: isStudentPage ? '#FAF6EE' : '#3B2818',
+        color: isStudentPage ? '#2C2C2C' : '#FFF7EE',
+        border: isStudentPage ? '2px solid #2C2C2C' : '1.5px solid #CFE3D2',
         borderRadius: '12px'
       }
     });
@@ -59,7 +59,7 @@ export default function Navbar() {
         scrolled
           ? isStudentPage
             ? "bg-[#FAF6EE]/95 border-b-3 border-[#2C2C2C] py-2.5 shadow-[0_4px_0_rgba(44,44,44,0.1)]"
-            : "bg-[#F0FBFF]/90 backdrop-blur-md border-b border-[#66C2D1]/30 py-2.5 shadow-sm"
+            : "bg-[#FFF7EE]/90 backdrop-blur-md border-b border-[#D5C4A6]/50 py-2.5 shadow-sm"
           : "bg-transparent py-4 sm:py-5"
       }`}
     >
@@ -71,16 +71,16 @@ export default function Navbar() {
             <div className={`w-10 h-10 rounded-xl bg-white overflow-hidden relative transition-all duration-150 ${
               isStudentPage 
                 ? "border-2.5 border-[#2C2C2C] shadow-[2px_3px_0_#2C2C2C]" 
-                : "border-1.5 border-[#66C2D1] shadow-sm"
+                : "border-1.5 border-[#A8C9AD] shadow-sm"
             }`}>
               <img src="/logo.jpg" alt="Shubdeep Labs Logo" className="w-full h-full object-cover" />
             </div>
             <span className={`font-black text-xl sm:text-2xl tracking-tight flex flex-col leading-none ${
-              isStudentPage ? "font-hand text-[#2C2C2C]" : "font-sans text-[#0D3B47]"
+              isStudentPage ? "font-hand text-[#2C2C2C]" : "font-sans text-[#3B2818]"
             }`}>
               Shubdeep Labs
               <span className={`text-[10px] tracking-wider leading-none ${
-                isStudentPage ? "font-marker text-[#6A6A6A]" : "font-sans font-semibold text-[#164E63]"
+                isStudentPage ? "font-marker text-[#6A6A6A]" : "font-sans font-semibold text-[#4A3525]"
               }`}>
                 {isStudentPage ? "Building Academic Solutions" : "Enterprise Digital Solutions"}
               </span>
@@ -97,7 +97,7 @@ export default function Navbar() {
                   className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-all duration-150 ${
                     isStudentPage
                       ? "font-marker text-[#2C2C2C] hover:bg-[#FFF59D]/60 border-1.5 border-transparent hover:border-[#2C2C2C]"
-                      : "font-sans text-[#0D3B47] hover:bg-[#BFE8F7]/50 hover:text-[#0D3B47]"
+                      : "font-sans text-[#3B2818] hover:bg-[#CFE3D2]/50 hover:text-[#2E3B2B]"
                   }`}
                 >
                   <span>{link.name}</span>
@@ -113,13 +113,13 @@ export default function Navbar() {
             <div className={`flex items-center p-1 rounded-full border transition-all ${
               isStudentPage 
                 ? "bg-white border-2 border-[#2C2C2C] shadow-[2px_2px_0_#2C2C2C]" 
-                : "bg-white/80 backdrop-blur-sm border-1.5 border-[#66C2D1] shadow-sm"
+                : "bg-white/90 backdrop-blur-sm border-1.5 border-[#A8C9AD] shadow-sm"
             }`}>
               <Link 
                 href="/"
                 className={`px-3 py-1 rounded-full flex items-center space-x-1.5 text-xs font-bold transition-all ${
                   isBusinessPage 
-                    ? "bg-[#66C2D1] text-[#0D3B47] shadow-sm" 
+                    ? "bg-[#CFE3D2] text-[#2E3B2B] shadow-sm" 
                     : "text-[#5A5A5A] hover:text-[#2C2C2C]"
                 }`}
                 title="Business Solutions Page"
@@ -133,7 +133,7 @@ export default function Navbar() {
                 className={`px-3 py-1 rounded-full flex items-center space-x-1.5 text-xs font-bold transition-all ${
                   isStudentPage 
                     ? "bg-[#FFF59D] text-[#2C2C2C] border border-[#2C2C2C]" 
-                    : "text-[#5A5A5A] hover:text-[#0D3B47]"
+                    : "text-[#5A5A5A] hover:text-[#3B2818]"
                 }`}
                 title="Student Projects Page"
               >
@@ -148,7 +148,7 @@ export default function Navbar() {
               className={`p-2 rounded-xl transition-all ${
                 isStudentPage
                   ? "text-[#2C2C2C] hover:bg-[#EBE5D9] border-2 border-[#2C2C2C] bg-white shadow-[2px_2px_0_#2C2C2C]"
-                  : "text-[#0D3B47] hover:bg-[#BFE8F7] border border-[#66C2D1] bg-white/90"
+                  : "text-[#3B2818] hover:bg-[#EADCC6] border border-[#D5C4A6] bg-white/90"
               }`}
               title="Admin Panel"
             >
@@ -167,7 +167,7 @@ export default function Navbar() {
             ) : (
               <a
                 href="#consultation"
-                className="ocean-btn-primary inline-flex items-center justify-center px-4 py-2 text-sm"
+                className="btn-sage-green inline-flex items-center justify-center px-4 py-2 text-sm"
               >
                 <span>Get Consultation</span>
                 <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -180,12 +180,12 @@ export default function Navbar() {
             
             {/* Mobile Mode Switcher */}
             <div className={`flex items-center p-0.5 rounded-full border ${
-              isStudentPage ? "bg-white border-2 border-[#2C2C2C]" : "bg-white border border-[#66C2D1]"
+              isStudentPage ? "bg-white border-2 border-[#2C2C2C]" : "bg-white border border-[#A8C9AD]"
             }`}>
               <Link 
                 href="/"
                 className={`px-2 py-1 rounded-full text-[11px] font-bold ${
-                  isBusinessPage ? "bg-[#66C2D1] text-[#0D3B47]" : "text-gray-500"
+                  isBusinessPage ? "bg-[#CFE3D2] text-[#2E3B2B]" : "text-gray-500"
                 }`}
               >
                 Biz
@@ -205,14 +205,14 @@ export default function Navbar() {
               className={`p-2 rounded-xl focus:outline-none ${
                 isStudentPage
                   ? "text-[#2C2C2C] border-2 border-[#2C2C2C] bg-white shadow-[1px_2px_0_#2C2C2C]"
-                  : "text-[#0D3B47] border border-[#66C2D1] bg-white"
+                  : "text-[#3B2818] border border-[#D5C4A6] bg-white"
               }`}
               aria-label="Toggle Menu"
             >
               <div className="space-y-1">
-                <span className={`block w-5 h-0.5 ${isStudentPage ? "bg-[#2C2C2C]" : "bg-[#0D3B47]"} transform transition-transform duration-300 ${isOpen ? "rotate-45 translate-y-1.5" : ""}`} />
-                <span className={`block w-4 h-0.5 ${isStudentPage ? "bg-[#2C2C2C]" : "bg-[#0D3B47]"} transition-opacity duration-300 ${isOpen ? "opacity-0" : ""}`} />
-                <span className={`block w-5 h-0.5 ${isStudentPage ? "bg-[#2C2C2C]" : "bg-[#0D3B47]"} transform transition-transform duration-300 ${isOpen ? "-rotate-45 -translate-y-1.5" : ""}`} />
+                <span className={`block w-5 h-0.5 ${isStudentPage ? "bg-[#2C2C2C]" : "bg-[#3B2818]"} transform transition-transform duration-300 ${isOpen ? "rotate-45 translate-y-1.5" : ""}`} />
+                <span className={`block w-4 h-0.5 ${isStudentPage ? "bg-[#2C2C2C]" : "bg-[#3B2818]"} transition-opacity duration-300 ${isOpen ? "opacity-0" : ""}`} />
+                <span className={`block w-5 h-0.5 ${isStudentPage ? "bg-[#2C2C2C]" : "bg-[#3B2818]"} transform transition-transform duration-300 ${isOpen ? "-rotate-45 -translate-y-1.5" : ""}`} />
               </div>
             </button>
           </div>
@@ -230,7 +230,7 @@ export default function Navbar() {
             className={`md:hidden ${
               isStudentPage 
                 ? "bg-[#FAF6EE] border-t-2 border-[#2C2C2C] shadow-lg" 
-                : "bg-[#F0FBFF] border-t border-[#66C2D1]/40 shadow-lg"
+                : "bg-[#FFF7EE] border-t border-[#D5C4A6] shadow-lg"
             }`}
           >
             <div className="px-4 pt-3 pb-6 space-y-2 font-semibold">
@@ -242,18 +242,18 @@ export default function Navbar() {
                   className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors ${
                     isStudentPage
                       ? "text-[#2C2C2C] hover:bg-[#FFF59D]/60 font-marker"
-                      : "text-[#0D3B47] hover:bg-[#BFE8F7]/60"
+                      : "text-[#3B2818] hover:bg-[#EADCC6]/60"
                   }`}
                 >
                   <span>{link.name}</span>
                 </Link>
               ))}
               
-              <div className="pt-4 border-t border-[#66C2D1]/30 mt-4 space-y-2">
+              <div className="pt-4 border-t border-[#D5C4A6] mt-4 space-y-2">
                 <Link
                   href={isStudentPage ? "/order" : "/#consultation"}
                   onClick={() => setIsOpen(false)}
-                  className={isStudentPage ? "btn-sketch flex items-center justify-center w-full py-3 text-center" : "ocean-btn-primary flex items-center justify-center w-full py-3 text-center"}
+                  className={isStudentPage ? "btn-sketch flex items-center justify-center w-full py-3 text-center" : "btn-sage-green flex items-center justify-center w-full py-3 text-center"}
                 >
                   <span>{isStudentPage ? "Build My Project!" : "Request Consultation"}</span>
                   <ArrowRight className="w-4 h-4 ml-1.5" />

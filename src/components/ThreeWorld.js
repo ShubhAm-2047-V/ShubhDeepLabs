@@ -146,12 +146,12 @@ function SceneElements({ hideBooks = false }) {
   if (hideBooks) {
     return (
       <PresentationControls global rotation={[0.1, -0.2, 0]} polar={[-0.4, 0.2]} azimuth={[-0.4, 0.2]} config={{ mass: 2, tension: 500 }} snap={{ mass: 4, tension: 1500 }}>
-        {/* Floating tech cubes for Business mode instead of notebooks */}
+        {/* Floating tech cubes for Business mode in Sand Dune & Sage Green */}
         <group ref={groupRef1}>
-          <SketchedBox position={[0, 0, -2]} rotation={[0.2, 0.1, 0]} scale={[1.2, 1.2, 1.2]} color="#66C2D1" offset={0} />
+          <SketchedBox position={[0, 0, -2]} rotation={[0.2, 0.1, 0]} scale={[1.2, 1.2, 1.2]} color="#CFE3D2" offset={0} />
         </group>
         <group ref={groupRef2}>
-          <SketchedBox position={[0, 0, -4]} rotation={[-0.2, 0.5, 0.1]} scale={[1, 1, 1]} color="#BFE8F7" offset={2} />
+          <SketchedBox position={[0, 0, -4]} rotation={[-0.2, 0.5, 0.1]} scale={[1, 1, 1]} color="#EADCC6" offset={2} />
         </group>
       </PresentationControls>
     );
@@ -180,16 +180,16 @@ export default function ThreeWorld({ hideBooks = false }) {
   return (
     <div className="w-full h-screen fixed inset-0 z-0 pointer-events-none">
       <Canvas shadows camera={{ position: [0, 0, 10], fov: 50 }} eventSource={eventSource || undefined} eventPrefix="client">
-        <fog attach="fog" args={[hideBooks ? "#F0FBFF" : "#FAF6EE", 8, 30]} />
+        <fog attach="fog" args={[hideBooks ? "#FFF7EE" : "#FAF6EE", 8, 30]} />
         
         <ambientLight intensity={1.5} />
         <directionalLight position={[10, 10, 10]} intensity={0.6} castShadow shadow-mapSize={[1024, 1024]} />
-        <directionalLight position={[-10, 10, -10]} intensity={0.3} color={hideBooks ? "#66C2D1" : "#FFF59D"} />
+        <directionalLight position={[-10, 10, -10]} intensity={0.3} color={hideBooks ? "#CFE3D2" : "#FFF59D"} />
 
         <SceneElements hideBooks={hideBooks} />
-        <SketchParticles count={250} color={hideBooks ? "#66C2D1" : "#2C2C2C"} />
+        <SketchParticles count={250} color={hideBooks ? "#CFE3D2" : "#2C2C2C"} />
 
-        <ContactShadows position={[0, -5, 0]} opacity={0.3} scale={40} blur={2} far={10} color={hideBooks ? "#0D3B47" : "#2C2C2C"} />
+        <ContactShadows position={[0, -5, 0]} opacity={0.3} scale={40} blur={2} far={10} color={hideBooks ? "#3B2818" : "#2C2C2C"} />
       </Canvas>
     </div>
   );

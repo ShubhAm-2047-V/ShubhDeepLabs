@@ -280,98 +280,109 @@ body {
   height: 7px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: rgba(102, 194, 209, 0.12);
+  background: rgba(234, 220, 198, 0.4);
   border-radius: 9999px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #66C2D1;
+  background: #CFE3D2;
   border-radius: 9999px;
   border: 1.5px solid rgba(255, 255, 255, 0.6);
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #0D3B47;
+  background: #3B2818;
 }
-
 
 /* ──────────────────────────────────────────────────
-   OCEAN BREEZE THEME (Business & Commercial Page)
+   SAND DUNE & SAGE GREEN THEME (Business Page)
    Palette:
-   - Primary Light BG: #F0FBFF
-   - Soft Aqua Surface: #BFE8F7
-   - Vibrant Turquoise Accent: #66C2D1
-   - Deep Teal Text/Headers: #0D3B47
+   - Sand Dune Light BG: #FFF7EE
+   - Warm Beige Surface: #EADCC6
+   - Sage Green Primary Accent: #CFE3D2
+   - Deep Espresso Contrast Text: #3B2818
    ────────────────────────────────────────────────── */
-.ocean-theme {
-  background-color: #F0FBFF !important;
-  color: #0D3B47 !important;
+.sand-dune-theme {
+  background-color: #FFF7EE !important;
+  color: #3B2818 !important;
 }
 
-.ocean-gradient-bg {
-  background: linear-gradient(135deg, #F0FBFF 0%, #E2F6FC 50%, #D4F1FA 100%);
+.sand-dune-gradient-bg {
+  background: linear-gradient(135deg, #FFF7EE 0%, #F7EFE4 50%, #EADCC6 100%);
 }
 
-.ocean-card {
-  background: rgba(255, 255, 255, 0.85);
+.sand-dune-card {
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1.5px solid rgba(102, 194, 209, 0.3);
-  box-shadow: 0 10px 30px -10px rgba(13, 59, 71, 0.08), 0 4px 12px rgba(191, 232, 247, 0.4);
+  border: 1.5px solid rgba(207, 227, 210, 0.8);
+  box-shadow: 0 10px 30px -10px rgba(59, 40, 24, 0.06), 0 4px 14px rgba(234, 220, 198, 0.5);
   border-radius: 1.25rem;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.ocean-card:hover {
+.sand-dune-card:hover {
   transform: translateY(-4px);
-  border-color: #66C2D1;
-  box-shadow: 0 20px 40px -15px rgba(13, 59, 71, 0.15), 0 8px 20px rgba(102, 194, 209, 0.35);
+  border-color: #A8C9AD;
+  box-shadow: 0 20px 40px -15px rgba(59, 40, 24, 0.12), 0 8px 20px rgba(207, 227, 210, 0.6);
 }
 
-.ocean-card-soft {
-  background: #BFE8F7;
-  border: 1px solid rgba(102, 194, 209, 0.5);
+.sand-dune-card-soft {
+  background: #EADCC6;
+  border: 1.5px solid rgba(59, 40, 24, 0.15);
   border-radius: 1.25rem;
 }
 
-.ocean-btn-primary {
-  background: linear-gradient(135deg, #66C2D1 0%, #46B3C4 100%);
-  color: #0D3B47;
+.btn-sage-green {
+  background: linear-gradient(135deg, #CFE3D2 0%, #B5D4B9 100%);
+  color: #2E3B2B;
   font-weight: 700;
+  border: 1.5px solid #A8C9AD;
   border-radius: 0.85rem;
-  box-shadow: 0 4px 14px rgba(102, 194, 209, 0.45);
+  box-shadow: 0 4px 14px rgba(207, 227, 210, 0.6);
   transition: all 0.2s ease;
 }
 
-.ocean-btn-primary:hover {
-  background: linear-gradient(135deg, #51B6C6 0%, #35A3B5 100%);
+.btn-sage-green:hover {
+  background: linear-gradient(135deg, #C2DCC5 0%, #A4CBB8 100%);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 194, 209, 0.6);
+  box-shadow: 0 6px 20px rgba(207, 227, 210, 0.8);
 }
 
-.ocean-btn-secondary {
-  background: #BFE8F7;
-  color: #0D3B47;
+.btn-warm-beige {
+  background: #EADCC6;
+  color: #3B2818;
   font-weight: 700;
-  border: 1.5px solid #66C2D1;
+  border: 1.5px solid #D5C4A6;
   border-radius: 0.85rem;
   transition: all 0.2s ease;
 }
 
-.ocean-btn-secondary:hover {
-  background: #AEE2F3;
+.btn-warm-beige:hover {
+  background: #DFCFB7;
   transform: translateY(-2px);
 }
 
-.ocean-badge {
-  background: rgba(191, 232, 247, 0.6);
-  border: 1px solid #66C2D1;
-  color: #0D3B47;
+.sage-badge {
+  background: rgba(207, 227, 210, 0.7);
+  border: 1.5px solid #A8C9AD;
+  color: #2E3B2B;
 }
 
-.ocean-text-primary {
-  color: #0D3B47 !important;
+.beige-badge {
+  background: rgba(234, 220, 198, 0.75);
+  border: 1.5px solid #D5C4A6;
+  color: #3B2818;
 }
 
-.ocean-text-accent {
-  color: #66C2D1 !important;
+.text-sand-dark {
+  color: #3B2818 !important;
 }
+
+.text-sage-dark {
+  color: #2E3B2B !important;
+}
+
+.text-sage-accent {
+  color: #4E7854 !important;
+}
+
 

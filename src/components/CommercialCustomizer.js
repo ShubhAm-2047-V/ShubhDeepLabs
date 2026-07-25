@@ -296,7 +296,7 @@ export default function CommercialCustomizerWizard({ onBack, onReset }) {
           <p className="font-sans text-xs text-[#6A6A6A] px-4">{step.hint}</p>
         </div>
 
-        <div className="max-h-[340px] sm:max-h-[380px] overflow-y-auto p-2 pr-3 custom-scrollbar rounded-2xl border border-[#66C2D1]/30 bg-white/40 mb-4">
+        <div className="max-h-[340px] sm:max-h-[380px] overflow-y-auto p-2 pr-3 custom-scrollbar rounded-2xl border border-[#CFE3D2] bg-white/60 mb-4">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {options.map((opt, i) => (
               <motion.div key={opt.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}>

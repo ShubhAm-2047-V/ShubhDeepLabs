@@ -77,9 +77,9 @@ export default function Home() {
 
       toast.success("Consultation request received! Our engineering team will contact you shortly.", {
         style: {
-          background: '#0D3B47',
-          color: '#F0FBFF',
-          border: '1px solid #66C2D1',
+          background: '#3B2818',
+          color: '#FFF7EE',
+          border: '1.5px solid #CFE3D2',
           borderRadius: '12px'
         }
       });
@@ -93,12 +93,12 @@ export default function Home() {
   };
 
   const commercialServices = [
-    { title: "Enterprise Web Applications", icon: Globe, desc: "High-performance web apps, client portals, and administrative dashboards engineered with Next.js, React, and microservices.", bg: "bg-[#BFE8F7]/40" },
-    { title: "Multi-Tenant SaaS Platforms", icon: Server, desc: "Scalable SaaS architectures featuring automated subscription billing, role-based access, and isolated tenant databases.", bg: "bg-[#66C2D1]/20" },
-    { title: "Custom AI & LLM Solutions", icon: Brain, desc: "Enterprise AI agents, document indexing (RAG), automated customer support chatbots, and predictive ML models.", bg: "bg-[#BFE8F7]/50" },
-    { title: "Native & Cross-Platform Apps", icon: Smartphone, desc: "Production-ready mobile applications for iOS & Android built with Flutter/React Native, offline sync, and push alerts.", bg: "bg-[#66C2D1]/20" },
-    { title: "Cloud Infrastructure & DevOps", icon: Cpu, desc: "AWS/GCP cloud deployments, Kubernetes auto-scaling, CI/CD automated pipelines, and Redis high-speed caching.", bg: "bg-[#BFE8F7]/40" },
-    { title: "API Gateway & Integrations", icon: Layers, desc: "Bank-grade RESTful & GraphQL APIs, OAuth2/JWT secure authentication, Webhooks, and Zapier/CRM integrations.", bg: "bg-[#66C2D1]/20" }
+    { title: "Enterprise Web Applications", icon: Globe, desc: "High-performance web apps, client portals, and administrative dashboards engineered with Next.js, React, and microservices." },
+    { title: "Multi-Tenant SaaS Platforms", icon: Server, desc: "Scalable SaaS architectures featuring automated subscription billing, role-based access, and isolated tenant databases." },
+    { title: "Custom AI & LLM Solutions", icon: Brain, desc: "Enterprise AI agents, document indexing (RAG), automated customer support chatbots, and predictive ML models." },
+    { title: "Native & Cross-Platform Apps", icon: Smartphone, desc: "Production-ready mobile applications for iOS & Android built with Flutter/React Native, offline sync, and push alerts." },
+    { title: "Cloud Infrastructure & DevOps", icon: Cpu, desc: "AWS/GCP cloud deployments, Kubernetes auto-scaling, CI/CD automated pipelines, and Redis high-speed caching." },
+    { title: "API Gateway & Integrations", icon: Layers, desc: "Bank-grade RESTful & GraphQL APIs, OAuth2/JWT secure authentication, Webhooks, and Zapier/CRM integrations." }
   ];
 
   const valueProps = [
@@ -122,17 +122,17 @@ export default function Home() {
   ];
 
   return (
-    <div className="ocean-theme ocean-gradient-bg min-h-screen space-y-24 pb-20 relative overflow-hidden text-[#0D3B47]">
-      <ThreeWorld hideBooks={true} />
+    <div className="sand-dune-theme sand-dune-gradient-bg min-h-screen space-y-24 pb-20 relative overflow-hidden text-[#3B2818]">
+      <ThreeWorld hideBooks={true} theme="sand" />
       
-      {/* 1. HERO SECTION (OCEAN BREEZE THEME) */}
+      {/* 1. HERO SECTION (SAND DUNE & SAGE GREEN THEME) */}
       <section className="relative z-10 min-h-[88vh] flex items-center justify-center pt-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="w-full text-center max-w-4xl mx-auto">
           
           {/* Mode Switch Pill & Tag */}
           <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
-            <div className="inline-flex items-center px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold ocean-badge shadow-sm">
-              <Briefcase className="w-4 h-4 mr-2 text-[#0D3B47]" />
+            <div className="inline-flex items-center px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold sage-badge shadow-sm">
+              <Briefcase className="w-4 h-4 mr-2 text-[#2E3B2B]" />
               SHUBDEEP LABS FOR BUSINESS & ENTERPRISE
             </div>
 
@@ -147,19 +147,19 @@ export default function Home() {
             </Link>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-[#0D3B47] tracking-tight leading-tight mb-6">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-[#3B2818] tracking-tight leading-tight mb-6">
             Enterprise Digital Solutions <br className="hidden sm:inline" />
-            <span className="ocean-text-accent underline decoration-[#BFE8F7] decoration-4">Built for Scale & Speed</span>
+            <span className="text-[#2E3B2B] underline decoration-[#CFE3D2] decoration-4">Built for Scale & Speed</span>
           </h1>
 
-          <p className="text-lg sm:text-xl text-[#164E63] font-medium leading-relaxed max-w-3xl mx-auto mb-10">
+          <p className="text-lg sm:text-xl text-[#4A3525] font-medium leading-relaxed max-w-3xl mx-auto mb-10">
             Empowering Startups and Enterprises with High-Performance Software, Scalable SaaS Platforms, Custom AI Agents, and Bank-Grade Web Applications.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
               href="#customizer"
-              className="ocean-btn-primary py-4 px-8 text-lg inline-flex items-center justify-center w-full sm:w-auto cursor-pointer"
+              className="btn-sage-green py-4 px-8 text-lg inline-flex items-center justify-center w-full sm:w-auto cursor-pointer"
             >
               Configure Enterprise Scope
               <ArrowRight className="w-5 h-5 ml-2" />
@@ -167,7 +167,7 @@ export default function Home() {
 
             <a
               href="#consultation"
-              className="ocean-btn-secondary py-4 px-8 text-lg inline-flex items-center justify-center w-full sm:w-auto cursor-pointer"
+              className="btn-warm-beige py-4 px-8 text-lg inline-flex items-center justify-center w-full sm:w-auto cursor-pointer"
             >
               Request Free Consultation
               <Rocket className="w-5 h-5 ml-2" />
@@ -175,22 +175,22 @@ export default function Home() {
           </div>
 
           {/* SLA Metrics Row */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 pt-8 border-t border-[#66C2D1]/30 text-left">
-            <div className="p-4 ocean-card text-center sm:text-left">
-              <div className="text-2xl sm:text-3xl font-extrabold text-[#0D3B47]">99.9%</div>
-              <div className="text-xs sm:text-sm font-semibold text-[#164E63]">Uptime SLA</div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 pt-8 border-t border-[#D5C4A6]/50 text-left">
+            <div className="p-4 sand-dune-card text-center sm:text-left">
+              <div className="text-2xl sm:text-3xl font-extrabold text-[#3B2818]">99.9%</div>
+              <div className="text-xs sm:text-sm font-semibold text-[#4A3525]">Uptime SLA</div>
             </div>
-            <div className="p-4 ocean-card text-center sm:text-left">
-              <div className="text-2xl sm:text-3xl font-extrabold text-[#0D3B47]">100+</div>
-              <div className="text-xs sm:text-sm font-semibold text-[#164E63]">Products Deployed</div>
+            <div className="p-4 sand-dune-card text-center sm:text-left">
+              <div className="text-2xl sm:text-3xl font-extrabold text-[#3B2818]">100+</div>
+              <div className="text-xs sm:text-sm font-semibold text-[#4A3525]">Products Deployed</div>
             </div>
-            <div className="p-4 ocean-card text-center sm:text-left">
-              <div className="text-2xl sm:text-3xl font-extrabold text-[#0D3B47]">256-bit</div>
-              <div className="text-xs sm:text-sm font-semibold text-[#164E63]">Bank Security</div>
+            <div className="p-4 sand-dune-card text-center sm:text-left">
+              <div className="text-2xl sm:text-3xl font-extrabold text-[#3B2818]">256-bit</div>
+              <div className="text-xs sm:text-sm font-semibold text-[#4A3525]">Bank Security</div>
             </div>
-            <div className="p-4 ocean-card text-center sm:text-left">
-              <div className="text-2xl sm:text-3xl font-extrabold text-[#0D3B47]">24/7</div>
-              <div className="text-xs sm:text-sm font-semibold text-[#164E63]">Dedicated Support</div>
+            <div className="p-4 sand-dune-card text-center sm:text-left">
+              <div className="text-2xl sm:text-3xl font-extrabold text-[#3B2818]">24/7</div>
+              <div className="text-xs sm:text-sm font-semibold text-[#4A3525]">Dedicated Support</div>
             </div>
           </div>
 
@@ -203,13 +203,13 @@ export default function Home() {
           {valueProps.map((prop, i) => {
             const Icon = prop.icon;
             return (
-              <div key={i} className="ocean-card p-6 flex flex-col justify-between">
+              <div key={i} className="sand-dune-card p-6 flex flex-col justify-between">
                 <div>
-                  <div className="w-12 h-12 rounded-xl bg-[#BFE8F7] text-[#0D3B47] flex items-center justify-center mb-4 shadow-sm">
+                  <div className="w-12 h-12 rounded-xl bg-[#CFE3D2] text-[#2E3B2B] flex items-center justify-center mb-4 shadow-sm">
                     <Icon className="w-6 h-6" />
                   </div>
-                  <h3 className="text-lg font-bold text-[#0D3B47] mb-2">{prop.title}</h3>
-                  <p className="text-sm font-medium text-[#164E63] leading-relaxed">{prop.desc}</p>
+                  <h3 className="text-lg font-bold text-[#3B2818] mb-2">{prop.title}</h3>
+                  <p className="text-sm font-medium text-[#4A3525] leading-relaxed">{prop.desc}</p>
                 </div>
               </div>
             );
@@ -220,13 +220,13 @@ export default function Home() {
       {/* 3. COMMERCIAL SERVICES CATALOG */}
       <section id="services" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center px-4 py-1 rounded-full text-xs font-bold ocean-badge mb-3">
+          <div className="inline-flex items-center px-4 py-1 rounded-full text-xs font-bold sage-badge mb-3">
             BUSINESS CAPABILITIES
           </div>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-[#0D3B47]">
+          <h2 className="text-3xl sm:text-5xl font-extrabold text-[#3B2818]">
             Core Enterprise Solutions
           </h2>
-          <p className="mt-3 text-base sm:text-lg text-[#164E63] font-medium">
+          <p className="mt-3 text-base sm:text-lg text-[#4A3525] font-medium">
             From initial MVP architecture to complex SaaS backends and custom AI integrations.
           </p>
         </div>
@@ -235,16 +235,16 @@ export default function Home() {
           {commercialServices.map((service, i) => {
             const Icon = service.icon;
             return (
-              <div key={i} className="ocean-card p-8 flex flex-col justify-between">
+              <div key={i} className="sand-dune-card p-8 flex flex-col justify-between">
                 <div>
-                  <div className="w-14 h-14 rounded-2xl bg-[#BFE8F7] text-[#0D3B47] flex items-center justify-center mb-6 shadow-sm">
-                    <Icon className="w-7 h-7 text-[#0D3B47]" />
+                  <div className="w-14 h-14 rounded-2xl bg-[#CFE3D2] text-[#2E3B2B] flex items-center justify-center mb-6 shadow-sm">
+                    <Icon className="w-7 h-7 text-[#2E3B2B]" />
                   </div>
-                  <h3 className="text-xl font-bold text-[#0D3B47] mb-3">{service.title}</h3>
-                  <p className="text-sm text-[#164E63] font-medium leading-relaxed mb-6">{service.desc}</p>
+                  <h3 className="text-xl font-bold text-[#3B2818] mb-3">{service.title}</h3>
+                  <p className="text-sm text-[#4A3525] font-medium leading-relaxed mb-6">{service.desc}</p>
                 </div>
-                <div className="pt-4 border-t border-[#66C2D1]/30 flex items-center justify-between">
-                  <a href="#consultation" className="text-sm font-bold ocean-text-accent hover:underline flex items-center">
+                <div className="pt-4 border-t border-[#D5C4A6]/50 flex items-center justify-between">
+                  <a href="#consultation" className="text-sm font-bold text-[#4E7854] hover:underline flex items-center">
                     Inquire Service <ArrowRight className="w-4 h-4 ml-1" />
                   </a>
                 </div>
@@ -256,15 +256,15 @@ export default function Home() {
 
       {/* 4. INTERACTIVE COMMERCIAL CUSTOMIZER */}
       <section id="customizer" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="ocean-card p-6 sm:p-10 border-2 border-[#66C2D1]">
+        <div className="sand-dune-card p-6 sm:p-10 border-2 border-[#CFE3D2]">
           <div className="text-center max-w-3xl mx-auto mb-10">
-            <span className="ocean-badge px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+            <span className="sage-badge px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
               Interactive Estimator
             </span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0D3B47] mt-3">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#3B2818] mt-3">
               Configure Your Business Solution Scope
             </h2>
-            <p className="text-sm sm:text-base text-[#164E63] mt-2">
+            <p className="text-sm sm:text-base text-[#4A3525] mt-2">
               Select your required platform, features, and timeline to build an instant commercial estimate.
             </p>
           </div>
@@ -276,29 +276,29 @@ export default function Home() {
       {/* 5. CLIENT TESTIMONIALS */}
       <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0D3B47]">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#3B2818]">
             Trusted by Business Leaders
           </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((test, i) => (
-            <div key={i} className="ocean-card p-6 flex flex-col justify-between">
+            <div key={i} className="sand-dune-card p-6 flex flex-col justify-between">
               <div>
-                <div className="flex items-center space-x-1 text-[#66C2D1] mb-4">
+                <div className="flex items-center space-x-1 text-[#4E7854] mb-4">
                   {[...Array(5)].map((_, idx) => (
-                    <Star key={idx} className="w-4 h-4 fill-[#66C2D1] text-[#66C2D1]" />
+                    <Star key={idx} className="w-4 h-4 fill-[#4E7854] text-[#4E7854]" />
                   ))}
                 </div>
-                <p className="text-sm font-medium italic text-[#164E63] leading-relaxed mb-6">
+                <p className="text-sm font-medium italic text-[#4A3525] leading-relaxed mb-6">
                   &quot;{test.review}&quot;
                 </p>
               </div>
-              <div className="flex items-center space-x-3 pt-4 border-t border-[#66C2D1]/30">
-                <img src={test.avatar} alt={test.name} className="w-10 h-10 rounded-full object-cover border-2 border-[#66C2D1]" />
+              <div className="flex items-center space-x-3 pt-4 border-t border-[#D5C4A6]/50">
+                <img src={test.avatar} alt={test.name} className="w-10 h-10 rounded-full object-cover border-2 border-[#CFE3D2]" />
                 <div>
-                  <h4 className="text-sm font-bold text-[#0D3B47]">{test.name}</h4>
-                  <p className="text-xs font-medium text-[#164E63]">{test.role}</p>
+                  <h4 className="text-sm font-bold text-[#3B2818]">{test.name}</h4>
+                  <p className="text-xs font-medium text-[#4A3525]">{test.role}</p>
                 </div>
               </div>
             </div>
@@ -309,23 +309,23 @@ export default function Home() {
       {/* 6. FAQS */}
       <section className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0D3B47]">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#3B2818]">
             Commercial FAQs
           </h2>
         </div>
 
         <div className="space-y-4">
           {faqs.map((faq, i) => (
-            <div key={i} className="ocean-card overflow-hidden">
+            <div key={i} className="sand-dune-card overflow-hidden">
               <button
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="w-full px-6 py-5 text-left flex items-center justify-between text-[#0D3B47] font-bold"
+                className="w-full px-6 py-5 text-left flex items-center justify-between text-[#3B2818] font-bold"
               >
                 <span className="text-base sm:text-lg flex items-center">
-                  <HelpCircle className="w-5 h-5 mr-3 text-[#66C2D1] shrink-0" />
+                  <HelpCircle className="w-5 h-5 mr-3 text-[#4E7854] shrink-0" />
                   {faq.q}
                 </span>
-                <ChevronDown className={`w-5 h-5 text-[#0D3B47] transform transition-transform duration-200 ${
+                <ChevronDown className={`w-5 h-5 text-[#3B2818] transform transition-transform duration-200 ${
                   openFaq === i ? "rotate-180" : ""
                 }`} />
               </button>
@@ -336,9 +336,9 @@ export default function Home() {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    className="border-t border-[#66C2D1]/20 bg-[#BFE8F7]/20"
+                    className="border-t border-[#D5C4A6]/50 bg-[#EADCC6]/30"
                   >
-                    <div className="px-6 py-4 text-sm font-medium text-[#164E63] leading-relaxed">
+                    <div className="px-6 py-4 text-sm font-medium text-[#4A3525] leading-relaxed">
                       {faq.a}
                     </div>
                   </motion.div>
@@ -351,56 +351,56 @@ export default function Home() {
 
       {/* 7. CONSULTATION CONTACT FORM */}
       <section id="consultation" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="ocean-card p-8 sm:p-12 border-2 border-[#66C2D1]">
+        <div className="sand-dune-card p-8 sm:p-12 border-2 border-[#CFE3D2]">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-5 flex flex-col justify-between">
               <div>
-                <span className="ocean-badge px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                <span className="sage-badge px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
                   Direct Engineering Desk
                 </span>
-                <h2 className="text-3xl font-extrabold text-[#0D3B47] mt-4 mb-4">
+                <h2 className="text-3xl font-extrabold text-[#3B2818] mt-4 mb-4">
                   Schedule a Solution Consultation
                 </h2>
-                <p className="text-sm font-medium text-[#164E63] leading-relaxed mb-8">
+                <p className="text-sm font-medium text-[#4A3525] leading-relaxed mb-8">
                   Let us review your software architecture or product requirements. Our team will prepare a technical blueprint and custom quote.
                 </p>
               </div>
 
-              <div className="space-y-4 font-bold text-[#0D3B47] pt-6 border-t border-[#66C2D1]/30">
+              <div className="space-y-4 font-bold text-[#3B2818] pt-6 border-t border-[#D5C4A6]/50">
                 <div className="flex items-center space-x-3">
-                  <Phone className="w-5 h-5 text-[#66C2D1]" />
+                  <Phone className="w-5 h-5 text-[#4E7854]" />
                   <span>{contactData.phone}</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Mail className="w-5 h-5 text-[#66C2D1]" />
+                  <Mail className="w-5 h-5 text-[#4E7854]" />
                   <span>{contactData.email}</span>
                 </div>
               </div>
             </div>
 
             <div className="lg:col-span-7">
-              <form onSubmit={handleFormSubmit} className="space-y-4 ocean-card-soft p-6 border border-[#66C2D1]">
+              <form onSubmit={handleFormSubmit} className="space-y-4 sand-dune-card-soft p-6 border border-[#D5C4A6]">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-[#0D3B47] uppercase mb-1">Your Full Name *</label>
+                    <label className="block text-xs font-bold text-[#3B2818] uppercase mb-1">Your Full Name *</label>
                     <input
                       type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="w-full text-sm px-4 py-3 bg-white/90 border border-[#66C2D1] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#66C2D1] text-[#0D3B47] font-medium"
+                      className="w-full text-sm px-4 py-3 bg-white/90 border border-[#D5C4A6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CFE3D2] text-[#3B2818] font-medium"
                       placeholder="e.g. Sarah Jenkins"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-[#0D3B47] uppercase mb-1">Company / Organization</label>
+                    <label className="block text-xs font-bold text-[#3B2818] uppercase mb-1">Company / Organization</label>
                     <input
                       type="text"
                       name="company"
                       value={formData.company}
                       onChange={handleInputChange}
-                      className="w-full text-sm px-4 py-3 bg-white/90 border border-[#66C2D1] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#66C2D1] text-[#0D3B47] font-medium"
+                      className="w-full text-sm px-4 py-3 bg-white/90 border border-[#D5C4A6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CFE3D2] text-[#3B2818] font-medium"
                       placeholder="e.g. Acme Corp"
                     />
                   </div>
@@ -408,25 +408,25 @@ export default function Home() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-[#0D3B47] uppercase mb-1">Phone Number *</label>
+                    <label className="block text-xs font-bold text-[#3B2818] uppercase mb-1">Phone Number *</label>
                     <input
                       type="tel"
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className="w-full text-sm px-4 py-3 bg-white/90 border border-[#66C2D1] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#66C2D1] text-[#0D3B47] font-medium"
+                      className="w-full text-sm px-4 py-3 bg-white/90 border border-[#D5C4A6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CFE3D2] text-[#3B2818] font-medium"
                       placeholder="e.g. +91 9876543210"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-[#0D3B47] uppercase mb-1">Work Email *</label>
+                    <label className="block text-xs font-bold text-[#3B2818] uppercase mb-1">Work Email *</label>
                     <input
                       type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full text-sm px-4 py-3 bg-white/90 border border-[#66C2D1] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#66C2D1] text-[#0D3B47] font-medium"
+                      className="w-full text-sm px-4 py-3 bg-white/90 border border-[#D5C4A6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CFE3D2] text-[#3B2818] font-medium"
                       placeholder="e.g. sarah@acme.com"
                       required
                     />
@@ -434,13 +434,13 @@ export default function Home() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#0D3B47] uppercase mb-1">Project Scope & Requirements *</label>
+                  <label className="block text-xs font-bold text-[#3B2818] uppercase mb-1">Project Scope & Requirements *</label>
                   <textarea
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
                     rows="4"
-                    className="w-full text-sm px-4 py-3 bg-white/90 border border-[#66C2D1] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#66C2D1] text-[#0D3B47] font-medium"
+                    className="w-full text-sm px-4 py-3 bg-white/90 border border-[#D5C4A6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CFE3D2] text-[#3B2818] font-medium"
                     placeholder="Describe your required application, timeline, target features..."
                     required
                   ></textarea>
@@ -449,7 +449,7 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="ocean-btn-primary w-full py-4 text-base flex items-center justify-center cursor-pointer"
+                  className="btn-sage-green w-full py-4 text-base flex items-center justify-center cursor-pointer"
                 >
                   {loading ? "Sending..." : "Submit Business Consultation Request"}
                   <Send className="w-4 h-4 ml-2" />
