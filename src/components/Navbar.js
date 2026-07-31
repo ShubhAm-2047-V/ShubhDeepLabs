@@ -24,11 +24,11 @@ export default function Navbar() {
   }, []);
  
   const businessNavLinks = [
-    { name: "Services", href: "/services/software-development", icon: Briefcase },
-    { name: "Web Engineering", href: "/services/website-development", icon: Layers },
-    { name: "AI Solutions", href: "/services/ai-development", icon: Cpu },
-    { name: "Mobile Apps", href: "/services/mobile-app-development", icon: Sparkles },
-    { name: "Scope Builder", href: "/#customizer", icon: Terminal },
+    { name: "Services", href: "/services", icon: Briefcase },
+    { name: "Products", href: "/products", icon: Layers },
+    { name: "Portfolio", href: "/portfolio", icon: Award },
+    { name: "Pricing", href: "/pricing", icon: Terminal },
+    { name: "AI Assistant", href: "/chat", icon: Cpu },
   ];
 
   const studentNavLinks = [

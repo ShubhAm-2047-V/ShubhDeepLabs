@@ -28,13 +28,15 @@ export default function Footer() {
   }, []);
 
   const quickLinks = [
-    { name: "Global Home", href: "/" },
-    { name: "Software Development", href: "/services/software-development" },
-    { name: "Website Engineering", href: "/services/website-development" },
-    { name: "AI Solutions", href: "/services/ai-development" },
-    { name: "Configure Scope", href: "/#customizer" },
-    { name: "Contact Desk", href: "/#contact" },
-    { name: "ShubDeep Dev", href: "https://shub-deep-dev.vercel.app/" },
+    { name: "Services Hub", href: "/services" },
+    { name: "Products Ecosystem", href: "/products" },
+    { name: "Portfolio & Blueprints", href: "/portfolio" },
+    { name: "Case Studies", href: "/case-studies" },
+    { name: "Pricing & Scope", href: "/pricing" },
+    { name: "AI Consultant", href: "/chat" },
+    { name: "Developer API Docs", href: "/api-docs" },
+    { name: "About Us", href: "/about" },
+    { name: "Contact Desk", href: "/contact" },
   ];
 
   const services = [

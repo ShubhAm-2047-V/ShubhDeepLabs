@@ -1,7 +1,8 @@
 export default function sitemap() {
   const baseUrl = 'https://shubh-deep-labs.vercel.app';
   
-  const serviceRoutes = [
+  const ecosystemRoutes = [
+    '/services',
     '/services/website-development',
     '/services/software-development',
     '/services/custom-software-development',
@@ -9,6 +10,21 @@ export default function sitemap() {
     '/services/ai-development',
     '/services/ecommerce-development',
     '/services/ui-ux-design',
+    '/products',
+    '/products/expense-tracker',
+    '/products/hospital-desk',
+    '/products/face-attendance',
+    '/products/notes-summarizer',
+    '/products/chatbot',
+    '/portfolio',
+    '/case-studies',
+    '/pricing',
+    '/about',
+    '/contact',
+    '/blog',
+    '/chat',
+    '/dashboard',
+    '/api-docs',
   ];
 
   const publicRoutes = [
@@ -22,16 +38,16 @@ export default function sitemap() {
     '/expense-tracker',
   ];
 
-  const allRoutes = [...publicRoutes, ...serviceRoutes];
+  const allRoutes = Array.from(new Set([...publicRoutes, ...ecosystemRoutes]));
 
   return allRoutes.map((route) => {
     const isHome = route === '';
-    const isService = route.startsWith('/services/');
+    const isPrimaryHub = route === '/services' || route === '/products' || route.startsWith('/services/') || route.startsWith('/products/');
     return {
       url: `${baseUrl}${route}`,
       lastModified: new Date(),
-      changeFrequency: isHome ? 'daily' : isService ? 'weekly' : 'monthly',
-      priority: isHome ? 1.0 : isService ? 0.9 : 0.7,
+      changeFrequency: isHome ? 'daily' : isPrimaryHub ? 'weekly' : 'monthly',
+      priority: isHome ? 1.0 : isPrimaryHub ? 0.9 : 0.8,
     };
   });
 }
