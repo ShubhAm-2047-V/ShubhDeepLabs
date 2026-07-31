@@ -51,7 +51,7 @@ export default function UiUxDesignPage() {
 
   const breadcrumbs = [
     { label: "Home", href: "/" },
-    { label: "Services", href: "/services/software-development" },
+    { label: "Services Hub", href: "/services" },
     { label: "UI/UX Design", href: "/services/ui-ux-design" }
   ];
 

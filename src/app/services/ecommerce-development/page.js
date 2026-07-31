@@ -51,7 +51,7 @@ export default function EcommerceDevelopmentPage() {
 
   const breadcrumbs = [
     { label: "Home", href: "/" },
-    { label: "Services", href: "/services/software-development" },
+    { label: "Services Hub", href: "/services" },
     { label: "Ecommerce Development", href: "/services/ecommerce-development" }
   ];
 

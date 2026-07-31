@@ -51,7 +51,7 @@ export default function CustomSoftwareDevelopmentPage() {
 
   const breadcrumbs = [
     { label: "Home", href: "/" },
-    { label: "Services", href: "/services/software-development" },
+    { label: "Services Hub", href: "/services" },
     { label: "Custom Software Development", href: "/services/custom-software-development" }
   ];
 

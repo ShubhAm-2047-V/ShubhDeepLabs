@@ -51,7 +51,7 @@ export default function AiDevelopmentPage() {
 
   const breadcrumbs = [
     { label: "Home", href: "/" },
-    { label: "Services", href: "/services/software-development" },
+    { label: "Services Hub", href: "/services" },
     { label: "AI Development", href: "/services/ai-development" }
   ];
 

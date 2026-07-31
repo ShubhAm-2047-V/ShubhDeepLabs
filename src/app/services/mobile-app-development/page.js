@@ -51,7 +51,7 @@ export default function MobileAppDevelopmentPage() {
 
   const breadcrumbs = [
     { label: "Home", href: "/" },
-    { label: "Services", href: "/services/software-development" },
+    { label: "Services Hub", href: "/services" },
     { label: "Mobile App Development", href: "/services/mobile-app-development" }
   ];
 

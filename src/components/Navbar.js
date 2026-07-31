@@ -27,15 +27,18 @@ export default function Navbar() {
     { name: "Services", href: "/services", icon: Briefcase },
     { name: "Products", href: "/products", icon: Layers },
     { name: "Portfolio", href: "/portfolio", icon: Award },
+    { name: "Case Studies", href: "/case-studies", icon: FileText },
     { name: "Pricing", href: "/pricing", icon: Terminal },
+    { name: "Blog", href: "/blog", icon: FileText },
+    { name: "About", href: "/about", icon: Briefcase },
     { name: "AI Assistant", href: "/chat", icon: Cpu },
   ];
 
   const studentNavLinks = [
-    { name: "Services", href: "/services/software-development", icon: Briefcase },
-    { name: "Business Desk", href: "/", icon: Briefcase },
+    { name: "Academic Projects", href: "/student", icon: GraduationCap },
+    { name: "Services Hub", href: "/services", icon: Briefcase },
+    { name: "Products", href: "/products", icon: Layers },
     { name: "Daily Offer", href: "/offers", icon: Gift },
-    { name: "Student Desk", href: "/student", icon: GraduationCap },
     { name: "Portfolio PDF", href: "/portfolio-pdf", icon: FileText },
   ];
 
@@ -73,28 +76,28 @@ export default function Navbar() {
                 ? "border-2.5 border-[#2C2C2C] shadow-[2px_3px_0_#2C2C2C]" 
                 : "border-1.5 border-[#A8C9AD] shadow-sm"
             }`}>
-              <img src="/logo.jpg" alt="Shubdeep Labs Logo" className="w-full h-full object-cover" />
+              <img src="/logo.jpg" alt="ShubDeep Labs Logo" className="w-full h-full object-cover" />
             </div>
             <span className={`font-black text-xl sm:text-2xl tracking-tight flex flex-col leading-none ${
               isStudentPage ? "font-hand text-[#2C2C2C]" : "font-sans text-[#3B2818]"
             }`}>
-              Shubdeep Labs
+              ShubDeep Labs
               <span className={`text-[10px] tracking-wider leading-none ${
                 isStudentPage ? "font-marker text-[#6A6A6A]" : "font-sans font-semibold text-[#4A3525]"
               }`}>
-                {isStudentPage ? "Building Academic Solutions" : "Global Software Agency"}
+                {isStudentPage ? "Academic Projects Hub" : "Global Software Agency"}
               </span>
             </span>
           </Link>
  
           {/* Nav Links */}
-          <div className="hidden md:flex items-center space-x-1 lg:space-x-3">
+          <div className="hidden lg:flex items-center space-x-1 xl:space-x-2">
             {navLinks.map((link) => {
               return (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-all duration-150 ${
+                  className={`px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-semibold transition-all duration-150 ${
                     isStudentPage
                       ? "font-marker text-[#2C2C2C] hover:bg-[#FFF59D]/60 border-1.5 border-transparent hover:border-[#2C2C2C]"
                       : "font-sans text-[#3B2818] hover:bg-[#CFE3D2]/50 hover:text-[#2E3B2B]"
@@ -106,41 +109,22 @@ export default function Navbar() {
             })}
           </div>
  
-          {/* Action CTAs & Toggle Button */}
+          {/* Action CTAs & Secondary Student Hub Badge */}
           <div className="hidden md:flex items-center space-x-3">
             
-            {/* High Impact Mode Switch Toggle */}
-            <div className={`flex items-center p-1 rounded-full border transition-all ${
-              isStudentPage 
-                ? "bg-white border-2 border-[#2C2C2C] shadow-[2px_2px_0_#2C2C2C]" 
-                : "bg-white/90 backdrop-blur-sm border-1.5 border-[#A8C9AD] shadow-sm"
-            }`}>
-              <Link 
-                href="/"
-                className={`px-3 py-1 rounded-full flex items-center space-x-1.5 text-xs font-bold transition-all ${
-                  isBusinessPage 
-                    ? "bg-[#CFE3D2] text-[#2E3B2B] shadow-sm" 
-                    : "text-[#5A5A5A] hover:text-[#2C2C2C]"
-                }`}
-                title="Business Solutions Page"
-              >
-                <Briefcase className="w-3.5 h-3.5" />
-                <span>Business</span>
-              </Link>
-              
-              <Link
-                href="/student"
-                className={`px-3 py-1 rounded-full flex items-center space-x-1.5 text-xs font-bold transition-all ${
-                  isStudentPage 
-                    ? "bg-[#FFF59D] text-[#2C2C2C] border border-[#2C2C2C]" 
-                    : "text-[#5A5A5A] hover:text-[#3B2818]"
-                }`}
-                title="Student Projects Page"
-              >
-                <GraduationCap className="w-3.5 h-3.5" />
-                <span>Students</span>
-              </Link>
-            </div>
+            {/* Student Hub Secondary Badge Link */}
+            <Link
+              href={isStudentPage ? "/" : "/student"}
+              className={`px-3 py-1.5 rounded-full text-xs font-extrabold flex items-center space-x-1.5 transition-all border ${
+                isStudentPage
+                  ? "bg-[#CFE3D2] text-[#2E3B2B] border-[#A8C9AD]"
+                  : "bg-[#EADCC6] text-[#3B2818] border-[#D5C4A6] hover:bg-[#CFE3D2]"
+              }`}
+              title={isStudentPage ? "Switch to Business Agency Desk" : "Explore Academic Student Hub"}
+            >
+              <GraduationCap className="w-4 h-4 text-[#2E3B2B]" />
+              <span>{isStudentPage ? "Business Agency" : "Student Hub"}</span>
+            </Link>
 
             {/* Admin icon link */}
             <Link
@@ -155,24 +139,13 @@ export default function Navbar() {
               <Lock className="w-4 h-4" />
             </Link>
  
-            {/* Launch CTA */}
-            {isStudentPage ? (
-              <Link
-                href="/order"
-                className="btn-sketch inline-flex items-center justify-center px-4 py-2 text-sm"
-              >
-                <span>Build My Project!</span>
-                <ArrowRight className="w-4 h-4 ml-1.5 text-[#2C2C2C]" />
-              </Link>
-            ) : (
-              <a
-                href="/#consultation"
-                className="btn-sage-green inline-flex items-center justify-center px-4 py-2 text-sm"
-              >
-                <span>Book Free Consultation</span>
-                <ArrowRight className="w-4 h-4 ml-1.5" />
-              </a>
-            )}
+            {/* Consultation CTA */}
+            <a
+              href="/contact"
+              className="btn-sage-green py-2 px-4 text-xs xl:text-sm font-extrabold inline-flex items-center justify-center"
+            >
+              Book Consultation <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+            </a>
           </div>
  
           {/* Mobile mode elements */}

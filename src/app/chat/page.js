@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { MessageSquare, Send, Bot, User, Sparkles, ArrowRight, CheckCircle2, RotateCcw } from "lucide-react";
+import { MessageSquare, Send, Bot, User, Sparkles, ArrowRight, CheckCircle2, RotateCcw, DollarSign, Smartphone, Brain, Globe, ShieldCheck } from "lucide-react";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
 export default function StandaloneChatPage() {
@@ -29,9 +29,44 @@ export default function StandaloneChatPage() {
     "What AI features can you integrate into my platform?"
   ];
 
+  // Load chat history from localStorage on mount
   useEffect(() => {
+    try {
+      const savedHistory = localStorage.getItem("shubdeeplabs_chat_history");
+      if (savedHistory) {
+        const parsed = JSON.parse(savedHistory);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setMessages(parsed);
+        }
+      }
+    } catch (e) {
+      console.error("Failed to load chat history from localStorage:", e);
+    }
+  }, []);
+
+  // Save chat history to localStorage on updates
+  useEffect(() => {
+    try {
+      if (messages.length > 0) {
+        localStorage.setItem("shubdeeplabs_chat_history", JSON.stringify(messages));
+      }
+    } catch (e) {
+      console.error("Failed to save chat history:", e);
+    }
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
+
+  const handleClearHistory = () => {
+    const welcome = [
+      {
+        id: "welcome-1",
+        sender: "bot",
+        text: "Hello! Welcome to ShubDeep Labs AI Business Consultant Desk. I can assist you with website pricing estimates, custom software architecture, AI agent development, mobile apps, and booking a technical consultation."
+      }
+    ];
+    setMessages(welcome);
+    localStorage.removeItem("shubdeeplabs_chat_history");
+  };
 
   const handleSendMessage = async (textToSend) => {
     const queryText = textToSend || inputVal;
@@ -95,6 +130,24 @@ export default function StandaloneChatPage() {
 
         {/* CHAT INTERFACE CONTAINER */}
         <div className="sand-dune-card p-4 sm:p-8 rounded-3xl border-2 border-[#2E3B2B] shadow-xl flex flex-col h-[650px] justify-between">
+          
+          {/* HEADER ACTIONS */}
+          <div className="flex items-center justify-between pb-3 border-b border-[#D5C4A6] mb-4">
+            <div className="flex items-center space-x-2">
+              <div className="w-3 h-3 rounded-full bg-[#2E3B2B] animate-pulse" />
+              <span className="text-xs font-bold text-[#3B2818]">AI Consultant Online</span>
+            </div>
+            <button
+              onClick={handleClearHistory}
+              className="text-xs font-bold text-[#4A3525] hover:text-[#2E3B2B] flex items-center space-x-1"
+              title="Clear Chat Session"
+              aria-label="Clear chat session history"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Clear Session</span>
+            </button>
+          </div>
+
           {/* MESSAGES AREA */}
           <div className="flex-1 overflow-y-auto space-y-4 pr-2 mb-4">
             {messages.map((msg) => (
@@ -141,7 +194,8 @@ export default function StandaloneChatPage() {
                 <button
                   key={idx}
                   onClick={() => handleSendMessage(query)}
-                  className="px-3 py-1.5 rounded-xl bg-[#EADCC6] hover:bg-[#CFE3D2] text-[#3B2818] text-xs font-bold transition-all border border-[#D5C4A6]"
+                  className="px-3 py-1.5 rounded-xl bg-[#EADCC6] hover:bg-[#CFE3D2] text-[#3B2818] text-xs font-bold transition-all border border-[#D5C4A6] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2E3B2B]"
+                  aria-label={`Ask AI: ${query}`}
                 >
                   {query}
                 </button>
@@ -162,12 +216,14 @@ export default function StandaloneChatPage() {
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
               placeholder="Ask about project pricing, tech stacks, or request a quote..."
-              className="flex-1 py-3 px-4 rounded-2xl bg-white border border-[#D5C4A6] text-sm text-[#3B2818] font-medium focus:outline-none focus:ring-2 focus:ring-[#2E3B2B]"
+              className="flex-1 py-3 px-4 rounded-2xl bg-white border border-[#D5C4A6] text-sm text-[#3B2818] font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2E3B2B]"
+              aria-label="Type your project question or specification"
             />
             <button
               type="submit"
               disabled={!inputVal.trim() || isTyping}
-              className="btn-sage-green py-3 px-6 text-sm font-extrabold flex items-center justify-center disabled:opacity-50"
+              className="btn-sage-green py-3 px-6 text-sm font-extrabold flex items-center justify-center disabled:opacity-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2E3B2B]"
+              aria-label="Send message to AI Consultant"
             >
               Send <Send className="w-4 h-4 ml-2" />
             </button>
