@@ -33,6 +33,7 @@ export default function Footer() {
     { name: "Portfolio & Blueprints", href: "/portfolio" },
     { name: "Case Studies", href: "/case-studies" },
     { name: "Pricing & Scope", href: "/pricing" },
+    { name: "Business Documents", href: "/documents" },
     { name: "AI Consultant", href: "/chat" },
     { name: "Developer API Docs", href: "/api-docs" },
     { name: "About Us", href: "/about" },

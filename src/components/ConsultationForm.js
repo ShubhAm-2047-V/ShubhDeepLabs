@@ -107,9 +107,29 @@ export default function ConsultationForm() {
               <Mail className="w-5 h-5 text-[#4E7854]" />
               <span>{contactData.email}</span>
             </div>
+
+            {/* WHAT HAPPENS NEXT ROADMAP */}
+            <div className="pt-4 border-t border-[#D5C4A6]/50 space-y-3">
+              <p className="text-xs font-extrabold uppercase text-[#3B2818] tracking-wider">What Happens After Submission:</p>
+              <div className="text-xs font-medium text-[#4A3525] space-y-2 bg-[#FAF6EE] p-4 rounded-2xl border border-[#D5C4A6]">
+                <div className="flex items-start space-x-2">
+                  <span className="w-5 h-5 rounded-full bg-[#CFE3D2] text-[#2E3B2B] flex items-center justify-center text-[10px] font-extrabold shrink-0">1</span>
+                  <p><strong>Instant Confirmation:</strong> You receive an email response confirmation within 15 minutes.</p>
+                </div>
+                <div className="flex items-start space-x-2">
+                  <span className="w-5 h-5 rounded-full bg-[#CFE3D2] text-[#2E3B2B] flex items-center justify-center text-[10px] font-extrabold shrink-0">2</span>
+                  <p><strong>Discovery Call:</strong> Senior software architect schedules a 30-minute discovery call within 24 hours.</p>
+                </div>
+                <div className="flex items-start space-x-2">
+                  <span className="w-5 h-5 rounded-full bg-[#CFE3D2] text-[#2E3B2B] flex items-center justify-center text-[10px] font-extrabold shrink-0">3</span>
+                  <p><strong>Technical Proposal:</strong> We deliver a formal architecture blueprint and commercial quote within 48 hours.</p>
+                </div>
+              </div>
+            </div>
+
             <div className="pt-2 text-xs font-bold text-[#4A3525] space-y-1">
-              <p>• Response Time SLA: 2–4 Business Hours</p>
-              <p>• NDA & Confidentiality Protocols Available</p>
+              <p>• NDA & Mutual Confidentiality Agreements Available</p>
+              <p>• Multi-Currency Global Invoicing (INR ₹, USD $, EUR €, GBP £)</p>
             </div>
           </div>
         </div>

@@ -30,6 +30,7 @@ export default function Navbar() {
     { name: "Case Studies", href: "/case-studies", icon: FileText },
     { name: "Pricing", href: "/pricing", icon: Terminal },
     { name: "Blog", href: "/blog", icon: FileText },
+    { name: "Docs", href: "/documents", icon: FileText },
     { name: "About", href: "/about", icon: Briefcase },
     { name: "AI Assistant", href: "/chat", icon: Cpu },
   ];
