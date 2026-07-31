@@ -46,7 +46,8 @@ A: Answer 2
 Make formatting clean, direct, and easy to split. Avoid introductory text.`;
 
       try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`;
+        const modelName = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiKey}`;
         const response = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -58,9 +59,9 @@ Make formatting clean, direct, and easy to split. Avoid introductory text.`;
         });
 
         const data = await response.json();
-        if (data.error) {
-          addLog(`[LLM Gemini Error] ${data.error.message}`, "error");
-          summary = "I encountered an error querying the Gemini service.";
+        if (data.error || !data.candidates?.[0]?.content?.parts?.[0]?.text) {
+          addLog(`[LLM Error] ${data.error ? data.error.message : "No candidates"}`, "error");
+          summary = "Failed to query Gemini API.";
         } else {
           const rawText = data.candidates[0].content.parts[0].text;
           addLog("[LLM Gemini] Document analyzed successfully.", "info");

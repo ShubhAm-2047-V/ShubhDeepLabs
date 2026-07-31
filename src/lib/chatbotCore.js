@@ -226,7 +226,8 @@ ${context || `No matching context found. Rely on the factual details of Shubdeep
     });
 
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`;
+      const modelName = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiKey}`;
       const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -238,9 +239,9 @@ ${context || `No matching context found. Rely on the factual details of Shubdeep
       });
 
       const data = await response.json();
-      if (data.error) {
-        addLog(`Gemini Error: ${data.error.message}`, "error");
-        reply = `I encountered an error querying the Gemini service: ${data.error.message}`;
+      if (data.error || !data.candidates?.[0]?.content?.parts?.[0]?.text) {
+        addLog(`Gemini Error: ${data.error ? data.error.message : "No candidates"}`, "error");
+        reply = "Hello! For custom website and software development inquiries, our standard packages start at ₹3,999. Please share your project details or WhatsApp number for a free consultation.";
       } else {
         reply = data.candidates[0].content.parts[0].text;
         addLog("Response received successfully.");

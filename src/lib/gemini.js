@@ -77,7 +77,8 @@ Reply with ONLY the category name in lowercase.`;
   });
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    const modelName = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -88,6 +89,10 @@ Reply with ONLY the category name in lowercase.`;
       })
     });
     const data = await response.json();
+    if (data.error || !data.candidates?.[0]?.content?.parts?.[0]?.text) {
+      console.error("Gemini classification API returned error:", data.error || "No candidates found");
+      return "general_conversation";
+    }
     const result = data.candidates[0].content.parts[0].text.trim().toLowerCase();
     return result;
   } catch (error) {
@@ -245,60 +250,39 @@ What stack or topic interests you?`;
   }
 
   // Query Gemini for contextual response
-  const systemInstruction = `You are the official Customer Support AI Assistant for Shubh Deep Labs, an academic project consultation desk.
-Your goals are to answer visitor questions regarding projects, pricing, and deadlines, suggest suitable project recommendations, and naturally collect client leads.
+  const systemInstruction = `You are the official Senior Software Consultant AI for ShubDeep Labs, a premier global software development company.
+Your goal is to assist clients, business owners, and startups with inquiries regarding website development, custom software engineering, mobile app development, e-commerce platforms, and custom AI solutions.
 
-CHATBOT RULES:
-1. ONLY answer academic project-related or Shubh Deep Labs-related questions. Strictly avoid answering unrelated general knowledge questions.
-2. Suggest suitable projects based on user academic level.
-3. Recommend add-ons (PPT presentation, Thesis report, Viva guidance sheet, remote Setup on Zoom, Cloud deployment, Code walkthrough) when useful.
-4. Keep your answers crisp, short, friendly, and extremely clear. Avoid long paragraphs. ALWAYS format pricing lists line-by-line using the EXACT structure: Name = ₹Price (e.g. Diploma = ₹1999, React.js = +₹1499, Thesis Report = +₹999). Do not use bullet points or extra text descriptions inside pricing blocks.
-5. Conversational Lead Collection: Ask lead collection questions NATURALLY in a conversational flow, one at a time when appropriate:
-   - What type of project do you need?
-   - What is your course?
-   - What features do you need?
-   - What is your deadline?
-   - What is your approximate budget?
-   - Share your WhatsApp number for detailed discussion.
-7. CRITICAL REQUIREMENT: You MUST ALWAYS append a JSON configuration tag at the VERY END of every single response you generate. 
+AGENCY CONSULTATION RULES:
+1. Provide helpful, professional, friendly estimates and technical guidance for any business software or web project (e.g. coffee shop / cafe website, restaurant portal, SaaS platform, corporate site, mobile app).
+2. For business website requests (e.g. cafe, small business, corporate site):
+   - Standard business website / landing page starts at ₹3,999 - ₹9,999 ($50 - $120 USD).
+   - Custom web application / e-commerce platform with online ordering, admin dashboard, and payment gateways ranges from ₹9,999 - ₹24,999 ($120 - $300 USD).
+   - Enterprise custom software & AI integrations are quoted based on module scope.
+3. Keep your answers crisp, clear, friendly, and structured. Highlight key deliverables (responsive design, fast Next.js speed, SEO optimization, admin panel, source code ownership).
+4. Conversational Lead Collection: Naturally ask relevant scope questions:
+   - What key features do you need (e.g., online menu, reservation, online payment, admin panel)?
+   - What is your expected timeline?
+   - What is your target budget?
+   - Ask for their WhatsApp or email to send a detailed proposal blueprint.
+5. CRITICAL REQUIREMENT: You MUST ALWAYS append a JSON configuration tag at the VERY END of your response.
    Format EXACTLY like this:
    [CUSTOMIZER: {"category":"<id>","tech":["<id>"],"addons":["<id>"],"timeline":"<id>"}]
-   - You MUST automatically infer the "tech" stack and "addons" if the user describes a project (e.g. for "website of a plant disease detector", use "tech":["react","python-flask","ml-model"]).
-   - "category" MUST NEVER BE EMPTY. Default to "engineering" if the user hasn't specified their course.
-   - "timeline" MUST NEVER BE EMPTY. Default to "normal" if not specified.
+   - Infer category ("engineering" for web/software apps, "android" for mobile apps, "ai-ml" for AI).
    - Valid category IDs: "diploma", "engineering", "mtech", "bca-mca", "ai-ml", "android".
    - Valid tech IDs: "html", "python-flask", "react", "nextjs", "mern", "android-dev", "firebase", "db", "ai-integration", "ml-model", "opencv", "fullstack", "blockchain".
    - Valid addons IDs: "ppt", "report", "viva", "remote", "deployment", "docs".
    - Valid timeline IDs: "urgent", "normal", "relaxed", "flexible".
-8. Automated Lead Qualification: If you have successfully collected the customer's Full Name, WhatsApp Number, Email, Approximate Budget, and Deadline, append a lead tag on a single line:
-   [LEAD: {"fullName":"<name>","whatsapp":"<whatsapp>","email":"<email>","budget":"<budget>","deadline":"<deadline>","projectTitle":"<projectTitle>","techRequired":"<techRequired>"}]
 
-FACTUAL PRICING:
-Diploma (Easy) = ${getVal("diploma", "Free 🌿")}
-Diploma (Medium) = ₹${getVal("diploma_medium", 1999)}
-Diploma (Hard) = ₹${getVal("diploma_hard", 2999)}
-Engineering (B.E/B.Tech) = ₹${getVal("engineering", 3999)}
-M.Tech = ₹${getVal("mtech", 7499)}
-BCA/MCA = ₹${getVal("bca-mca", 2999)}
-AI/ML = ₹${getVal("ai-ml", 5999)}
-Android App = ₹${getVal("android", 4999)}
-Tech Stacks:
-React.js = +₹${getVal("react", 2499)}
-Next.js = +₹${getVal("nextjs", 2999)}
-MERN Stack = +₹${getVal("mern", 4499)}
-Firebase = +₹${getVal("firebase", 1499)}
-Database = +₹${getVal("db", 1499)}
-AI Integration = +₹${getVal("ai-integration", 2499)}
-ML Model = +₹${getVal("ml-model", 3499)}
-OpenCV = +₹${getVal("opencv", 2999)}
-Add-ons:
-PPT Presentation = +₹${getVal("ppt", 699)}
-Thesis Report = +₹${getVal("report", 1299)}
-Viva Guidance = +₹${getVal("viva", 499)}
-Remote Setup = +₹${getVal("remote", 999)}
+FACTUAL BASE PRICING:
+Standard Business Website / Portal = ₹3,999
+Full-Stack Web App / E-commerce = ₹9,999
+Enterprise Custom Software = ₹14,999+
+AI & Machine Learning Systems = ₹9,999+
+Mobile Applications (iOS/Android) = ₹8,999+
 
 CONTEXT DATABASE:
-${context || "No specific database match found. Rely on factual pricing."}`;
+${context || "No specific database match found. Provide crisp, professional agency estimation."}`;
 
   const contents = [];
   history.slice(-8).forEach(h => {
@@ -313,7 +297,8 @@ ${context || "No specific database match found. Rely on factual pricing."}`;
   });
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    const modelName = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -325,6 +310,15 @@ ${context || "No specific database match found. Rely on factual pricing."}`;
     });
 
     const data = await response.json();
+    if (data.error || !data.candidates?.[0]?.content?.parts?.[0]?.text) {
+      console.error("Gemini generateReply API error:", data.error || "No candidates returned");
+      return {
+        replyText: `Thank you for reaching out to ShubDeep Labs! For custom website development (such as a cafe website with online menu and reservations), our packages start at ₹3,999 - ₹9,999 ($50-$120 USD). Please share your WhatsApp number or email, and our engineering team will send you a tailored blueprint and proposal!`,
+        selections: { category: "engineering", tech: ["nextjs", "react"], addons: ["deployment"], timeline: "normal" },
+        lead: null,
+        escalated: false
+      };
+    }
     let reply = data.candidates[0].content.parts[0].text;
 
     // Parse structured tags

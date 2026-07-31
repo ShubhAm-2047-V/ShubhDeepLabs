@@ -45,7 +45,8 @@ ${expenses.map(e => `- ${e.date}: ${e.description} (${e.category}) - ₹${e.amou
 Please review and provide my financial report.`;
 
       try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`;
+        const modelName = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${geminiKey}`;
         const response = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -57,9 +58,9 @@ Please review and provide my financial report.`;
         });
 
         const data = await response.json();
-        if (data.error) {
-          addLog(`[LLM Gemini Error] ${data.error.message}`, "error");
-          reply = "I encountered an error querying the Gemini service.";
+        if (data.error || !data.candidates?.[0]?.content?.parts?.[0]?.text) {
+          addLog(`[LLM Error] ${data.error ? data.error.message : "No candidates"}`, "error");
+          reply = "Failed to query Gemini API.";
         } else {
           reply = data.candidates[0].content.parts[0].text;
           addLog("[LLM Gemini] Financial report received and parsed successfully.", "info");
