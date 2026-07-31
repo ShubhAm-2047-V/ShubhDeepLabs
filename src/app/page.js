@@ -1,111 +1,61 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Briefcase, GraduationCap, ArrowRight, ShieldCheck, Zap, Globe, Server, 
-  Cpu, Brain, Smartphone, Code, CheckSquare, Layers, Lock, Building, 
-  BarChart, Users, Headphones, Phone, Mail, Send, Star, HelpCircle, ChevronDown, Rocket, Sparkles
+  Briefcase, ArrowRight, ShieldCheck, Zap, Globe, Server, 
+  Cpu, Brain, Smartphone, Layers, Lock, Headphones, Rocket, Star
 } from "lucide-react";
-import toast from "react-hot-toast";
-import { dbService } from "@/lib/supabase";
-import ThreeWorld from "@/components/ThreeWorld";
-import CommercialCustomizer from "@/components/CommercialCustomizer";
+import DynamicThreeWorld from "@/components/DynamicThreeWorld";
+import DynamicCommercialCustomizer from "@/components/DynamicCommercialCustomizer";
+import ServiceFAQ from "@/components/ServiceFAQ";
+import ConsultationForm from "@/components/ConsultationForm";
+
+export const metadata = {
+  title: "ShubDeep Labs | Global Software Development & Custom AI Solutions",
+  description: "ShubDeep Labs is a premier global software development company delivering custom web applications, enterprise SaaS platforms, AI solutions, mobile apps, and cloud engineering.",
+  keywords: [
+    "Software Development Company",
+    "Global Software Agency",
+    "Custom Software Development",
+    "AI Development Company",
+    "Website Development",
+    "Mobile App Development",
+    "Ecommerce Development",
+    "UI UX Design",
+    "Enterprise Software Solutions"
+  ],
+  alternates: {
+    canonical: "https://shubh-deep-labs.vercel.app",
+  },
+  openGraph: {
+    title: "ShubDeep Labs | Global Software Development & Custom AI Solutions",
+    description: "Empowering startups, enterprises, and international clients with custom web applications, AI engineering, and scalable software systems.",
+    url: "https://shubh-deep-labs.vercel.app",
+    siteName: "ShubDeep Labs",
+    images: [{ url: "https://shubh-deep-labs.vercel.app/logo.jpg", width: 800, height: 800, alt: "ShubDeep Labs Global Software Agency" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ShubDeep Labs | Global Software Development & Custom AI Solutions",
+    description: "Enterprise custom software development, cloud systems, and AI engineering.",
+    images: ["https://shubh-deep-labs.vercel.app/logo.jpg"],
+  },
+};
 
 export default function Home() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    message: "",
-  });
-  const [loading, setLoading] = useState(false);
-  const [openFaq, setOpenFaq] = useState(null);
-
-  const [siteSettings, setSiteSettings] = useState(null);
-
-  useEffect(() => {
-    const loadSiteSettings = async () => {
-      try {
-        const settings = await dbService.getSiteSettings();
-        if (settings) setSiteSettings(settings);
-      } catch (e) {
-        console.error("Failed to load site settings:", e);
-      }
-    };
-    loadSiteSettings();
-  }, []);
-
-  const contactData = siteSettings?.contact || {
-    phone: "+91 90288 33275",
-    email: "shubdeeplabs@gmail.com",
-    address: "Solapur, Maharashtra"
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.name || !formData.email || !formData.phone || !formData.message) {
-      toast.error("Please fill in all required contact details.");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      await dbService.addOrder({
-        fullName: formData.name,
-        collegeName: formData.company || "Commercial Client",
-        branch: "Enterprise Business Solution",
-        year: "Business",
-        projectTitle: "Commercial Business Consultation",
-        techRequired: "Enterprise Tech Stack",
-        deadline: new Date().toISOString().split('T')[0],
-        budget: "Custom Quote",
-        description: `Company: ${formData.company || 'N/A'}\nMessage: ${formData.message}`,
-        needPPT: false,
-        needReport: false,
-        needVivaGuidance: false,
-        projectStatus: "Pending",
-        paymentStatus: "Unpaid"
-      });
-
-      toast.success("Consultation request received! Our engineering team will contact you shortly.", {
-        style: {
-          background: '#3B2818',
-          color: '#FFF7EE',
-          border: '1.5px solid #CFE3D2',
-          borderRadius: '12px'
-        }
-      });
-      setFormData({ name: "", email: "", phone: "", company: "", message: "" });
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to submit consultation request.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const commercialServices = [
-    { title: "Enterprise Web Applications", icon: Globe, desc: "High-performance web apps, client portals, and administrative dashboards engineered with Next.js, React, and microservices." },
-    { title: "Multi-Tenant SaaS Platforms", icon: Server, desc: "Scalable SaaS architectures featuring automated subscription billing, role-based access, and isolated tenant databases." },
-    { title: "Custom AI & LLM Solutions", icon: Brain, desc: "Enterprise AI agents, document indexing (RAG), automated customer support chatbots, and predictive ML models." },
-    { title: "Native & Cross-Platform Apps", icon: Smartphone, desc: "Production-ready mobile applications for iOS & Android built with Flutter/React Native, offline sync, and push alerts." },
-    { title: "Cloud Infrastructure & DevOps", icon: Cpu, desc: "AWS/GCP cloud deployments, Kubernetes auto-scaling, CI/CD automated pipelines, and Redis high-speed caching." },
-    { title: "API Gateway & Integrations", icon: Layers, desc: "Bank-grade RESTful & GraphQL APIs, OAuth2/JWT secure authentication, Webhooks, and Zapier/CRM integrations." }
+    { title: "Website Development", href: "/services/website-development", icon: Globe, desc: "High-performance web applications, client portals, and administrative dashboards engineered with Next.js, React, and microservices." },
+    { title: "Enterprise Software Engineering", href: "/services/software-development", icon: Server, desc: "Scalable enterprise software architectures featuring automated subscription billing, role-based access, and isolated databases." },
+    { title: "Custom Software Solutions", href: "/services/custom-software-development", icon: Cpu, desc: "Bespoke business platforms, proprietary management desks, and workflow automation tailored 100% to your operational goals." },
+    { title: "Custom AI & LLM Solutions", href: "/services/ai-development", icon: Brain, desc: "Enterprise AI agents, document indexing (RAG), automated customer support chatbots, and predictive ML models." },
+    { title: "Mobile App Development", href: "/services/mobile-app-development", icon: Smartphone, desc: "Production-ready mobile applications for iOS & Android built with Flutter/React Native, offline sync, and push alerts." },
+    { title: "Ecommerce & Shopping Portals", href: "/services/ecommerce-development", icon: Layers, desc: "High-converting headless storefronts, multi-currency payment gateway integrations, and automated inventory sync." }
   ];
 
   const valueProps = [
     { title: "99.9% Uptime SLA", desc: "Built on resilient cloud infrastructure with multi-region redundancy and auto-scaling.", icon: ShieldCheck },
     { title: "Bank-Grade Security", desc: "End-to-end data encryption, strict RBAC controls, OAuth2/JWT, and regular vulnerability audits.", icon: Lock },
-    { title: "Rapid Engineering", desc: "Production-ready boilerplate architectures to launch your business software 3x faster.", icon: Zap },
-    { title: "Dedicated Support", desc: "24/7 technical monitoring, SLA maintenance, and direct engineer-level support.", icon: Headphones }
+    { title: "Rapid Engineering", desc: "Production-ready boilerplate architectures to launch your enterprise software 3x faster.", icon: Zap },
+    { title: "Dedicated 24/7 Support", desc: "Round-the-clock technical monitoring, SLA maintenance, and direct engineer-level support.", icon: Headphones }
   ];
 
   const testimonials = [
@@ -115,61 +65,50 @@ export default function Home() {
   ];
 
   const faqs = [
-    { q: "What types of business applications do you build?", a: "We build custom web applications, SaaS platforms, enterprise admin dashboards, AI integrations, mobile applications, and high-scale API microservices." },
-    { q: "Do we get 100% full source code ownership?", a: "Yes, absolutely! You receive complete, unencumbered ownership of all source code, database schemas, CI/CD scripts, and documentation with no recurring vendor lock-in." },
+    { q: "What types of business applications do you build?", a: "We build custom web applications, enterprise software, SaaS platforms, AI integrations, mobile applications, e-commerce storefronts, and high-scale API microservices." },
+    { q: "Do we get 100% full source code ownership?", a: "Yes, absolutely! You receive complete, unencumbered ownership of all source code, database schemas, CI/CD scripts, and technical documentation." },
     { q: "What is your typical project delivery timeline?", a: "MVP releases and core business applications are typically delivered within 2-4 weeks, depending on system complexity." },
     { q: "How do you handle security and compliance?", a: "We implement OAuth2/JWT authentication, AES-256 data encryption at rest and in transit, strict RBAC permissions, and OWASP security standards." }
   ];
 
   return (
     <div className="sand-dune-theme sand-dune-gradient-bg min-h-screen space-y-24 pb-20 relative overflow-hidden text-[#3B2818]">
-      <ThreeWorld hideBooks={true} theme="sand" />
+      <DynamicThreeWorld hideBooks={true} theme="sand" />
       
-      {/* 1. HERO SECTION (SAND DUNE & SAGE GREEN THEME) */}
+      {/* 1. HERO SECTION */}
       <section className="relative z-10 min-h-[88vh] flex items-center justify-center pt-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="w-full text-center max-w-4xl mx-auto">
           
-          {/* Mode Switch Pill & Tag */}
           <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
             <div className="inline-flex items-center px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold sage-badge shadow-sm">
               <Briefcase className="w-4 h-4 mr-2 text-[#2E3B2B]" />
-              SHUBDEEP LABS FOR BUSINESS & ENTERPRISE
+              GLOBAL SOFTWARE DEVELOPMENT COMPANY
             </div>
-
-            {/* Prominent Mode Switch Button */}
-            <Link 
-              href="/student"
-              className="inline-flex items-center px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold bg-[#FAF6EE] text-[#2C2C2C] border border-[#2C2C2C] hover:bg-[#FFF59D] transition-all shadow-sm"
-              title="Switch to Student Desk Mode"
-            >
-              <GraduationCap className="w-4 h-4 mr-1.5 text-[#3F51B5]" />
-              Switch to Student Desk →
-            </Link>
           </div>
 
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-[#3B2818] tracking-tight leading-tight mb-6">
-            Enterprise Digital Solutions <br className="hidden sm:inline" />
+            Global Software Engineering <br className="hidden sm:inline" />
             <span className="text-[#2E3B2B] underline decoration-[#CFE3D2] decoration-4">Built for Scale & Speed</span>
           </h1>
 
           <p className="text-lg sm:text-xl text-[#4A3525] font-medium leading-relaxed max-w-3xl mx-auto mb-10">
-            Empowering Startups and Enterprises with High-Performance Software, Scalable SaaS Platforms, Custom AI Agents, and Bank-Grade Web Applications.
+            Empowering Startups, Enterprises, Hospitals, and International Clients with Custom Software Development, High-Performance Web Applications, AI Solutions, and Mobile Engineering.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="#customizer"
+              href="#consultation"
               className="btn-sage-green py-4 px-8 text-lg inline-flex items-center justify-center w-full sm:w-auto cursor-pointer"
             >
-              Configure Enterprise Scope
+              Book Free Consultation
               <ArrowRight className="w-5 h-5 ml-2" />
             </a>
 
             <a
-              href="#consultation"
+              href="#customizer"
               className="btn-warm-beige py-4 px-8 text-lg inline-flex items-center justify-center w-full sm:w-auto cursor-pointer"
             >
-              Request Free Consultation
+              Configure Scope
               <Rocket className="w-5 h-5 ml-2" />
             </a>
           </div>
@@ -182,7 +121,7 @@ export default function Home() {
             </div>
             <div className="p-4 sand-dune-card text-center sm:text-left">
               <div className="text-2xl sm:text-3xl font-extrabold text-[#3B2818]">100+</div>
-              <div className="text-xs sm:text-sm font-semibold text-[#4A3525]">Products Deployed</div>
+              <div className="text-xs sm:text-sm font-semibold text-[#4A3525]">Global Deployments</div>
             </div>
             <div className="p-4 sand-dune-card text-center sm:text-left">
               <div className="text-2xl sm:text-3xl font-extrabold text-[#3B2818]">256-bit</div>
@@ -220,14 +159,14 @@ export default function Home() {
       {/* 3. COMMERCIAL SERVICES CATALOG */}
       <section id="services" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center px-4 py-1 rounded-full text-xs font-bold sage-badge mb-3">
-            BUSINESS CAPABILITIES
+          <div className="inline-flex items-center px-4 py-1 rounded-full text-xs font-bold sage-badge mb-3 uppercase tracking-wider">
+            Target Services & Capabilities
           </div>
           <h2 className="text-3xl sm:text-5xl font-extrabold text-[#3B2818]">
             Core Enterprise Solutions
           </h2>
           <p className="mt-3 text-base sm:text-lg text-[#4A3525] font-medium">
-            From initial MVP architecture to complex SaaS backends and custom AI integrations.
+            From web engineering to custom AI agents and enterprise software platforms.
           </p>
         </div>
 
@@ -244,9 +183,9 @@ export default function Home() {
                   <p className="text-sm text-[#4A3525] font-medium leading-relaxed mb-6">{service.desc}</p>
                 </div>
                 <div className="pt-4 border-t border-[#D5C4A6]/50 flex items-center justify-between">
-                  <a href="#consultation" className="text-sm font-bold text-[#4E7854] hover:underline flex items-center">
-                    Inquire Service <ArrowRight className="w-4 h-4 ml-1" />
-                  </a>
+                  <Link href={service.href} className="text-sm font-bold text-[#4E7854] hover:underline flex items-center">
+                    Learn More <ArrowRight className="w-4 h-4 ml-1" />
+                  </Link>
                 </div>
               </div>
             );
@@ -259,17 +198,17 @@ export default function Home() {
         <div className="sand-dune-card p-6 sm:p-10 border-2 border-[#CFE3D2]">
           <div className="text-center max-w-3xl mx-auto mb-10">
             <span className="sage-badge px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-              Interactive Estimator
+              Interactive Scope Builder
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#3B2818] mt-3">
-              Configure Your Business Solution Scope
+              Configure Your Enterprise Software Scope
             </h2>
             <p className="text-sm sm:text-base text-[#4A3525] mt-2">
-              Select your required platform, features, and timeline to build an instant commercial estimate.
+              Select required modules, integrations, and deployment scale to estimate your business solution.
             </p>
           </div>
 
-          <CommercialCustomizer />
+          <DynamicCommercialCustomizer />
         </div>
       </section>
 
@@ -277,7 +216,7 @@ export default function Home() {
       <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#3B2818]">
-            Trusted by Business Leaders
+            Trusted by Businesses & Startups Worldwide
           </h2>
         </div>
 
@@ -307,157 +246,11 @@ export default function Home() {
       </section>
 
       {/* 6. FAQS */}
-      <section className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#3B2818]">
-            Commercial FAQs
-          </h2>
-        </div>
-
-        <div className="space-y-4">
-          {faqs.map((faq, i) => (
-            <div key={i} className="sand-dune-card overflow-hidden">
-              <button
-                onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                className="w-full px-6 py-5 text-left flex items-center justify-between text-[#3B2818] font-bold"
-              >
-                <span className="text-base sm:text-lg flex items-center">
-                  <HelpCircle className="w-5 h-5 mr-3 text-[#4E7854] shrink-0" />
-                  {faq.q}
-                </span>
-                <ChevronDown className={`w-5 h-5 text-[#3B2818] transform transition-transform duration-200 ${
-                  openFaq === i ? "rotate-180" : ""
-                }`} />
-              </button>
-              
-              <AnimatePresence>
-                {openFaq === i && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    className="border-t border-[#D5C4A6]/50 bg-[#EADCC6]/30"
-                  >
-                    <div className="px-6 py-4 text-sm font-medium text-[#4A3525] leading-relaxed">
-                      {faq.a}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
-        </div>
-      </section>
+      <ServiceFAQ faqs={faqs} title="Enterprise Software FAQs" />
 
       {/* 7. CONSULTATION CONTACT FORM */}
       <section id="consultation" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="sand-dune-card p-8 sm:p-12 border-2 border-[#CFE3D2]">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            <div className="lg:col-span-5 flex flex-col justify-between">
-              <div>
-                <span className="sage-badge px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                  Direct Engineering Desk
-                </span>
-                <h2 className="text-3xl font-extrabold text-[#3B2818] mt-4 mb-4">
-                  Schedule a Solution Consultation
-                </h2>
-                <p className="text-sm font-medium text-[#4A3525] leading-relaxed mb-8">
-                  Let us review your software architecture or product requirements. Our team will prepare a technical blueprint and custom quote.
-                </p>
-              </div>
-
-              <div className="space-y-4 font-bold text-[#3B2818] pt-6 border-t border-[#D5C4A6]/50">
-                <div className="flex items-center space-x-3">
-                  <Phone className="w-5 h-5 text-[#4E7854]" />
-                  <span>{contactData.phone}</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Mail className="w-5 h-5 text-[#4E7854]" />
-                  <span>{contactData.email}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="lg:col-span-7">
-              <form onSubmit={handleFormSubmit} className="space-y-4 sand-dune-card-soft p-6 border border-[#D5C4A6]">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-[#3B2818] uppercase mb-1">Your Full Name *</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="w-full text-sm px-4 py-3 bg-white/90 border border-[#D5C4A6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CFE3D2] text-[#3B2818] font-medium"
-                      placeholder="e.g. Sarah Jenkins"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-[#3B2818] uppercase mb-1">Company / Organization</label>
-                    <input
-                      type="text"
-                      name="company"
-                      value={formData.company}
-                      onChange={handleInputChange}
-                      className="w-full text-sm px-4 py-3 bg-white/90 border border-[#D5C4A6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CFE3D2] text-[#3B2818] font-medium"
-                      placeholder="e.g. Acme Corp"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-[#3B2818] uppercase mb-1">Phone Number *</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="w-full text-sm px-4 py-3 bg-white/90 border border-[#D5C4A6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CFE3D2] text-[#3B2818] font-medium"
-                      placeholder="e.g. +91 9876543210"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-[#3B2818] uppercase mb-1">Work Email *</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full text-sm px-4 py-3 bg-white/90 border border-[#D5C4A6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CFE3D2] text-[#3B2818] font-medium"
-                      placeholder="e.g. sarah@acme.com"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-[#3B2818] uppercase mb-1">Project Scope & Requirements *</label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    rows="4"
-                    className="w-full text-sm px-4 py-3 bg-white/90 border border-[#D5C4A6] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CFE3D2] text-[#3B2818] font-medium"
-                    placeholder="Describe your required application, timeline, target features..."
-                    required
-                  ></textarea>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="btn-sage-green w-full py-4 text-base flex items-center justify-center cursor-pointer"
-                >
-                  {loading ? "Sending..." : "Submit Business Consultation Request"}
-                  <Send className="w-4 h-4 ml-2" />
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
+        <ConsultationForm />
       </section>
 
     </div>

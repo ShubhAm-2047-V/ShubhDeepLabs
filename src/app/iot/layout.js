@@ -1,6 +1,9 @@
 export const metadata = {
-  title: "IoT Projects | Shubdeep Labs",
-  description: "Smart automation designs, hardware controller mapping (Arduino/ESP32), sensors integration, and interactive dashboard monitors. Starts at ₹4999.",
+  title: "IoT Systems & Embedded Projects | Shubdeep Labs",
+  description: "Internet of Things hardware-software integration, sensors, and cloud dashboard systems.",
+  alternates: {
+    canonical: "https://shubh-deep-labs.vercel.app/iot",
+  },
 };
 
 export default function IotLayout({ children }) {

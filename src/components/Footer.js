@@ -28,22 +28,23 @@ export default function Footer() {
   }, []);
 
   const quickLinks = [
-    { name: "Home Dashboard", href: "/" },
-    { name: "Project Topics", href: "/#categories" },
-    { name: "Daily Deals & Offers", href: "/offers" },
-    { name: "Blueprints Showcase", href: "/#portfolio" },
-    { name: "Download Portfolio PDF", href: "/portfolio-pdf" },
-    { name: "Get In Touch", href: "/#contact" },
+    { name: "Global Home", href: "/" },
+    { name: "Software Development", href: "/services/software-development" },
+    { name: "Website Engineering", href: "/services/website-development" },
+    { name: "AI Solutions", href: "/services/ai-development" },
+    { name: "Configure Scope", href: "/#customizer" },
+    { name: "Contact Desk", href: "/#contact" },
     { name: "ShubDeep Dev", href: "https://shub-deep-dev.vercel.app/" },
   ];
 
-  const categories = [
-    { name: "Diploma Projects", href: "/order?category=Diploma" },
-    { name: "Engineering Projects", href: "/order?category=Engineering" },
-    { name: "M.Tech Projects", href: "/order?category=M.Tech" },
-    { name: "BCA / MCA Projects", href: "/order?category=BCA-MCA" },
-    { name: "AI & ML Systems", href: "/order?category=AI-ML" },
-    { name: "Web Applications", href: "/order?category=Web-Dev" },
+  const services = [
+    { name: "Website Development", href: "/services/website-development" },
+    { name: "Software Development", href: "/services/software-development" },
+    { name: "Custom Software Dev", href: "/services/custom-software-development" },
+    { name: "Mobile App Development", href: "/services/mobile-app-development" },
+    { name: "AI Development", href: "/services/ai-development" },
+    { name: "Ecommerce Solutions", href: "/services/ecommerce-development" },
+    { name: "UI/UX Design", href: "/services/ui-ux-design" },
   ];
 
   const socialLinks = [
@@ -86,11 +87,11 @@ export default function Footer() {
               </div>
               <span className="font-hand font-extrabold text-2.5xl text-[#2C2C2C] flex flex-col leading-none">
                 Shubdeep Labs
-                <span className="text-[10px] font-marker text-[#6A6A6A] mt-0.5 leading-none">Building Intelligent Solutions</span>
+                <span className="text-[10px] font-marker text-[#6A6A6A] mt-0.5 leading-none">Global Software Agency</span>
               </span>
             </div>
             <p className="text-sm font-sans text-[#2C2C2C] leading-relaxed">
-              We engineer production-ready software, custom web solutions, and scalable SaaS platforms for businesses and startups. Specially offering secondary capstone support for students.
+              We engineer production-ready custom software, scalable SaaS platforms, enterprise AI integrations, and mobile applications for startups, businesses, hospitals, and enterprises worldwide.
             </p>
             
             <div className="flex space-x-3 pt-2">
@@ -111,7 +112,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-marker text-lg text-[#2C2C2C] mb-6 underline decoration-2 decoration-[#EF9A9A]">Quick Links</h3>
+            <h3 className="font-marker text-lg text-[#2C2C2C] mb-6 underline decoration-2 decoration-[#EF9A9A]">Company Links</h3>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.name}>
@@ -137,11 +138,11 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Categories Links */}
+          {/* Core Services Links */}
           <div>
-            <h3 className="font-marker text-lg text-[#2C2C2C] mb-6 underline decoration-2 decoration-[#A5D6A7]">Academic Topics</h3>
+            <h3 className="font-marker text-lg text-[#2C2C2C] mb-6 underline decoration-2 decoration-[#A5D6A7]">Target Services</h3>
             <ul className="space-y-3">
-              {categories.map((link) => (
+              {services.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}

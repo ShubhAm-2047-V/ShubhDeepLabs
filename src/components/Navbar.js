@@ -24,18 +24,18 @@ export default function Navbar() {
   }, []);
  
   const businessNavLinks = [
-    { name: "Solutions", href: "/#services", icon: Briefcase },
-    { name: "Customizer", href: "/#customizer", icon: Layers },
-    { name: "Student Desk", href: "/student", icon: GraduationCap },
-    { name: "Blueprints", href: "/student#portfolio", icon: Award },
-    { name: "FAQs", href: "/#faq", icon: FileText },
+    { name: "Services", href: "/services/software-development", icon: Briefcase },
+    { name: "Web Engineering", href: "/services/website-development", icon: Layers },
+    { name: "AI Solutions", href: "/services/ai-development", icon: Cpu },
+    { name: "Mobile Apps", href: "/services/mobile-app-development", icon: Sparkles },
+    { name: "Scope Builder", href: "/#customizer", icon: Terminal },
   ];
 
   const studentNavLinks = [
-    { name: "Student Desk", href: "/student", icon: GraduationCap },
-    { name: "Business Solutions", href: "/", icon: Briefcase },
+    { name: "Services", href: "/services/software-development", icon: Briefcase },
+    { name: "Business Desk", href: "/", icon: Briefcase },
     { name: "Daily Offer", href: "/offers", icon: Gift },
-    { name: "Blueprints", href: "/student#portfolio", icon: Award },
+    { name: "Student Desk", href: "/student", icon: GraduationCap },
     { name: "Portfolio PDF", href: "/portfolio-pdf", icon: FileText },
   ];
 
@@ -82,7 +82,7 @@ export default function Navbar() {
               <span className={`text-[10px] tracking-wider leading-none ${
                 isStudentPage ? "font-marker text-[#6A6A6A]" : "font-sans font-semibold text-[#4A3525]"
               }`}>
-                {isStudentPage ? "Building Academic Solutions" : "Enterprise Digital Solutions"}
+                {isStudentPage ? "Building Academic Solutions" : "Global Software Agency"}
               </span>
             </span>
           </Link>
@@ -166,10 +166,10 @@ export default function Navbar() {
               </Link>
             ) : (
               <a
-                href="#consultation"
+                href="/#consultation"
                 className="btn-sage-green inline-flex items-center justify-center px-4 py-2 text-sm"
               >
-                <span>Get Consultation</span>
+                <span>Book Free Consultation</span>
                 <ArrowRight className="w-4 h-4 ml-1.5" />
               </a>
             )}

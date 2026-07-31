@@ -1,6 +1,9 @@
 export const metadata = {
-  title: "AI / ML Projects | Shubdeep Labs",
-  description: "Advanced machine learning models, convolutional neural networks, computer vision tools, and vector search chatbots. Starts at ₹5999.",
+  title: "AI & Machine Learning Projects | Shubdeep Labs",
+  description: "Computer vision, NLP, prediction models, and deep learning projects with working source code.",
+  alternates: {
+    canonical: "https://shubh-deep-labs.vercel.app/ai-ml",
+  },
 };
 
 export default function AiMlLayout({ children }) {

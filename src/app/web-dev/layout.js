@@ -1,6 +1,9 @@
 export const metadata = {
-  title: "Web Projects | Shubdeep Labs",
-  description: "Stunning responsive portals, custom dashboards, single page interfaces, and rich administrative panels. Starts at ₹3999.",
+  title: "Web Engineering Projects & Solutions | ShubDeep Labs",
+  description: "Custom web applications, dashboards, portals, and single page web apps engineered by ShubDeep Labs.",
+  alternates: {
+    canonical: "https://shubh-deep-labs.vercel.app/web-dev",
+  },
 };
 
 export default function WebDevLayout({ children }) {
