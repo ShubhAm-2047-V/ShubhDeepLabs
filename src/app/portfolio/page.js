@@ -118,6 +118,47 @@ export default function PortfolioPage() {
       ],
       results: "Reduced study material preparation time by 75% for over 5,000 active academic users.",
       impactStat: "75% Faster Revision"
+    },
+    {
+      title: "Saira Elegance E-Commerce Storefront",
+      category: "Fashion E-Commerce",
+      client: "Miss Sania (Owner, Saira Elegance)",
+      href: "https://saira-elegance.vercel.app/",
+      external: true,
+      icon: Globe,
+      timeline: "2 Weeks Sprints",
+      problem: "Needed a high-converting, mobile-responsive fashion e-commerce storefront to showcase clothing catalog collections and drive direct online orders.",
+      solution: "Engineered a custom React & Next.js e-commerce platform featuring high-resolution image galleries, instant product filtering, and frictionless cart checkout.",
+      techStack: ["Next.js", "React 19", "Tailwind CSS", "Vercel Cloud CDN"],
+      architecture: "Static catalog page pre-rendering backed by responsive mobile drawer navigation and client-side cart state management.",
+      features: [
+        "Live Fashion Catalog & Collection Displays",
+        "Mobile-First Responsive Shopping Experience",
+        "Instant Product Filtering & Search",
+        "Frictionless Checkout & Mobile Ordering"
+      ],
+      results: "Live store deployed at https://saira-elegance.vercel.app/ driving daily customer orders.",
+      impactStat: "Live Store Deployed"
+    },
+    {
+      title: "Dinesh Gold & Jewellery Custom App",
+      category: "Retail Gold Mobile App",
+      client: "Mr. Dinesh (Dinesh Gold & Jewellery)",
+      href: "/contact",
+      icon: Smartphone,
+      timeline: "3 Weeks Sprints",
+      problem: "Manual gold rate calculations, physical ledger entry, and catalog browsing caused customer delays and invoice calculation errors.",
+      solution: "Architected a dedicated mobile application for gold jewellery management, featuring real-time daily gold rate sync, digital invoice generation, and customer catalog browsing.",
+      techStack: ["React Native / Flutter", "Node.js", "Supabase PostgreSQL", "Tailwind CSS"],
+      architecture: "Real-time daily rate calculation engine connected to automated billing module and digital receipt generator.",
+      features: [
+        "Daily Real-Time Gold & Silver Rate Calculation Engine",
+        "Digital Customer Billing & Invoice Generation",
+        "Jewellery Catalog & Ornament Showcase",
+        "Customer Transaction History Ledger"
+      ],
+      results: "Eliminated billing calculation errors and streamlined gold shop customer checkouts.",
+      impactStat: "100% Billing Accuracy"
     }
   ];
 

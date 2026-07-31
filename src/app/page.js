@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { 
   Briefcase, ArrowRight, ShieldCheck, Zap, Globe, Server, 
-  Cpu, Brain, Smartphone, Layers, Lock, Headphones, Rocket, Star, CheckSquare, Code, Building, Heart, ShoppingBag, GraduationCap, DollarSign, FileText, MessageSquare
+  Cpu, Brain, Smartphone, Layers, Lock, Headphones, Rocket, Star, CheckSquare, Code, Building, Heart, ShoppingBag, GraduationCap, DollarSign, FileText, MessageSquare, ExternalLink
 } from "lucide-react";
 import DynamicThreeWorld from "@/components/DynamicThreeWorld";
 import DynamicCommercialCustomizer from "@/components/DynamicCommercialCustomizer";
@@ -85,9 +85,20 @@ export default function Home() {
   ];
 
   const testimonials = [
-    { name: "Vikram Mehta", role: "Founder & CEO, TechScale Solutions", review: "ShubDeep Labs engineered our core customer dashboard and API pipeline within 3 weeks. Their clean codebase and rapid delivery gave us a massive head start before launch!", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" },
-    { name: "Anand Kulkarni", role: "CTO, HealthTech Innovations", review: "We partnered with ShubDeep Labs to build a customized clinic desk module. The UI design and backend security exceeded our expectations. Highly recommended for commercial projects!", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80" },
-    { name: "Meera Singhania", role: "Head of Product, RetailEdge SaaS", review: "The multi-tenant SaaS architecture ShubDeep Labs built for us handles thousands of daily active user queries effortlessly. Extraordinary engineering quality!", avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80" }
+    { 
+      name: "Miss Sania", 
+      role: "Founder & Owner, Saira Elegance", 
+      review: "ShubDeep Labs engineered our fashion e-commerce storefront with incredible speed and design elegance. The mobile shopping experience and seamless checkout increased our online sales from day one!", 
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+      websiteLink: "https://saira-elegance.vercel.app/"
+    },
+    { 
+      name: "Mr. Dinesh", 
+      role: "Owner, Dinesh Gold & Jewellery", 
+      review: "We partnered with ShubDeep Labs to build a custom mobile application for our gold shop. The real-time daily gold rate tracking, digital billing, and customer catalog management run flawlessly!", 
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
+      websiteLink: null
+    }
   ];
 
   const faqs = [
@@ -352,23 +363,44 @@ export default function Home() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {testimonials.map((t, i) => (
-            <div key={i} className="sand-dune-card p-8 flex flex-col justify-between border border-[#D5C4A6]">
+            <div key={i} className="sand-dune-card p-8 flex flex-col justify-between border-2 border-[#D5C4A6] rounded-3xl space-y-6">
               <div>
-                <div className="flex items-center space-x-1 text-[#2E3B2B] mb-4">
-                  {[...Array(5)].map((_, s) => (
-                    <Star key={s} className="w-4 h-4 fill-current" />
-                  ))}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-1 text-[#2E3B2B]">
+                    {[...Array(5)].map((_, s) => (
+                      <Star key={s} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <span className="px-3 py-1 rounded-full text-[11px] font-extrabold bg-[#CFE3D2] text-[#2E3B2B]">
+                    Verified Client Partner
+                  </span>
                 </div>
-                <p className="text-sm text-[#4A3525] font-medium leading-relaxed mb-6 italic">"{t.review}"</p>
+                <p className="text-sm text-[#4A3525] font-medium leading-relaxed mb-4 italic">"{t.review}"</p>
               </div>
-              <div className="flex items-center space-x-3 pt-4 border-t border-[#D5C4A6]/50">
-                <img src={t.avatar} alt={t.name} className="w-10 h-10 rounded-full object-cover border border-[#2E3B2B]" />
-                <div>
-                  <h4 className="text-sm font-bold text-[#3B2818]">{t.name}</h4>
-                  <p className="text-xs text-[#4A3525] font-medium">{t.role}</p>
+
+              <div className="pt-4 border-t border-[#D5C4A6]/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center space-x-3">
+                  <img src={t.avatar} alt={t.name} className="w-11 h-11 rounded-full object-cover border-2 border-[#2E3B2B]" />
+                  <div>
+                    <h4 className="text-base font-extrabold text-[#3B2818]">{t.name}</h4>
+                    <p className="text-xs text-[#4A3525] font-bold">{t.role}</p>
+                  </div>
                 </div>
+
+                {t.websiteLink && (
+                  <a
+                    href={t.websiteLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-sage-green py-2 px-4 text-xs font-extrabold inline-flex items-center justify-center shrink-0"
+                    title="Visit Live Store"
+                  >
+                    <span>Visit Live Store</span>
+                    <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
+                  </a>
+                )}
               </div>
             </div>
           ))}
