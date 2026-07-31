@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { MessageSquare, Send, Bot, User, Sparkles, ArrowRight, CheckCircle2, RotateCcw, DollarSign, Smartphone, Brain, Globe, ShieldCheck } from "lucide-react";
+import { MessageSquare, Send, Bot, User, Sparkles, ArrowRight, CheckCircle2, RotateCcw, Download, Search, Paperclip, Calendar, FileText } from "lucide-react";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import toast from "react-hot-toast";
 
 export default function StandaloneChatPage() {
   const [messages, setMessages] = useState([
@@ -14,6 +15,7 @@ export default function StandaloneChatPage() {
     }
   ]);
   const [inputVal, setInputVal] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
@@ -66,6 +68,33 @@ export default function StandaloneChatPage() {
     ];
     setMessages(welcome);
     localStorage.removeItem("shubdeeplabs_chat_history");
+    toast.success("Chat session reset.");
+  };
+
+  const handleExportChat = () => {
+    try {
+      const exportContent = messages.map(m => `[${m.sender.toUpperCase()}]: ${m.text}`).join("\n\n");
+      const blob = new Blob([exportContent], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `ShubDeepLabs_AI_Consultation_${Date.now()}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast.success("Consultation log exported to file.");
+    } catch (e) {
+      toast.error("Failed to export chat transcript.");
+    }
+  };
+
+  const handleFileUploadPlaceholder = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      toast.success(`Attached "${file.name}" to consultation session. You can now describe your requirements!`, {
+        duration: 5000
+      });
+    }
   };
 
   const handleSendMessage = async (textToSend) => {
@@ -110,6 +139,10 @@ export default function StandaloneChatPage() {
     }
   };
 
+  const filteredMessages = searchQuery.trim()
+    ? messages.filter(m => m.text.toLowerCase().includes(searchQuery.toLowerCase()))
+    : messages;
+
   return (
     <div className="sand-dune-theme sand-dune-gradient-bg min-h-screen py-24 px-4 sm:px-6 lg:px-8 text-[#3B2818]">
       <div className="max-w-5xl mx-auto">
@@ -129,28 +162,55 @@ export default function StandaloneChatPage() {
         </header>
 
         {/* CHAT INTERFACE CONTAINER */}
-        <div className="sand-dune-card p-4 sm:p-8 rounded-3xl border-2 border-[#2E3B2B] shadow-xl flex flex-col h-[650px] justify-between">
+        <div className="sand-dune-card p-4 sm:p-8 rounded-3xl border-2 border-[#2E3B2B] shadow-xl flex flex-col h-[700px] justify-between">
           
-          {/* HEADER ACTIONS */}
-          <div className="flex items-center justify-between pb-3 border-b border-[#D5C4A6] mb-4">
+          {/* TOP ACTIONS BAR (Search & Export & Clear) */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#D5C4A6] mb-4">
             <div className="flex items-center space-x-2">
               <div className="w-3 h-3 rounded-full bg-[#2E3B2B] animate-pulse" />
-              <span className="text-xs font-bold text-[#3B2818]">AI Consultant Online</span>
+              <span className="text-xs font-bold text-[#3B2818]">AI Consultant Active</span>
             </div>
-            <button
-              onClick={handleClearHistory}
-              className="text-xs font-bold text-[#4A3525] hover:text-[#2E3B2B] flex items-center space-x-1"
-              title="Clear Chat Session"
-              aria-label="Clear chat session history"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Clear Session</span>
-            </button>
+
+            <div className="flex items-center space-x-2">
+              {/* Search Box */}
+              <div className="relative">
+                <Search className="w-3.5 h-3.5 text-[#4A3525] absolute left-2.5 top-2.5" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search chat..."
+                  className="pl-8 pr-3 py-1 bg-white/80 border border-[#D5C4A6] rounded-xl text-xs text-[#3B2818] font-medium focus:outline-none focus-visible:ring-1 focus-visible:ring-[#2E3B2B]"
+                  aria-label="Search conversation messages"
+                />
+              </div>
+
+              {/* Export Chat Log */}
+              <button
+                onClick={handleExportChat}
+                className="px-2.5 py-1.5 rounded-xl bg-[#EADCC6] hover:bg-[#CFE3D2] text-[#3B2818] text-xs font-bold transition-all border border-[#D5C4A6] flex items-center space-x-1"
+                title="Export Consultation Transcript"
+                aria-label="Export chat log transcript"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Export</span>
+              </button>
+
+              {/* Clear History */}
+              <button
+                onClick={handleClearHistory}
+                className="p-1.5 rounded-xl text-[#4A3525] hover:text-[#2E3B2B] hover:bg-[#EADCC6]/50 transition-all"
+                title="Clear Session"
+                aria-label="Clear chat session history"
+              >
+                <RotateCcw className="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
           {/* MESSAGES AREA */}
           <div className="flex-1 overflow-y-auto space-y-4 pr-2 mb-4">
-            {messages.map((msg) => (
+            {filteredMessages.map((msg) => (
               <div
                 key={msg.id}
                 className={`flex gap-3 ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
@@ -186,24 +246,33 @@ export default function StandaloneChatPage() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* QUICK PRESETS */}
-          <div className="mb-4">
-            <p className="text-xs font-bold text-[#4A3525] mb-2">Suggested Consultation Inquiries:</p>
+          {/* QUICK ACTION BUTTONS */}
+          <div className="mb-4 pt-3 border-t border-[#D5C4A6]/50 flex flex-wrap items-center justify-between gap-2">
             <div className="flex flex-wrap gap-2">
               {presetQueries.map((query, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleSendMessage(query)}
-                  className="px-3 py-1.5 rounded-xl bg-[#EADCC6] hover:bg-[#CFE3D2] text-[#3B2818] text-xs font-bold transition-all border border-[#D5C4A6] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2E3B2B]"
+                  className="px-3 py-1 rounded-xl bg-[#EADCC6] hover:bg-[#CFE3D2] text-[#3B2818] text-xs font-bold transition-all border border-[#D5C4A6] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2E3B2B]"
                   aria-label={`Ask AI: ${query}`}
                 >
                   {query}
                 </button>
               ))}
             </div>
+
+            <div className="flex items-center space-x-2">
+              <Link
+                href="/contact"
+                className="px-3 py-1 rounded-xl bg-[#2E3B2B] text-white hover:bg-[#3B2818] text-xs font-bold transition-all flex items-center space-x-1"
+              >
+                <Calendar className="w-3.5 h-3.5" />
+                <span>Book Meeting</span>
+              </Link>
+            </div>
           </div>
 
-          {/* INPUT FORM */}
+          {/* INPUT FORM WITH FILE ATTACHMENT */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -211,11 +280,27 @@ export default function StandaloneChatPage() {
             }}
             className="flex items-center gap-2 pt-3 border-t border-[#D5C4A6]"
           >
+            <label
+              htmlFor="spec-file-upload"
+              className="p-3 bg-white border border-[#D5C4A6] rounded-2xl cursor-pointer hover:bg-[#CFE3D2]/50 text-[#3B2818] transition-all"
+              title="Attach Project Specs (PDF/DOCX)"
+            >
+              <Paperclip className="w-4 h-4" />
+              <input
+                id="spec-file-upload"
+                type="file"
+                accept=".pdf,.docx,.txt"
+                onChange={handleFileUploadPlaceholder}
+                className="hidden"
+                aria-label="Upload project specification file"
+              />
+            </label>
+
             <input
               type="text"
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
-              placeholder="Ask about project pricing, tech stacks, or request a quote..."
+              placeholder="Ask about project pricing, tech stacks, or request a proposal..."
               className="flex-1 py-3 px-4 rounded-2xl bg-white border border-[#D5C4A6] text-sm text-[#3B2818] font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2E3B2B]"
               aria-label="Type your project question or specification"
             />
